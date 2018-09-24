@@ -1,0 +1,21 @@
+<apex:page standardController="Candidate__c" extensions="CandidatesImagesController,DisplayImageController">
+    
+    <apex:form enctype="multipart/form-data">
+        <apex:pageMessages />
+        <apex:pageBlock rendered="{!OR((NOT(hasImage)),isDelete)}">
+      <apex:inputFile value="{!file}" accept="png,jpg" id="uploadImage" onchange="makeSaveVisibleForUpload();"/>
+      <apex:commandButton action="{!upload}" value="Save" id="saveButton"/>
+    </apex:pageBlock>  
+    <apex:pageBlock rendered="{!AND(hasImage, NOT(isDelete))}">
+      <div class="candidateImageAndButtonDelete" style="width: 360px; height: 255px; float: none">
+          <apex:image style="height: 230px; width: 150px; float: left; margin-top: 20px" url="/sfc/servlet.shepherd/version/download/{!FileId}" id="candidateImage"/>
+          <apex:commandButton action="{!deleteImage}" value="Delete" style="margin-left: 120px; margin-top: 80px"/>
+      </div>
+      <div class="updateCandidateImage">
+        <apex:inputFile value="{!file}" accept=".png, .jpg" id="file2" onchange="makeSaveVisibleForUpdate();"/>
+        <apex:commandButton action="{!updateImage}" value="Update Image" id="update"/>
+      </div>
+    </apex:pageBlock>
+    </apex:form>
+    
+</apex:page>
