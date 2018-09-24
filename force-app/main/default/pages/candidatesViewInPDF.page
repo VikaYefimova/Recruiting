@@ -1,0 +1,31 @@
+<apex:page showHeader="false" standardStylesheets="false" showQuickActionVfHeader="false"
+    standardController="Candidate__c" extensions="CandidateImageControler"
+    renderAs="pdf">
+    <apex:stylesheet value="{!URLFOR($Resource.cssStyles, 'CandidatePDFStyles.css')}"/>
+    
+    <h2>Candidate {!Candidate__c.Name}</h2>
+    <apex:pageBlock >
+        <apex:form >
+			<apex:image style="height: 150px; width: 100px" url="/servlet/servlet.FileDownload?file={!FileId}"/>
+		</apex:form>
+        <apex:pageBlockSection title="Contact Information" >
+            <apex:outputField value="{!Candidate__c.First_Name__c}" label="First Name: " styleClass="candidateField" style="font-size: 15px; margin: 10px;"/>
+            <apex:outputField value="{!Candidate__c.Last_Name__c}" label="Last Name: " styleClass="candidateField" style="font-size: 10px; margin: 10px;"/>
+            <apex:outputField value="{!Candidate__c.Mobile__c}" label="Mobile Phone: " styleClass="candidateField" style="font-size: 10px; margin: 10px;"/>
+            <apex:outputField value="{!Candidate__c.Phone__c}" label="Phone: " styleClass="candidateField" style="font-size: 10px; margin: 10px;"/>
+            <apex:outputField value="{!Candidate__c.Email__c}" label="Email: " styleClass="candidateField" style="font-size: 10px; margin: 10px;"/>
+            <apex:outputField value="{!Candidate__c.Country__c}" label="Country: " styleClass="candidateField" style="font-size: 10px; margin: 10px;"/>
+            <apex:outputField value="{!Candidate__c.City__c}" label="City: " styleClass="candidateField" style="font-size: 10px; margin: 10px;"/>  
+		</apex:pageBlockSection>
+        <apex:pageBlockSection title="Education&Experience" id="sectionEducation">
+            <apex:outputField value="{!Candidate__c.Education__c}" label="Education" styleClass="candidateField" style="font-size: 10px; margin: 10px;"/>
+            <apex:outputField value="{!Candidate__c.Years_of_Experience__c}" label="Years of Experience" styleClass="candidateField" style="font-size: 10px; margin: 10px;"/>
+            <apex:form >
+            <span class="label">Currently Employed</span>
+            <apex:image value="/img/checkbox_checked.gif" rendered="{!(Candidate__c.Currently_Employed__c == true)}" styleClass="checkboxField"/>
+            <apex:image value="/img/checkbox_unchecked.gif" rendered="{!(Candidate__c.Currently_Employed__c == false)}" styleClass="checkboxField"/>
+            </apex:form>
+            <apex:outputField value="{!Candidate__c.Current_Employer__c}" label="Currently Employer" styleClass="candidateField" style="font-size: 10px; margin: 10px;"/>
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:page>
