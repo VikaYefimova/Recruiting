@@ -566,14 +566,14 @@
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\layouts\\Candidate__c-Candidate Layout.layout-meta.xml",
         {
-            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\layouts\\Candidate__c-Candidate Layout.layout-meta.xml",
             "isDirectory": false,
-            "isMetadataFile": true,
             "size": 9775,
             "modifiedTime": 1537786700561,
             "changeTime": 1537786700561,
-            "contentHash": "36390bec925a4710619b14b9d8198449d1b5cddd"
+            "contentHash": "36390bec925a4710619b14b9d8198449d1b5cddd",
+            "isMetadataFile": true,
+            "state": "u"
         }
     ],
     [
@@ -2990,10 +2990,10 @@
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\pages\\UploadCandidatesImage.page",
             "isDirectory": false,
             "isMetadataFile": false,
-            "size": 1755,
-            "modifiedTime": 1537786700545,
-            "changeTime": 1537786700545,
-            "contentHash": "158d24711903860c2b591ee7e88fbb4969daf290"
+            "size": 1805,
+            "modifiedTime": 1537791995403,
+            "changeTime": 1537791995403,
+            "contentHash": "d27a0546d21eded716bce4c60c1ee08d25eec2cd"
         }
     ],
     [
@@ -3197,7 +3197,7 @@
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\pages",
             "isDirectory": true,
             "size": 0,
-            "modifiedTime": 1537783976511,
+            "modifiedTime": 1537786700545,
             "changeTime": 1537783976511,
             "contentHash": "a73cf8f0ebd409847e7100c7f66b8ffda9402ca0",
             "isMetadataFile": false,
@@ -3220,27 +3220,27 @@
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\documents",
         {
-            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\documents",
             "isDirectory": true,
-            "isMetadataFile": false,
             "size": 0,
             "modifiedTime": 1537783976542,
             "changeTime": 1537783976542,
-            "contentHash": "334a2aa121395abbd2b894bc911f2fe74a5b9027"
+            "contentHash": "334a2aa121395abbd2b894bc911f2fe74a5b9027",
+            "isMetadataFile": false,
+            "state": "u"
         }
     ],
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\documents\\CandidatesImages\\CABIAJCEAf033a39c476c4d969c04df880fdfb882.document-meta.xml",
         {
-            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\documents\\CandidatesImages\\CABIAJCEAf033a39c476c4d969c04df880fdfb882.document-meta.xml",
             "isDirectory": false,
-            "isMetadataFile": true,
             "size": 218,
             "modifiedTime": 1537786700561,
             "changeTime": 1537786700561,
-            "contentHash": "848ba1faf1b9a1da24d107873609c996e30be403"
+            "contentHash": "848ba1faf1b9a1da24d107873609c996e30be403",
+            "isMetadataFile": true,
+            "state": "u"
         }
     ],
     [
@@ -3250,23 +3250,23 @@
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\documents\\CandidatesImages\\CABIAJCEAf033a39c476c4d969c04df880fdfb882",
             "isDirectory": false,
             "isMetadataFile": false,
-            "size": 38926,
-            "modifiedTime": 1537786700577,
-            "changeTime": 1537786700577,
-            "contentHash": "4e5d55a1b50c4e1ae3e324d5b6d9bb0923a6b9f6"
+            "size": 23656,
+            "modifiedTime": 1537791995418,
+            "changeTime": 1537791995418,
+            "contentHash": "5635affd4fa330533602a9fdac7e01c8140e0d3c"
         }
     ],
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\documents\\CandidatesImages",
         {
-            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\documents\\CandidatesImages",
             "isDirectory": true,
-            "isMetadataFile": false,
             "size": 0,
             "modifiedTime": 1537786700577,
             "changeTime": 1537786700577,
-            "contentHash": "300f3ee340e7ff843b6be11dd72db7776c1e8c72"
+            "contentHash": "300f3ee340e7ff843b6be11dd72db7776c1e8c72",
+            "isMetadataFile": false,
+            "state": "u"
         }
     ]
 ]

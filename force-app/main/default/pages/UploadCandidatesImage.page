@@ -18,7 +18,7 @@
     <apex:pageMessages />
     <apex:pageBlock rendered="{!OR((NOT(hasImage)),isDelete)}">
       <apex:inputFile value="{!file}" accept="png,jpg" filename="{!document.name}" id="uploadImage" onchange="makeSaveVisibleForUpload();"/>
-      <apex:commandButton action="{!upload}" value="Save" id="saveButton" />
+      <apex:commandButton action="{!upload}" value="Save" id="saveButton" style="visibility:hidden"/>
     </apex:pageBlock>  
     <apex:pageBlock rendered="{!AND(hasImage, NOT(isDelete))}">
       <div class="candidateImageAndButtonDelete" style="width: 360px; height: 255px; float: none">
@@ -27,7 +27,7 @@
       </div>
       <div class="updateCandidateImage">
         <apex:inputFile value="{!file}" accept=".png, .jpg" filename="{!document.name}" id="file2" onchange="makeSaveVisibleForUpdate();"/>
-        <apex:commandButton action="{!updateImage}" value="Update Image" id="update" />
+        <apex:commandButton action="{!updateImage}" value="Update Image" id="update" style="visibility:hidden"/>
       </div>
     </apex:pageBlock>
 
