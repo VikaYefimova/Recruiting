@@ -16,7 +16,7 @@ public class HelperForAssigningPositionTrigger {
                 try{
                     update newPositions;
                 }
-                catch(DmlException ex){	// let's cover this part of code as well (just to practise, how to do it).
+                catch(DmlException ex){	
                     System.debug(ex.getMessage());
                 }
     }
