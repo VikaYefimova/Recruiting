@@ -15,22 +15,28 @@ public class CandidatesImagesController {
     }
     
     public PageReference upload() {
-        uploadCandidatesImage(file, recordId);
+        String candidateName = getCandidateName(recordId);
+        uploadCandidatesImage(file, candidateName);
         return null;
     }
     public PageReference deleteImage(){
-        deleteCandidatePhoto(recordId);
+        String candidateName = getCandidateName(recordId);
+        id documentid = [select ContentDocumentId from ContentDocumentLink where LinkedEntityId =: candidateName].ContentDocumentId;
+        ContentDocument candidatesImage = [select id from ContentDocument where Id =: documentid];
+        deleteCandidatePhoto(candidatesImage);
         return null;
     }
     public PageReference updateImage(){
-        updateCandidateImage(recordId, file);
+        String candidateName = getCandidateName(recordId);
+        id documentid = [select ContentDocumentId from ContentDocumentLink where LinkedEntityId =: candidateName].ContentDocumentId;
+        ContentVersion candidatesImage = [select id from ContentVersion where ContentDocumentId =: documentid And isLatest = True];
+        updateCandidateImage(candidatesImage, file);
         return null;
     }
-    public ContentVersion uploadCandidatesImage(Blob file, id candidateId){
+    public ContentVersion uploadCandidatesImage(Blob file, String candidateName){
         ContentVersion image = new ContentVersion();
         image.VersionData = file;
-        String recId = candidateId;
-        image.title = recId;
+        image.title = candidateName;
         image.PathOnClient = '/image.jpg';
         image.IsMajorVersion = false;
         try{
@@ -38,7 +44,7 @@ public class CandidatesImagesController {
             hasImage = true;
             isDelete = false;
             ContentDocumentLink relatedFile = new ContentDocumentLink();
-            Id contentid = [select ContentDocumentId from ContentVersion where Title =: recId].ContentDocumentId;
+            Id contentid = [select ContentDocumentId from ContentVersion where Title =: candidateName].ContentDocumentId;
             relatedFile.ContentDocumentId = contentid;
             System.debug('contentID: ' + contentid);
             relatedFile.LinkedEntityId = recordId;
@@ -50,12 +56,10 @@ public class CandidatesImagesController {
         }
         return image;
     }
-    public String deleteCandidatePhoto(id recId){
+    public String deleteCandidatePhoto(ContentDocument candidateImages){
         String message;
-        id documentid = [select ContentDocumentId from ContentDocumentLink where LinkedEntityId =: recId].ContentDocumentId;
-        ContentDocument candidatesImage = [select id from ContentDocument where Id =: documentid];
         try{
-            delete candidatesImage;
+            delete candidateImages;
             isDelete = true;
             hasImage = false;
             message = 'Image deleted successfully';
@@ -69,12 +73,10 @@ public class CandidatesImagesController {
         }
         return message;
     }
-    public ContentVersion updateCandidateImage(id recId, Blob file){
-        id documentid = [select ContentDocumentId from ContentDocumentLink where LinkedEntityId =: recId].ContentDocumentId;
-        ContentVersion candidatesImage = [select id from ContentVersion where ContentDocumentId =: documentid And isLatest = True];
-        candidatesImage.VersionData = file;
+    public ContentVersion updateCandidateImage(ContentVersion candidateImage, Blob file){
+        candidateImage.VersionData = file;
         try{
-            update candidatesImage;
+            update candidateImage;
             hasImage = true;
             isDelete = false;
             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.INFO,'Image updating successfully'));
@@ -84,7 +86,7 @@ public class CandidatesImagesController {
             isDelete = false;
             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR,'Error updating image'));
         }
-        return candidatesImage;
+        return candidateImage;
     }
     public boolean hasImage(id recordId){
         List<ContentDocumentLink> candidatesImage = [select ContentDocumentId from ContentDocumentLink where LinkedEntityId =: recordId];
@@ -95,5 +97,9 @@ public class CandidatesImagesController {
             hasImage = false;
         }
         return hasImage;
+    }
+    public String getCandidateName(id recordId){
+        String candidateName = [select Name from Candidate__c Where Id =: recordId].Name;
+        return candidateName;
     }
 }
