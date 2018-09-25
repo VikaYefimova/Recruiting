@@ -13,27 +13,27 @@ public class CandidatesImagesController {
             hasImage = true;
         }
     }
-    
     public PageReference upload() {
+        ContentVersion image = new ContentVersion();
         String candidateName = getCandidateName(recordId);
-        uploadCandidatesImage(file, candidateName);
+        uploadCandidatesImage(file, candidateName, recordId);
         return null;
     }
     public PageReference deleteImage(){
         String candidateName = getCandidateName(recordId);
-        id documentid = [select ContentDocumentId from ContentDocumentLink where LinkedEntityId =: candidateName].ContentDocumentId;
-        ContentDocument candidatesImage = [select id from ContentDocument where Id =: documentid];
+        id documentid = [select ContentDocumentId from ContentDocumentLink where LinkedEntityId =: recordId].ContentDocumentId;
+        List<ContentDocument> candidatesImage = [select id from ContentDocument where Id =: documentid];
         deleteCandidatePhoto(candidatesImage);
         return null;
     }
     public PageReference updateImage(){
         String candidateName = getCandidateName(recordId);
-        id documentid = [select ContentDocumentId from ContentDocumentLink where LinkedEntityId =: candidateName].ContentDocumentId;
+        id documentid = [select ContentDocumentId from ContentDocumentLink where LinkedEntityId =: recordId].ContentDocumentId;
         ContentVersion candidatesImage = [select id from ContentVersion where ContentDocumentId =: documentid And isLatest = True];
         updateCandidateImage(candidatesImage, file);
         return null;
     }
-    public ContentVersion uploadCandidatesImage(Blob file, String candidateName){
+    public ContentVersion uploadCandidatesImage(Blob file, String candidateName, id recId){
         ContentVersion image = new ContentVersion();
         image.VersionData = file;
         image.title = candidateName;
@@ -46,17 +46,17 @@ public class CandidatesImagesController {
             ContentDocumentLink relatedFile = new ContentDocumentLink();
             Id contentid = [select ContentDocumentId from ContentVersion where Title =: candidateName].ContentDocumentId;
             relatedFile.ContentDocumentId = contentid;
-            System.debug('contentID: ' + contentid);
-            relatedFile.LinkedEntityId = recordId;
+            relatedFile.LinkedEntityId = recId;
             relatedFile.ShareType = 'I';
             insert relatedFile;
+            ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR, 'Image uploaded successfully'));
         }
         catch(DMLException e){
             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR, 'Error uploading image'));
         }
         return image;
     }
-    public String deleteCandidatePhoto(ContentDocument candidateImages){
+    public String deleteCandidatePhoto(List<ContentDocument> candidateImages){
         String message;
         try{
             delete candidateImages;
