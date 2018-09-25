@@ -12,14 +12,6 @@
             "requestTypeFilter": [],
             "entryPointFilter": "",
             "sfdxProject": "${workspaceRoot}"
-        },
-        {
-            "name": "Launch Apex Replay Debugger",
-            "type": "apex-replay",
-            "request": "launch",
-            "logFile": "${command:AskForLogFileName}",
-            "stopOnEntry": true,
-            "trace": true
         }
     ]
 }
