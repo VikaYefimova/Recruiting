@@ -1,12 +1,12 @@
 <apex:page showHeader="false" standardStylesheets="false" showQuickActionVfHeader="false"
-    standardController="Candidate__c" extensions="CandidateImageControler"
+    standardController="Candidate__c" extensions="DisplayImageController"
     renderAs="pdf">
     <apex:stylesheet value="{!URLFOR($Resource.cssStyles, 'CandidatePDFStyles.css')}"/>
     
     <h2>Candidate {!Candidate__c.Name}</h2>
     <apex:pageBlock >
         <apex:form >
-			<apex:image style="height: 150px; width: 100px" url="/servlet/servlet.FileDownload?file={!FileId}"/>
+			<apex:image style="height: 150px; width: 100px" url="/sfc/servlet.shepherd/version/download/{!FileId}"/>
 		</apex:form>
         <apex:pageBlockSection title="Contact Information" >
             <apex:outputField value="{!Candidate__c.First_Name__c}" label="First Name: " styleClass="candidateField" style="font-size: 15px; margin: 10px;"/>
