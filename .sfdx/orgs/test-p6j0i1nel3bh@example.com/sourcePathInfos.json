@@ -93,7 +93,7 @@
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\classes",
             "isDirectory": true,
             "size": 0,
-            "modifiedTime": 1538043602063,
+            "modifiedTime": 1538064323834,
             "changeTime": 1538043602063,
             "contentHash": "67c58a45680629d450b11464a281ab82a7909057",
             "isMetadataFile": false,
@@ -3240,7 +3240,7 @@
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\triggers",
             "isDirectory": true,
             "size": 0,
-            "modifiedTime": 1538043602068,
+            "modifiedTime": 1538064323839,
             "changeTime": 1538043602068,
             "contentHash": "5b65151fb8244e8b38cb705341642f22c7fe20f4",
             "isMetadataFile": false,
@@ -3433,9 +3433,9 @@
             "isDirectory": false,
             "isMetadataFile": false,
             "size": 6774,
-            "modifiedTime": 1538064323835,
-            "changeTime": 1538064323835,
-            "contentHash": "de4c2b66bd245cd2590378a9be8ea65111d29ffc"
+            "modifiedTime": 1538065486092,
+            "changeTime": 1538065486092,
+            "contentHash": "1de069fca8eaad9f778ea1a747bfa474060c56d2"
         }
     ],
     [
@@ -3454,14 +3454,14 @@
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\triggers\\createPositionOnTargetOrg.trigger",
         {
-            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\triggers\\createPositionOnTargetOrg.trigger",
             "isDirectory": false,
-            "isMetadataFile": false,
             "size": 624,
             "modifiedTime": 1538064323839,
             "changeTime": 1538064323839,
-            "contentHash": "bbcd36eb96de33c4ae8f46b9264c22ff2a2a171e"
+            "contentHash": "bbcd36eb96de33c4ae8f46b9264c22ff2a2a171e",
+            "isMetadataFile": false,
+            "state": "u"
         }
     ],
     [

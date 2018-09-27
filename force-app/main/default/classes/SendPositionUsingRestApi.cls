@@ -33,7 +33,7 @@ String clientId='3MVG9fTLmJ60pJ5I9d8FcNmhnOyWg4QBXzptmhuhTNPXtWTsLGzeihB6UX.YrwA
         System.debug(accessToken+'###0012');
         if(accessToken!=null){
             String posId = position.Id;
-            String endPoint='https://eu16.salesforce.com/services/data/v32.0/sobjects/Job_Advertisement__c'; //Instance  Target Org
+            String endPoint='https://eu16.salesforce.com/services/data/v20.0/sobjects/Job_Advertisement__c'; //Instance  Target Org
            // String endPoint='https://eu16.salesforce.com/services/data/v32.0/sobjects/Job_Advertisement__c/Legacy_Job_Advertisement_Number__c/' + posId + '?_HttpMethod=PATCH'; 
 String jsonstr='{"Name":"'+ position.Name + '", "Location__c":"' + position.Location__c +'", "Education__c":"' + position.Education__c +
     '", "Manager_name__c":"' + recruiterUser.Name + '", "Legacy_Job_Advertisement_Number__c":"' + position.id + '", "Status__c":"Active"}';
