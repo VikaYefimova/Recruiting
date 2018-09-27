@@ -72,6 +72,7 @@ public class CandidatesImagesController {
            ApexPages.addMessage(new ApexPages.message(ApexPages.severity.ERROR, message));
         }
         return message;
+        ///////.jkljljll
     }
     public ContentVersion updateCandidateImage(ContentVersion candidateImage, Blob file){
         candidateImage.VersionData = file;
