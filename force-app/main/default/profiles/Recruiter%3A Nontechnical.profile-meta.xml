@@ -54,6 +54,10 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>addingCustomSettingsController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>aws_PositionHelper</apexClass>
         <enabled>false</enabled>
     </classAccesses>
@@ -395,6 +399,10 @@
     <layoutAssignments>
         <layout>Zip_Code__c-Zip Code Layout</layout>
     </layoutAssignments>
+    <pageAccesses>
+        <apexPage>AddingCustomSettings</apexPage>
+        <enabled>false</enabled>
+    </pageAccesses>
     <pageAccesses>
         <apexPage>UploadCandidatesImage</apexPage>
         <enabled>false</enabled>
