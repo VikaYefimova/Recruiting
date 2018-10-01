@@ -54,6 +54,10 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>addingCustomSettingsController</apexClass>
+        <enabled>false</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>aws_PositionHelper</apexClass>
         <enabled>false</enabled>
     </classAccesses>
@@ -458,6 +462,10 @@
         <object>Review__c</object>
         <viewAllRecords>false</viewAllRecords>
     </objectPermissions>
+    <pageAccesses>
+        <apexPage>AddingCustomSettings</apexPage>
+        <enabled>false</enabled>
+    </pageAccesses>
     <pageAccesses>
         <apexPage>UploadCandidatesImage</apexPage>
         <enabled>false</enabled>
