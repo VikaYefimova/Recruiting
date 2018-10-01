@@ -1,0 +1,57 @@
+<apex:page standardController="Authorization_setting__c" standardStylesheets="true">
+    <apex:stylesheet value="{!URLFOR($Resource.cssStyles, '/cssStyles/Styles/addingCustomSettingStyles.css')}"/>
+        <apex:pageBlock >
+            <apex:pageBlockSection title="New Custom Settings Block">
+            <apex:form >
+                <span class="label">Name: </span>
+                <apex:inputField label="Name:" value="{!Authorization_setting__c.Name}" id="name"/>
+                <apex:image url="https://cdn3.iconfinder.com/data/icons/bold-blue-glyphs-free-samples/32/Info_Circle_Symbol_Information_Letter-512.png" title="Enter name for your authorization setting" width="15" height="15" styleClass="informationImage"/>
+                
+                </apex:form>
+            <apex:form >
+                <span class="label">Username: </span>
+                <apex:inputField label="Username:" value="{!Authorization_setting__c.Login__c}" id="login"/>
+                
+                <apex:image url="https://cdn3.iconfinder.com/data/icons/bold-blue-glyphs-free-samples/32/Info_Circle_Symbol_Information_Letter-512.png"
+                            title="Enter your username from connected org" width="15" height="15" styleClass="informationImage"/>
+                
+            </apex:form>
+            <apex:form >
+                <span class="label">Password: </span>
+                <apex:inputField label="Password:" value="{!Authorization_setting__c.Password__c}" id="password"/>
+                
+                <apex:image url="https://cdn3.iconfinder.com/data/icons/bold-blue-glyphs-free-samples/32/Info_Circle_Symbol_Information_Letter-512.png"
+                            title="Enter your password from connected org" width="15" height="15" styleClass="informationImage"/>
+               
+            </apex:form>
+            <apex:form >
+                <span class="label">Client Secret: </span>
+                <apex:inputField label="Client Secret:" value="{!Authorization_setting__c.Client_secret__c}" id="clientSecret"/>
+               
+                <apex:image url="https://cdn3.iconfinder.com/data/icons/bold-blue-glyphs-free-samples/32/Info_Circle_Symbol_Information_Letter-512.png"
+                            title="Client secret from your connected org" width="15" height="15" styleClass="informationImage"/>
+                
+            </apex:form>
+            <apex:form >
+                <span class="label">Consumer Secret: </span>
+                <apex:inputField label="Consumer Secret:" value="{!Authorization_setting__c.Consumer_Secret__c}" id="consumerSecret"/>
+                
+                    <apex:image url="https://cdn3.iconfinder.com/data/icons/bold-blue-glyphs-free-samples/32/Info_Circle_Symbol_Information_Letter-512.png"
+                                title="Enter consumer secret from your connected org" width="15" height="15" styleClass="informationImage"/>
+               
+            </apex:form>
+            <apex:form >
+                <span class="label">Link: </span>
+                <apex:inputField label="Link: " value="{!Authorization_setting__c.Link_to_connected_org__c}" id="link"/>
+                
+                <apex:image url="https://cdn3.iconfinder.com/data/icons/bold-blue-glyphs-free-samples/32/Info_Circle_Symbol_Information_Letter-512.png"
+                            title="Enter your connected org's link (like: https://xxxx.salesforce.com, where xxxx - your org's instance)."
+                            width="15" height="15" styleClass="informationImage"/>
+                
+            </apex:form>
+            <apex:form >
+                <apex:commandButton action="{!save}" value="Save" styleClass="btn"/>
+            </apex:form>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+</apex:page>

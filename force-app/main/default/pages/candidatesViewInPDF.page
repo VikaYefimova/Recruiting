@@ -1,7 +1,7 @@
 <apex:page showHeader="false" standardStylesheets="false" showQuickActionVfHeader="false"
     standardController="Candidate__c" extensions="DisplayImageController"
     renderAs="pdf">
-    <apex:stylesheet value="{!URLFOR($Resource.cssStyles, 'CandidatePDFStyles.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.cssStyles, '/cssStyles/Styles/CandidatePDFStyles.css')}"/>
     
     <h2>Candidate {!Candidate__c.Name}</h2>
     <apex:pageBlock >

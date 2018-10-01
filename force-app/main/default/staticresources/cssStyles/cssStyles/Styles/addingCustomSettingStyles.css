@@ -1,0 +1,13 @@
+.label{
+    width: 110px;
+    float: left;
+}
+.inputField{
+    width: 193px;
+    float: none;
+}
+
+.requiredInput {
+    width: 175px;
+    float: left;
+}
