@@ -90,14 +90,14 @@
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\classes",
         {
-            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\classes",
             "isDirectory": true,
-            "isMetadataFile": false,
             "size": 0,
             "modifiedTime": 1537884767474,
             "changeTime": 1537884767474,
-            "contentHash": "261037a6981e226215b49197511e5c70af4f5294"
+            "contentHash": "261037a6981e226215b49197511e5c70af4f5294",
+            "isMetadataFile": false,
+            "state": "u"
         }
     ],
     [
@@ -3232,14 +3232,14 @@
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\classes\\CandidatesImagesController.cls",
         {
-            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\classes\\CandidatesImagesController.cls",
             "isDirectory": false,
-            "isMetadataFile": false,
             "size": 4326,
             "modifiedTime": 1538039211004,
             "changeTime": 1538039211004,
-            "contentHash": "225173ffd028ce3ce3bdb697f447cc41370c0b5a"
+            "contentHash": "225173ffd028ce3ce3bdb697f447cc41370c0b5a",
+            "isMetadataFile": false,
+            "state": "u"
         }
     ],
     [
