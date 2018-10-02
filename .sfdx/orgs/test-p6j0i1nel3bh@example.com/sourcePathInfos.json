@@ -90,14 +90,14 @@
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\classes",
         {
+            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\classes",
             "isDirectory": true,
-            "size": 0,
-            "modifiedTime": 1538502234253,
-            "changeTime": 1538502234253,
-            "contentHash": "588186bbdeb67e13ba2c9e3acb800aea10f79a2e",
             "isMetadataFile": false,
-            "state": "u"
+            "size": 0,
+            "modifiedTime": 1538503211856,
+            "changeTime": 1538503211856,
+            "contentHash": "4df92cd83db462c1ec42f6b3b1d3c02481f5c156"
         }
     ],
     [
@@ -3593,14 +3593,14 @@
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\pages\\AddingCustomSettings.page",
         {
+            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\pages\\AddingCustomSettings.page",
             "isDirectory": false,
-            "size": 2461,
-            "modifiedTime": 1538502233761,
-            "changeTime": 1538502233761,
-            "contentHash": "1c7f10519e66c6b407aa55892039d56a459e4281",
             "isMetadataFile": false,
-            "state": "u"
+            "size": 2453,
+            "modifiedTime": 1538503211835,
+            "changeTime": 1538503211835,
+            "contentHash": "8be863b8966d765acc15a6a0d492e864cfe5e4ae"
         }
     ],
     [
@@ -3770,6 +3770,32 @@
             "contentHash": "a0a899dd9152d2f9c1e4586cc53539c4d19553e4",
             "isMetadataFile": false,
             "state": "u"
+        }
+    ],
+    [
+        "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\classes\\SendCalloutsController.cls-meta.xml",
+        {
+            "state": "u",
+            "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\classes\\SendCalloutsController.cls-meta.xml",
+            "isDirectory": false,
+            "isMetadataFile": true,
+            "size": 174,
+            "modifiedTime": 1538503211854,
+            "changeTime": 1538503211854,
+            "contentHash": "0bfc8bc49e53c8f0f6b207cf675766c0d6546ee5"
+        }
+    ],
+    [
+        "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\classes\\SendCalloutsController.cls",
+        {
+            "state": "u",
+            "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\classes\\SendCalloutsController.cls",
+            "isDirectory": false,
+            "isMetadataFile": false,
+            "size": 3228,
+            "modifiedTime": 1538503211862,
+            "changeTime": 1538503211862,
+            "contentHash": "d09b5514fcffc820f4f85888f496abf1e4cf0764"
         }
     ]
 ]

@@ -1,4 +1,4 @@
-<apex:page standardController="Position__c" extensions="AddingCustomSettingsController" cache="false" standardStylesheets="true">
+<apex:page standardController="Position__c" extensions="SendCalloutsController" cache="false" standardStylesheets="true">
     <apex:stylesheet value="{!URLFOR($Resource.cssStyles, '/cssStyles/Styles/addingCustomSettingStyles.css')}"/>
     <apex:messages />
     <apex:form >
