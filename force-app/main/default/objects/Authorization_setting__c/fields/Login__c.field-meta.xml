@@ -3,7 +3,7 @@
     <fullName>Login__c</fullName>
     <externalId>false</externalId>
     <label>Login</label>
-    <required>false</required>
+    <required>true</required>
     <trackTrending>false</trackTrending>
     <type>Email</type>
     <unique>true</unique>

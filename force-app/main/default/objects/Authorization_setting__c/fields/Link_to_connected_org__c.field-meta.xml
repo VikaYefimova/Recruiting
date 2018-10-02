@@ -3,7 +3,7 @@
     <fullName>Link_to_connected_org__c</fullName>
     <externalId>false</externalId>
     <label>Link to connected org</label>
-    <required>false</required>
+    <required>true</required>
     <trackTrending>false</trackTrending>
     <type>Url</type>
 </CustomField>
