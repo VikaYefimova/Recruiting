@@ -1,63 +1,28 @@
-<apex:page controller="addingCustomSettingsController" cache="false" standardStylesheets="true">
+<apex:page standardController="Position__c" extensions="addingCustomSettingsController" cache="false" standardStylesheets="true">
     <apex:stylesheet value="{!URLFOR($Resource.cssStyles, '/cssStyles/Styles/addingCustomSettingStyles.css')}"/>
-    
-
-    <apex:pageBlock >
-        <apex:form >
-        <apex:pageBlockSection title="New Custom Settings Block">
-                <apex:inputText label="Name:"  value="{!userName}" />
-            <apex:inputField label="Username:" value="{!authorizationSetting.Login__c}" />
-            <apex:inputField label="Password:" value="{!authorizationSetting.Password__c}" />
-            <apex:inputField label="Client Secret:" value="{!authorizationSetting.Client_secret__c}" id="clientSecret"/>
-            <apex:inputField label="Consumer Secret:" value="{!authorizationSetting.Consumer_Secret__c}" />
-            <apex:inputField label="Link: " value="{!authorizationSetting.Link_to_connected_org__c}" id="link"/>
+    <apex:form >
+        <apex:pageBlock rendered="{!NOT(flag)}">
+            <apex:pageBlockSection >
+                <apex:selectList value="{!settingName}" multiselect="false" size="1" label="Authorization settings: ">
+                    <apex:selectOptions value="{!settingsList}" />
+                </apex:selectList>
+                <apex:commandButton value="New Authorization setting" action="{!createButtonAction}" />
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+    <apex:outputPanel id="createCustomSetting" rendered="{!flag}">
+        <apex:pageBlock >
+            <apex:form >
+                <apex:pageBlockSection title="New Custom Settings Block">
+                    <apex:inputField label="Name:"  value="{!authorizationSetting.Name}" />
+                    <apex:inputField label="Username:" value="{!authorizationSetting.Login__c}" />
+                    <apex:inputField label="Password:" value="{!authorizationSetting.Password__c}" />
+                    <apex:inputField label="Client Secret:" value="{!authorizationSetting.Client_secret__c}" id="clientSecret"/>
+                    <apex:inputField label="Consumer Secret:" value="{!authorizationSetting.Consumer_Secret__c}" />
+                    <apex:inputField label="Link: " value="{!authorizationSetting.Link_to_connected_org__c}" id="link"/>
                     <apex:commandButton action="{!save}" value="Save" styleClass="btn"/> 
-            
-            <!--<apex:form>
-<span class="label">Username: </span>
-<apex:inputField label="Username:" value="{!authorizationSetting.Login__c}" />
-
-<apex:image url="https://cdn3.iconfinder.com/data/icons/bold-blue-glyphs-free-samples/32/Info_Circle_Symbol_Information_Letter-512.png"
-title="Enter your username from connected org" width="15" height="15" styleClass="informationImage"/>
-
-</apex:form>
-<apex:form>
-<span class="label">Password: </span>
-<apex:inputField label="Password:" value="{!authorizationSetting.Password__c}" />
-
-<apex:image url="https://cdn3.iconfinder.com/data/icons/bold-blue-glyphs-free-samples/32/Info_Circle_Symbol_Information_Letter-512.png"
-title="Enter your password from connected org" width="15" height="15" styleClass="informationImage"/>
-
-</apex:form>
-<apex:form>
-<span class="label">Client Secret: </span>
-<apex:inputField label="Client Secret:" value="{!authorizationSetting.Client_secret__c}" id="clientSecret"/>
-
-<apex:image url="https://cdn3.iconfinder.com/data/icons/bold-blue-glyphs-free-samples/32/Info_Circle_Symbol_Information_Letter-512.png"
-title="Client secret from your connected org" width="15" height="15" styleClass="informationImage"/>
-
-</apex:form>
-<apex:form>
-<span class="label">Consumer Secret: </span>
-<apex:inputField label="Consumer Secret:" value="{!authorizationSetting.Consumer_Secret__c}" />
-
-<apex:image url="https://cdn3.iconfinder.com/data/icons/bold-blue-glyphs-free-samples/32/Info_Circle_Symbol_Information_Letter-512.png"
-title="Enter consumer secret from your connected org" width="15" height="15" styleClass="informationImage"/>
-
-</apex:form>
-<apex:form>
-<span class="label">Link: </span>
-<apex:inputField label="Link: " value="{!authorizationSetting.Link_to_connected_org__c}" id="link"/>
-
-<apex:image url="https://cdn3.iconfinder.com/data/icons/bold-blue-glyphs-free-samples/32/Info_Circle_Symbol_Information_Letter-512.png"
-title="Enter your connected org's link (like: https://xxxx.salesforce.com, where xxxx - your org's instance)."
-width="15" height="15" styleClass="informationImage"/>
-
-</apex:form>-->
-            
-            
-            
-        </apex:pageBlockSection>
+                </apex:pageBlockSection>
             </apex:form>
-    </apex:pageBlock>
+        </apex:pageBlock>
+    </apex:outputPanel>
 </apex:page>
