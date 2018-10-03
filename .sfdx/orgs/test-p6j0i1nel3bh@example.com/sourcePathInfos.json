@@ -90,14 +90,14 @@
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\classes",
         {
+            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\classes",
             "isDirectory": true,
-            "size": 0,
-            "modifiedTime": 1538503211856,
-            "changeTime": 1538503211856,
-            "contentHash": "4df92cd83db462c1ec42f6b3b1d3c02481f5c156",
             "isMetadataFile": false,
-            "state": "u"
+            "size": 0,
+            "modifiedTime": 1538582780126,
+            "changeTime": 1538582780126,
+            "contentHash": "63ce9a6a3df4161abfa1f095cd610c41f113a268"
         }
     ],
     [
@@ -716,14 +716,14 @@
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\flexipages",
         {
-            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\flexipages",
             "isDirectory": true,
-            "isMetadataFile": false,
             "size": 0,
             "modifiedTime": 1538577085925,
             "changeTime": 1538577085925,
-            "contentHash": "1f11ce9bce7763d9d313a346a165cc2725f2c8e3"
+            "contentHash": "1f11ce9bce7763d9d313a346a165cc2725f2c8e3",
+            "isMetadataFile": false,
+            "state": "u"
         }
     ],
     [
@@ -868,23 +868,23 @@
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\layouts\\Position__c-Position Layout.layout-meta.xml",
             "isDirectory": false,
             "isMetadataFile": true,
-            "size": 7364,
-            "modifiedTime": 1538577085917,
-            "changeTime": 1538577085917,
-            "contentHash": "9bfb0462d387367409d2ffa24db9bf794520ec8c"
+            "size": 7509,
+            "modifiedTime": 1538582780095,
+            "changeTime": 1538582780095,
+            "contentHash": "edf3737ed98c4a19267870079293906f29dda3df"
         }
     ],
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\layouts\\Position__c-Technical Position Layout.layout-meta.xml",
         {
+            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\layouts\\Position__c-Technical Position Layout.layout-meta.xml",
             "isDirectory": false,
-            "size": 7669,
-            "modifiedTime": 1538502233851,
-            "changeTime": 1538502233851,
-            "contentHash": "e3e9fdbb23c3198755ab360a6c9b7ef48f699309",
             "isMetadataFile": true,
-            "state": "u"
+            "size": 7814,
+            "modifiedTime": 1538582780114,
+            "changeTime": 1538582780114,
+            "contentHash": "a543d8652bff3bbc8f2e3075754d894d02c7ec05"
         }
     ],
     [
@@ -920,14 +920,14 @@
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\objects",
         {
+            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\objects",
             "isDirectory": true,
-            "size": 0,
-            "modifiedTime": 1538409931353,
-            "changeTime": 1538409931353,
-            "contentHash": "430606386de0de451e787c96c54acc12222b8776",
             "isMetadataFile": false,
-            "state": "u"
+            "size": 0,
+            "modifiedTime": 1538582780070,
+            "changeTime": 1538582780070,
+            "contentHash": "bbded7fc8b0f59f19190487ce8831d336bbcd9cb"
         }
     ],
     [
@@ -1953,14 +1953,14 @@
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\objects\\Position__c\\fields",
         {
+            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\objects\\Position__c\\fields",
             "isDirectory": true,
-            "size": 0,
-            "modifiedTime": 1538502233770,
-            "changeTime": 1538502233770,
-            "contentHash": "2665145fea2ad3f4f7d0e0aec10a12901f98c09a",
             "isMetadataFile": false,
-            "state": "u"
+            "size": 0,
+            "modifiedTime": 1538582780065,
+            "changeTime": 1538582780065,
+            "contentHash": "08f27c3b6dbe0ecc4ce5255ec45ae74c86d9cce2"
         }
     ],
     [
@@ -2251,14 +2251,14 @@
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\objects\\Position__c\\Position__c.object-meta.xml",
         {
-            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\objects\\Position__c\\Position__c.object-meta.xml",
             "isDirectory": false,
-            "isMetadataFile": true,
             "size": 2426,
             "modifiedTime": 1538577085899,
             "changeTime": 1538577085899,
-            "contentHash": "052a270b2415751531df04e84a534198b0912dc4"
+            "contentHash": "052a270b2415751531df04e84a534198b0912dc4",
+            "isMetadataFile": true,
+            "state": "u"
         }
     ],
     [
@@ -2714,14 +2714,14 @@
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\pages",
         {
+            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\pages",
             "isDirectory": true,
-            "size": 0,
-            "modifiedTime": 1538503211833,
-            "changeTime": 1538386055001,
-            "contentHash": "c50a3533bcc43fd6fdf967a7c6c8f8fd479ae7c3",
             "isMetadataFile": false,
-            "state": "u"
+            "size": 0,
+            "modifiedTime": 1538582780056,
+            "changeTime": 1538582780056,
+            "contentHash": "a5716b6ad0287a7082aa4faaa1172c0da0543618"
         }
     ],
     [
@@ -2873,79 +2873,79 @@
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\profiles\\Custom%3A Marketing Profile.profile-meta.xml",
         {
+            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\profiles\\Custom%3A Marketing Profile.profile-meta.xml",
             "isDirectory": false,
-            "size": 19766,
-            "modifiedTime": 1538502234011,
-            "changeTime": 1538502234011,
-            "contentHash": "6a8fdac57cd026c10d7ee1206ecdf3fc353930d4",
             "isMetadataFile": true,
-            "state": "u"
+            "size": 20156,
+            "modifiedTime": 1538582780199,
+            "changeTime": 1538582780199,
+            "contentHash": "66acaee31540a835771049d8d30a4ca3f2aab019"
         }
     ],
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\profiles\\Custom%3A Sales Profile.profile-meta.xml",
         {
+            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\profiles\\Custom%3A Sales Profile.profile-meta.xml",
             "isDirectory": false,
-            "size": 19766,
-            "modifiedTime": 1538502234094,
-            "changeTime": 1538502234094,
-            "contentHash": "6a8fdac57cd026c10d7ee1206ecdf3fc353930d4",
             "isMetadataFile": true,
-            "state": "u"
+            "size": 20156,
+            "modifiedTime": 1538582780272,
+            "changeTime": 1538582780272,
+            "contentHash": "66acaee31540a835771049d8d30a4ca3f2aab019"
         }
     ],
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\profiles\\Custom%3A Support Profile.profile-meta.xml",
         {
+            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\profiles\\Custom%3A Support Profile.profile-meta.xml",
             "isDirectory": false,
-            "size": 20104,
-            "modifiedTime": 1538502234060,
-            "changeTime": 1538502234060,
-            "contentHash": "8c68550240f53ea8bace37a929500dbe0afe5ff2",
             "isMetadataFile": true,
-            "state": "u"
+            "size": 20494,
+            "modifiedTime": 1538582780245,
+            "changeTime": 1538582780245,
+            "contentHash": "d611ff358d2d45eecb85e0f93309d1a3b51a97e2"
         }
     ],
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\profiles\\HR Recruiter.profile-meta.xml",
         {
+            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\profiles\\HR Recruiter.profile-meta.xml",
             "isDirectory": false,
-            "size": 23218,
-            "modifiedTime": 1538502234220,
-            "changeTime": 1538502234220,
-            "contentHash": "737c30192877efa2951bf285be7003e8fa374c41",
             "isMetadataFile": true,
-            "state": "u"
+            "size": 23608,
+            "modifiedTime": 1538582780370,
+            "changeTime": 1538582780370,
+            "contentHash": "0d00eba22fec6bd3bdcdb9860dc598ec868548b5"
         }
     ],
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\profiles\\Recruiter%3A Nontechnical.profile-meta.xml",
         {
+            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\profiles\\Recruiter%3A Nontechnical.profile-meta.xml",
             "isDirectory": false,
-            "size": 20840,
-            "modifiedTime": 1538502234251,
-            "changeTime": 1538502234251,
-            "contentHash": "013722416aeef567e37291f916184355f7f83c9b",
             "isMetadataFile": true,
-            "state": "u"
+            "size": 21230,
+            "modifiedTime": 1538582780392,
+            "changeTime": 1538582780392,
+            "contentHash": "6916b99e973a6c9a360dc4007e09c4858a4369c9"
         }
     ],
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\profiles\\Recruiter%3A Technical.profile-meta.xml",
         {
+            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\profiles\\Recruiter%3A Technical.profile-meta.xml",
             "isDirectory": false,
-            "size": 20846,
-            "modifiedTime": 1538502234126,
-            "changeTime": 1538502234126,
-            "contentHash": "d599261eac1d0dbebc7eb3ee4b597544f2b281a3",
             "isMetadataFile": true,
-            "state": "u"
+            "size": 21236,
+            "modifiedTime": 1538582780295,
+            "changeTime": 1538582780295,
+            "contentHash": "87cb2d49ad741141e651ed877dee67f45d1171df"
         }
     ],
     [
@@ -3394,14 +3394,14 @@
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\classes\\SendPositionUsingRestApi.cls",
         {
-            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\classes\\SendPositionUsingRestApi.cls",
             "isDirectory": false,
-            "isMetadataFile": false,
             "size": 12078,
             "modifiedTime": 1538577085937,
             "changeTime": 1538577085937,
-            "contentHash": "e48b1e95cc17a59c564f0328402cdb923332bcaa"
+            "contentHash": "e48b1e95cc17a59c564f0328402cdb923332bcaa",
+            "isMetadataFile": false,
+            "state": "u"
         }
     ],
     [
@@ -3537,14 +3537,14 @@
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\profiles\\Admin.profile-meta.xml",
         {
+            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\profiles\\Admin.profile-meta.xml",
             "isDirectory": false,
-            "size": 35888,
-            "modifiedTime": 1538502234186,
-            "changeTime": 1538502234186,
-            "contentHash": "4c5e03451453928278b2155be9af9ce6d847791b",
             "isMetadataFile": true,
-            "state": "u"
+            "size": 36276,
+            "modifiedTime": 1538582780347,
+            "changeTime": 1538582780347,
+            "contentHash": "5b3421b76e7cd57852f28a9647cc47def537335f"
         }
     ],
     [
@@ -3589,14 +3589,14 @@
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\pages\\AddingCustomSettings.page",
         {
-            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\pages\\AddingCustomSettings.page",
             "isDirectory": false,
-            "isMetadataFile": false,
             "size": 2685,
             "modifiedTime": 1538577085807,
             "changeTime": 1538577085807,
-            "contentHash": "69ae801977789db76ab266e75373ccb83ff58b41"
+            "contentHash": "69ae801977789db76ab266e75373ccb83ff58b41",
+            "isMetadataFile": false,
+            "state": "u"
         }
     ],
     [
@@ -3762,23 +3762,140 @@
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\classes\\SendCalloutsController.cls",
             "isDirectory": false,
             "isMetadataFile": false,
-            "size": 3715,
-            "modifiedTime": 1538577085932,
-            "changeTime": 1538577085932,
-            "contentHash": "d74f3b4cf1a4950f8495293a5fd15c7c358b9bec"
+            "size": 4243,
+            "modifiedTime": 1538582780119,
+            "changeTime": 1538582780119,
+            "contentHash": "5885df361f63fde9cdb0cf61fa3c7b42b41234e6"
         }
     ],
     [
         "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\flexipages\\Position_Record_Page.flexipage-meta.xml",
         {
-            "state": "u",
             "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\flexipages\\Position_Record_Page.flexipage-meta.xml",
             "isDirectory": false,
-            "isMetadataFile": true,
             "size": 5756,
             "modifiedTime": 1538577085927,
             "changeTime": 1538577085927,
-            "contentHash": "dd9edbeb3a91b34b0bd8e63ce170c509872a51cd"
+            "contentHash": "dd9edbeb3a91b34b0bd8e63ce170c509872a51cd",
+            "isMetadataFile": true,
+            "state": "u"
+        }
+    ],
+    [
+        "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\pages\\example.page-meta.xml",
+        {
+            "state": "u",
+            "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\pages\\example.page-meta.xml",
+            "isDirectory": false,
+            "isMetadataFile": true,
+            "size": 283,
+            "modifiedTime": 1538582780052,
+            "changeTime": 1538582780052,
+            "contentHash": "6a34f96f8e8a737f5ebf318106dade6556bd295a"
+        }
+    ],
+    [
+        "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\pages\\example.page",
+        {
+            "state": "u",
+            "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\pages\\example.page",
+            "isDirectory": false,
+            "isMetadataFile": false,
+            "size": 1087,
+            "modifiedTime": 1538582780056,
+            "changeTime": 1538582780056,
+            "contentHash": "0177898c02209f803d0ace540eddb1873ef87464"
+        }
+    ],
+    [
+        "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\objects\\Position__c\\fields\\Posting_Setting__c.field-meta.xml",
+        {
+            "state": "u",
+            "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\objects\\Position__c\\fields\\Posting_Setting__c.field-meta.xml",
+            "isDirectory": false,
+            "isMetadataFile": true,
+            "size": 375,
+            "modifiedTime": 1538582780066,
+            "changeTime": 1538582780066,
+            "contentHash": "ba37acf2162d7be7dd4ff6d0d72bb4594010e5f9"
+        }
+    ],
+    [
+        "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\objects\\List_Setting__c\\List_Setting__c.object-meta.xml",
+        {
+            "state": "u",
+            "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\objects\\List_Setting__c\\List_Setting__c.object-meta.xml",
+            "isDirectory": false,
+            "isMetadataFile": true,
+            "size": 278,
+            "modifiedTime": 1538582780072,
+            "changeTime": 1538582780072,
+            "contentHash": "b6c517e3a3a52c6b2a72888578fef782fdf09a2c"
+        }
+    ],
+    [
+        "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\objects\\List_Setting__c\\fields\\Password__c.field-meta.xml",
+        {
+            "state": "u",
+            "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\objects\\List_Setting__c\\fields\\Password__c.field-meta.xml",
+            "isDirectory": false,
+            "isMetadataFile": true,
+            "size": 361,
+            "modifiedTime": 1538582780073,
+            "changeTime": 1538582780073,
+            "contentHash": "80d8a519ad41255810362f290fe65b0f37cadb64"
+        }
+    ],
+    [
+        "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\classes\\exampleController.cls-meta.xml",
+        {
+            "state": "u",
+            "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\classes\\exampleController.cls-meta.xml",
+            "isDirectory": false,
+            "isMetadataFile": true,
+            "size": 174,
+            "modifiedTime": 1538582780123,
+            "changeTime": 1538582780123,
+            "contentHash": "0bfc8bc49e53c8f0f6b207cf675766c0d6546ee5"
+        }
+    ],
+    [
+        "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\classes\\exampleController.cls",
+        {
+            "state": "u",
+            "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\classes\\exampleController.cls",
+            "isDirectory": false,
+            "isMetadataFile": false,
+            "size": 618,
+            "modifiedTime": 1538582780126,
+            "changeTime": 1538582780126,
+            "contentHash": "4995261605d7771c9b31e92fd0fc6653cfd419b8"
+        }
+    ],
+    [
+        "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\objects\\List_Setting__c",
+        {
+            "state": "u",
+            "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\objects\\List_Setting__c",
+            "isDirectory": true,
+            "isMetadataFile": false,
+            "size": 0,
+            "modifiedTime": 1538582780072,
+            "changeTime": 1538582780072,
+            "contentHash": "cc7b5d6165921de24eda8ffc0c7ac60733c09419"
+        }
+    ],
+    [
+        "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\objects\\List_Setting__c\\fields",
+        {
+            "state": "u",
+            "sourcePath": "C:\\Users\\efimova\\Recruiting\\force-app\\main\\default\\objects\\List_Setting__c\\fields",
+            "isDirectory": true,
+            "isMetadataFile": false,
+            "size": 0,
+            "modifiedTime": 1538582780073,
+            "changeTime": 1538582780073,
+            "contentHash": "6ffea0a3a2081ef2619edb0bb48fa91b04d24b54"
         }
     ]
 ]
