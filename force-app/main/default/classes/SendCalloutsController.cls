@@ -4,6 +4,7 @@ public with sharing class SendCalloutsController {
     public boolean newSettingflag {get; set;}
     public boolean approvedPositionFlag {get; set;}
     public boolean postingFlag {get; set;}
+    public boolean flag {get; set;}
     public boolean afterDeleteFlag {get; set;}
     public String positionId;
     public String message {get; set;}
