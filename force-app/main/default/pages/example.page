@@ -1,0 +1,16 @@
+<apex:page controller="exampleController">
+    <apex:pageBlock >
+            <apex:form >
+                <apex:pageBlockSection >
+                    <apex:inputField label="Name:"  value="{!authorizationSetting.Name}" />
+                    <!--<apex:inputField label="Username:" value="{!authorizationSetting.Login__c}" />-->
+                    <apex:inputField label="Password:" value="{!authorizationSetting.Password__c}" />
+                   <!-- <apex:inputField label="Client Secret:" value="{!authorizationSetting.Client_secret__c}" id="clientSecret"/>
+                    <apex:inputField label="Consumer Secret:" value="{!authorizationSetting.Consumer_Secret__c}" />
+                    <apex:inputField label="Link: " value="{!authorizationSetting.Link_to_connected_org__c}" id="link"/>-->
+                </apex:pageBlockSection>
+                <apex:commandButton action="{!cancel}" value="Cancel" styleClass="btn"/>
+                    <apex:commandButton action="{!save}" value="Save" styleClass="btn"/> 
+            </apex:form>
+        </apex:pageBlock>
+</apex:page>

@@ -1,24 +1,44 @@
 public with sharing class SendCalloutsController {
     public Authorization_setting__c authorizationSetting {get; set;}
-    public String settingName ;
-    public boolean flag {get; set;}
+    public String settingName;
+    public boolean newSettingflag {get; set;}
+    public boolean approvedPositionFlag {get; set;}
+    public boolean postingFlag {get; set;}
+    public boolean afterDeleteFlag {get; set;}
     public String positionId;
     public String message {get; set;}
     public SendCalloutsController(ApexPages.StandardController controller){
-        flag = false;
+        positionId = controller.getId();
+        Position__c currentPosition = getCurrentPosition(positionId);
+        newSettingflag = false;
         getSettingsList();
         this.authorizationSetting = new Authorization_setting__c();
-        //SendPositionUsingRestApi.settingId = settingName;
-        positionId = controller.getId();
-       SendPositionUsingRestApi pos = new SendPositionUsingRestApi();
-        message = pos.getStatus();
-        
+        if(currentPosition.Status__c == 'Open' && currentPosition.Approval_Status__c == 'Approved'){
+            approvedPositionFlag = true;
+        }
+        else approvedPositionFlag = false;
+        if(currentPosition.Posting_Status__c == 'Posting successfully' || currentPosition.Posting_Status__c == 'Updating successfully' 
+           || currentPosition.Posting_Status__c == 'Error updating' || currentPosition.Posting_Status__c == 'Error deleting' ){
+            SendPositionUsingRestApi pos = new SendPositionUsingRestApi();
+        	message = pos.getStatus();
+            postingFlag = true;
+        }
+        else if(currentPosition.Posting_Status__c == 'Error posting'){
+            SendPositionUsingRestApi pos = new SendPositionUsingRestApi();
+        	message = pos.getStatus();
+            postingFlag = false;
+        }
+        else postingFlag = false;
+        if(currentPosition.Posting_Status__c == 'Deleting successfully'){
+            afterDeleteFlag = true;
+        }
+        //currentPosition.
     }
     public PageReference save(){
         system.debug('i am in save. authorizationSetting='+ authorizationSetting);
         insert authorizationSetting;
         settingName = authorizationSetting.Id;
-        flag = false;
+        newSettingflag = false;
 		return null;
     }
     public List<SelectOption> getSettingsList(){
@@ -30,13 +50,39 @@ public with sharing class SendCalloutsController {
         return settingsList;
     }
     public PageReference createButtonAction(){
-        flag = true;
-        //SendPositionUsingRestApi.settingId = settingName;
+        newSettingflag = true;
         System.debug(settingName);
         return null;
     }
     public PageReference cancel(){
-        flag = false;
+        newSettingflag = false;
+        return null;
+    }
+    public PageReference postJobAdvertisement(){
+        System.debug(settingName);
+        System.debug('show me setting id: ' + settingName);
+        SendPositionUsingRestApi.createJobAdvertisement(positionId, settingName);
+        postingFlag = true;
+        Position__c currentPosition = getCurrentPosition(positionId);
+        Authorization_setting__c currentSetting = [select Name, Login__c from Authorization_setting__c where id =: settingName];
+        String settingTitle = currentSetting.Login__c;
+        currentPosition.Posting_Setting__c = settingName;
+        update currentPosition;
+        return null;
+    }
+    public PageReference updateJobAdvertisement(){
+        SendPositionUsingRestApi.updateJobAdvertisement(positionId, settingName);
+        postingFlag = true;
+        return null;
+    }
+    public PageReference deleteJobAdvertisement(){
+        System.debug(settingName);
+        SendPositionUsingRestApi.deleteJobAdvertisement(positionId, settingName);
+        Position__c currentPosition = getCurrentPosition(positionId);
+        if(currentPosition.Status__c == 'Deleting successfully'){
+            afterDeleteFlag = true;
+        }
+        else afterDeleteFlag = false;
         return null;
     }
     public String getSettingName(){
@@ -45,35 +91,8 @@ public with sharing class SendCalloutsController {
     public void setSettingName(String settingName){
         this.settingName = settingName;
     }
-    public PageReference postJobAdvertisement(){
-        Position__c position = [select id from Position__c where id =: positionId];
-        position.Posting_Status__c = 'Callout in process';
-        update position;
-        System.debug(settingName);
-        System.debug('show me setting id: ' + settingName);
-        SendPositionUsingRestApi.createJobAdvertisement(positionId, settingName);
-        PageReference tempPage = ApexPages.currentPage();            
-        tempPage.setRedirect(true);
-        return tempPage;
-    }
-    public PageReference updateJobAdvertisement(){
-        Position__c position = [select id from Position__c where id =: positionId];
-        position.Posting_Status__c = 'Callout in process';
-        update position;
-        SendPositionUsingRestApi.updateJobAdvertisement(positionId, settingName);
-        PageReference tempPage = ApexPages.currentPage();            
-        //tempPage.setRedirect(true);
-        return tempPage;
-        //jgjhghgjhgjgjgjgjgjghhjhhjhgj
-    }
-    public PageReference deleteJobAdvertisement(){
-        Position__c position = [select id from Position__c where id =: positionId];
-        position.Posting_Status__c = 'Callout in process';
-        update position;
-        System.debug(settingName);
-        SendPositionUsingRestApi.deleteJobAdvertisement(positionId, settingName);
-        PageReference tempPage = ApexPages.currentPage();            
-        tempPage.setRedirect(true);
-        return tempPage;
+    public Position__c getCurrentPosition(id posId){
+        Position__c currentPosition = [select id, Posting_Status__c, Status__c, Approval_Status__c from Position__c where id=: posId];
+        return currentPosition;
     }
 }
