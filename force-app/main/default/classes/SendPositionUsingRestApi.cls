@@ -138,12 +138,11 @@ global class SendPositionUsingRestApi {
             req2.setHeader('Authorization','Bearer ' + accessToken);
             req2.setHeader('Content-Type','application/json');
             req2.setHeader('accept','application/json');
-            //req2.setBody(jsonstr);
             req2.setMethod('DELETE');
             req2.setEndpoint(endPoint);
             try{
                 HttpResponse res2=h2.send(req2);
-                position.Posting_Status__c = 'Deleteing successfully';
+                position.Posting_Status__c = 'Deleting successfully';
                 System.debug('Show me request body' + req2.getBody());
                 System.debug('Show me response body' + res2.getBody());
             }
