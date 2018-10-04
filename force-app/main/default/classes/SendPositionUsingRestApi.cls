@@ -229,6 +229,7 @@ global class SendPositionUsingRestApi {
         else if(salaryRange.contains('+')){
             salaries.add(salaryRange);
             salaries.add('');
+            /////
         }
         return salaries;
     }
