@@ -4,8 +4,11 @@ public with sharing class SendCalloutsController {
     public boolean newSettingAfterChangeflag {get; set;}
     public boolean approvedPositionFlag {get; set;}
     public boolean postingFlag {get; set;}
+<<<<<<< HEAD
     public boolean flag {get; set;}
     public boolean afterChangeFlag {get; set;}
+=======
+>>>>>>> 8229df293a25f4c41ad3c4b37edabfaafa2540eb
     public boolean afterDeleteFlag {get; set;}
     public String positionId;
     public String message {get; set;}
