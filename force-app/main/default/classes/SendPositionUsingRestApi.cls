@@ -1,21 +1,20 @@
 global class SendPositionUsingRestApi {
     String accesstoken_url='https://login.salesforce.com/services/oauth2/token';
     String authurl='https://login.salesforce.com/services/oauth2/authorize';
-    public String status = 'nonkol';
   public class deserializeResponse{
       public String id;
       public String access_token;   
    }
-    public String ReturnAccessToken(SendPositionUsingRestApi pos, String setingId){
+    public String ReturnAccessToken(SendPositionUsingRestApi pos){
         //String setId = AddingCustomSettingController.settingName;
         //String settingId = AddingCustomSettingController
-        System.debug('show me custom setting id: ' + setingId);
-        Authorization_setting__c customSetting = [select id, Name, Login__c, Password__c, Client_secret__c, 
-                                                  Consumer_Secret__c, Link_to_connected_org__c from Authorization_setting__c where id =: setingId];
+        List_Setting__c customSetting = [select id, Name, Login_c__c, Password__c, Client_secret__c, 
+                                                  Consumer_Secret__c, Link_to_connected_org__c from List_Setting__c];
+        System.debug('customSetting: ' + customSetting);
         String clientId = customSetting.Consumer_Secret__c;
         String clientsecret = customSetting.Client_secret__c;
         
-        String reqbody = 'grant_type=password&client_id='+customSetting.Consumer_Secret__c+'&client_secret='+customSetting.Client_secret__c+'&username='+customSetting.Login__c+'&password='+customSetting.Password__c;
+        String reqbody = 'grant_type=password&client_id='+customSetting.Consumer_Secret__c+'&client_secret='+customSetting.Client_secret__c+'&username='+customSetting.Login_c__c+'&password='+customSetting.Password__c;
         Http h= new Http();
         HttpRequest req= new HttpRequest();
         req.setBody(reqbody);
@@ -30,12 +29,19 @@ global class SendPositionUsingRestApi {
     }
 
    @future(callout=true)
-    public static void createJobAdvertisement(id pos, String setingId){
-        CalloutsStatus callout = new CalloutsStatus();
-        Position__c position = [select Name, Education__c, Location__c, Hiring_Manager__c, Legacy_Position_Number__c, Salary_Range__c, Skills_Required__c, Job_Description__c from Position__c where id =: pos];
+    public static void createJobAdvertisement(id pos){
+        Position__c position = [select Name, Education__c, Location__c, Hiring_Manager__c, Legacy_Position_Number__c, Approval_Status__c, Status__c, Salary_Range__c, Skills_Required__c, Job_Description__c from Position__c where id =: pos];
+        String jobAdvertisementsStatus = '';
+        if(position.Status__c == 'Closed'){
+            jobAdvertisementsStatus = 'Archived';
+        }
+        else if(position.Status__c == 'Open' && position.Approval_Status__c == 'Approved'){
+            jobAdvertisementsStatus = 'Active';
+        }
         User recruiterUser = [select Name, Email, Phone from User where id =: position.Hiring_Manager__c];
+        List<String> salaries = getMinAndMaxSalary(position);
         SendPositionUsingRestApi pos1= new SendPositionUsingRestApi();
-        String accessToken=pos1.ReturnAccessToken(pos1, setingId);
+        String accessToken=pos1.ReturnAccessToken(pos1);
         System.debug(accessToken+'###0012');
         if(accessToken!=null){
             String posId = position.Id;
@@ -43,7 +49,8 @@ global class SendPositionUsingRestApi {
 			String jsonstr='{"Name":"'+ position.Name + '", "Location__c":"' + position.Location__c +'", "Education__c":"' + position.Education__c +
     					'", "Salary__c":"' + position.Salary_Range__c + '", "Skills_Required__c":"' + position.Skills_Required__c + '", "Description__c":"' 
                         + position.Job_Description__c + '", "Manager_name__c":"' + recruiterUser.Name + '", "Email__c":"' + recruiterUser.Email + 
-                        '", "Phone__c":"' + recruiterUser.Phone +'", "Legacy_Job_Advertisement_Number__c":"' + position.id + '", "Status__c":"Active"}';
+                '", "Phone__c":"' + recruiterUser.Phone +'", "Legacy_Job_Advertisement_Number__c":"' + position.id +
+                '", "Minimum_Salary__c":"' + salaries[0] + '", "Maximum_Salary__c":"' + salaries[1] + '", "Status__c":"' + jobAdvertisementsStatus + '"}';
             
             system.debug('Show me String jsonstr='+jsonstr);
             Http h2= new Http();
@@ -69,9 +76,8 @@ global class SendPositionUsingRestApi {
         }
     }
     @future(callout=true)
-    public static void updateJobAdvertisement(id pos, String setingId){
-        CalloutsStatus callout = new CalloutsStatus();
-        String dataFromTargetOrg = getDatafromTargetOrg(setingId);
+    public static void updateJobAdvertisement(id pos){
+        String dataFromTargetOrg = getDatafromTargetOrg();
         List<Map<String, String>> data = parsingDataFromTargetOrg(dataFromTargetOrg);
         String jobAdvertisementsId;
         for(Map<String, String> item: data){
@@ -80,17 +86,26 @@ global class SendPositionUsingRestApi {
             }
         }
         system.debug('show me id of Job Advertisements: ' + jobAdvertisementsId);
-        Position__c position = [select Name, Education__c, Location__c, Hiring_Manager__c, Legacy_Position_Number__c, Salary_Range__c, Skills_Required__c, Job_Description__c from Position__c where id =: pos];
+        Position__c position = [select Name, Education__c, Location__c, Hiring_Manager__c, Legacy_Position_Number__c, Approval_Status__c, Status__c, Salary_Range__c, Skills_Required__c, Job_Description__c from Position__c where id =: pos];
+        String jobAdvertisementsStatus = '';
+        if(position.Status__c == 'Closed'){
+            jobAdvertisementsStatus = 'Archived';
+        }
+        else if(position.Status__c == 'Open' && position.Approval_Status__c == 'Approved'){
+            jobAdvertisementsStatus = 'Active';
+        }
         User recruiterUser = [select Name, Email, Phone from User where id =: position.Hiring_Manager__c];
+        List<String> salaries = getMinAndMaxSalary(position);
         SendPositionUsingRestApi sendPositionUsingRestApi = new SendPositionUsingRestApi();
-        String accessToken = sendPositionUsingRestApi.ReturnAccessToken(sendPositionUsingRestApi, setingId);
+        String accessToken = sendPositionUsingRestApi.ReturnAccessToken(sendPositionUsingRestApi);
         if(accessToken!=null){
             String posId = position.Id;
             String endPoint='https://eu16.salesforce.com/services/data/v32.0/sobjects/Job_Advertisement__c/' + jobAdvertisementsId + '?_HttpMethod=PATCH'; //Instance  Target Org 
 			String jsonstr='{"Name":"'+ position.Name + '", "Location__c":"' + position.Location__c +'", "Education__c":"' + position.Education__c +
     					'", "Salary__c":"' + position.Salary_Range__c + '", "Skills_Required__c":"' + position.Skills_Required__c + '", "Description__c":"' 
                         + position.Job_Description__c + '", "Manager_name__c":"' + recruiterUser.Name + '", "Email__c":"' + recruiterUser.Email + 
-                        '", "Phone__c":"' + recruiterUser.Phone +'", "Legacy_Job_Advertisement_Number__c":"' + position.id + '", "Status__c":"Active"}';
+                '", "Phone__c":"' + recruiterUser.Phone +'", "Legacy_Job_Advertisement_Number__c":"' + position.id +
+                '", "Minimum_Salary__c":"' + salaries[0] + '", "Maximum_Salary__c":"' + salaries[1] + '", "Status__c":"' + jobAdvertisementsStatus + '"}';
             
             system.debug('Show me String jsonstr='+jsonstr);
             Http h2= new Http();
@@ -117,10 +132,9 @@ global class SendPositionUsingRestApi {
         }
     }
     @future(callout=true)
-    public static void deleteJobAdvertisement(id pos, String setingId){
+    public static void deleteJobAdvertisement(id pos){
         Position__c position = [select Name, Education__c, Location__c, Hiring_Manager__c, Legacy_Position_Number__c, Salary_Range__c, Skills_Required__c, Job_Description__c from Position__c where id =: pos];
-        String dataFromTargetOrg = getDatafromTargetOrg(setingId);
-        CalloutsStatus callout = new CalloutsStatus();
+        String dataFromTargetOrg = getDatafromTargetOrg();
         List<Map<String, String>> data = parsingDataFromTargetOrg(dataFromTargetOrg);
         String jobAdvertisementsId;
         for(Map<String, String> item: data){
@@ -130,7 +144,7 @@ global class SendPositionUsingRestApi {
         }
         system.debug('show me id of Job Advertisements: ' + jobAdvertisementsId);
         SendPositionUsingRestApi sendPositionUsingRestApi = new SendPositionUsingRestApi();
-        String accessToken = sendPositionUsingRestApi.ReturnAccessToken(sendPositionUsingRestApi, setingId);
+        String accessToken = sendPositionUsingRestApi.ReturnAccessToken(sendPositionUsingRestApi);
         if(accessToken != null){
             String endPoint='https://eu16.salesforce.com/services/data/v32.0/sobjects/Job_Advertisement__c/' + jobAdvertisementsId;
             Http h2= new Http();
@@ -152,9 +166,9 @@ global class SendPositionUsingRestApi {
             update position;
         }
     }
-    public static String getDatafromTargetOrg(String setingId){
+    public static String getDatafromTargetOrg(){
         SendPositionUsingRestApi sendPositionUsingRestApi = new SendPositionUsingRestApi();
-        String accessToken = sendPositionUsingRestApi.ReturnAccessToken(sendPositionUsingRestApi, setingId);
+        String accessToken = sendPositionUsingRestApi.ReturnAccessToken(sendPositionUsingRestApi);
         String dataFromTargetOrg;
         if(accessToken != null){
             Http http= new Http();
@@ -200,11 +214,22 @@ global class SendPositionUsingRestApi {
         System.debug('show me list of maps: ' + data);
         return data;
     }
-    public String getStatus(){
-        return status;
-    }
-    public void setStatus(String message){
-        this.status = message;
-        
+    public static List<String> getMinAndMaxSalary(Position__c currentPosition){
+        List<String> salaries = new List<String>();
+        String salaryRange = currentPosition.Salary_Range__c;
+        if(salaryRange == null){
+            String maxSalary = '';
+            String minSalary = '';
+            salaries.add(minSalary);
+            salaries.add(maxSalary);
+        }
+        else if(salaryRange.contains('-')){
+            salaries = salaryRange.split('-');
+        }
+        else if(salaryRange.contains('+')){
+            salaries.add(salaryRange);
+            salaries.add('');
+        }
+        return salaries;
     }
 }
