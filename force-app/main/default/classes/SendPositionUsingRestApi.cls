@@ -39,7 +39,7 @@ global class SendPositionUsingRestApi {
             jobAdvertisementsStatus = 'Active';
         }
         User recruiterUser = [select Name, Email, Phone from User where id =: position.Hiring_Manager__c];
-        List<String> salaries = getMinAndMaxSalary(position);
+        List<Integer> salaries = getMinAndMaxSalary(position);
         SendPositionUsingRestApi pos1= new SendPositionUsingRestApi();
         String accessToken=pos1.ReturnAccessToken(pos1);
         System.debug(accessToken+'###0012');
@@ -95,7 +95,7 @@ global class SendPositionUsingRestApi {
             jobAdvertisementsStatus = 'Active';
         }
         User recruiterUser = [select Name, Email, Phone from User where id =: position.Hiring_Manager__c];
-        List<String> salaries = getMinAndMaxSalary(position);
+        List<Integer> salaries = getMinAndMaxSalary(position);
         SendPositionUsingRestApi sendPositionUsingRestApi = new SendPositionUsingRestApi();
         String accessToken = sendPositionUsingRestApi.ReturnAccessToken(sendPositionUsingRestApi);
         if(accessToken!=null){
@@ -214,23 +214,37 @@ global class SendPositionUsingRestApi {
         System.debug('show me list of maps: ' + data);
         return data;
     }
-    public static List<String> getMinAndMaxSalary(Position__c currentPosition){
+    public static List<Integer> getMinAndMaxSalary(Position__c currentPosition){
+        List<Integer> integerSalaries = new List<Integer>();
         List<String> salaries = new List<String>();
         String salaryRange = currentPosition.Salary_Range__c;
+        String maxSalary = '';
+        String minSalary = '';
         if(salaryRange == null){
-            String maxSalary = '';
-            String minSalary = '';
             salaries.add(minSalary);
             salaries.add(maxSalary);
         }
         else if(salaryRange.contains('-')){
             salaries = salaryRange.split('-');
+            string oneSalary ='';
+            for(String salary: salaries){
+                oneSalary = salary.remove('K');
+                Integer integerSalary = integer.valueOf(oneSalary);
+                integerSalaries.add(integerSalary);
+            }
+            System.debug('salaries max and min without k: ' + salaries);
         }
         else if(salaryRange.contains('+')){
             salaries.add(salaryRange);
             salaries.add('');
-            /////
+            string oneSalary ='';
+            for(Integer i =0; i< salaries.size(); i++){
+                oneSalary = salaries[0].removeEnd('K+');
+                Integer salary = integer.valueOf(oneSalary);
+                integerSalaries.add(salary);
+            }
+            System.debug('salaries max and min without k: ' + integerSalaries);
         }
-        return salaries;
+        return integerSalaries;
     }
 }
