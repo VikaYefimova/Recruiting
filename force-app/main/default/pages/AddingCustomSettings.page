@@ -1,16 +1,17 @@
 <apex:page standardController="Position__c" extensions="SendCalloutsController" cache="false" standardStylesheets="true">
     <apex:stylesheet value="{!URLFOR($Resource.cssStyles, '/cssStyles/Styles/addingCustomSettingStyles.css')}"/>
     <apex:messages />
-    <apex:form >
-        <apex:pageBlock rendered="{!NOT(newSettingflag)}">
+        <apex:pageBlock rendered="{!AND(NOT(afterChangeFlag))}">
+            <apex:form >
             <apex:pageBlockSection id="customSettingsSection">
-                <apex:selectList value="{!settingName}" multiselect="false" size="1" label="Authorization settings: ">
-                    <apex:selectOptions value="{!settingsList}" />
-                </apex:selectList>
-                <apex:commandButton value="New Authorization setting" action="{!createButtonAction}" />
+                <apex:commandButton value="Change Authorization setting" action="{!createButtonAction}" />
             </apex:pageBlockSection>
+            </apex:form>
+        </apex:pageBlock>
+        <apex:pageBlock rendered="{!NOT(newSettingAfterChangeflag)}">
+            <apex:form >
             <div>
-            <apex:pageBlockSection id="postingMessage" rendered="{!postingFlag}">
+            <apex:pageBlockSection id="postingMessage" rendered="{!AND(postingFlag, NOT(afterChangeFlag))}">
                <apex:outputText value="Request send" label="Callouts status: " rendered="{!postingFlag}"/> 
             </apex:pageBlockSection>
             </div>
@@ -19,16 +20,29 @@
                 <apex:commandButton value="Update" action="{!updateJobAdvertisement}" rendered="{!AND(postingFlag, NOT(afterDeleteFlag))}" />
                 <apex:commandButton value="Delete" action="{!deleteJobAdvertisement}" rendered="{!AND(postingFlag, NOT(afterDeleteFlag))}"/>
             </span>
+            </apex:form>
         </apex:pageBlock>
-    </apex:form>
-    <apex:outputPanel id="createCustomSetting" rendered="{!newSettingflag}">
-        <apex:pageBlock >
+        <apex:pageBlock rendered="{!newSettingAfterChangeflag}">
+            <apex:form >
+            <div>
+            <apex:pageBlockSection id="postingAfterChangeSettingMessage" rendered="{!AND(postingFlag, NOT(afterChangeFlag), NOT(newSettingAfterChangeflag))}">
+               <apex:outputText value="Request send" label="Callouts status: " rendered="{!postingFlag}"/> 
+            </apex:pageBlockSection>
+            </div>
+            <span>
+                <apex:commandButton value="Post" action="{!postJobAdvertisement}" rendered="{!OR(AND(approvedPositionFlag, NOT(postingFlag)))}"/>
+                <apex:commandButton value="Update" action="{!updateJobAdvertisement}" rendered="{!AND(postingFlag, NOT(afterDeleteFlag), NOT(newSettingAfterChangeflag))}" />
+                <apex:commandButton value="Delete" action="{!deleteJobAdvertisement}" rendered="{!AND(postingFlag, NOT(afterDeleteFlag), NOT(newSettingAfterChangeflag))}"/>
+            </span>
+            </apex:form>
+        </apex:pageBlock>
+        <apex:pageBlock rendered="{!AND(afterChangeFlag)}">
             <apex:form >
                 <apex:pageBlockSection >
                     <apex:inputField label="Name:"  value="{!authorizationSetting.Name}" />
-                    <apex:inputField label="Username:" value="{!authorizationSetting.Login__c}" />
+                    <apex:inputField label="Username:" value="{!authorizationSetting.Login_c__c}" />
                     <apex:inputField label="Password:" value="{!authorizationSetting.Password__c}" />
-                    <apex:inputField label="Client Secret:" value="{!authorizationSetting.Client_secret__c}" id="clientSecret"/>
+                    <apex:inputField label="Client Secret:" value="{!authorizationSetting.Client_Secret__c}" id="clientSecret"/>
                     <apex:inputField label="Consumer Secret:" value="{!authorizationSetting.Consumer_Secret__c}" />
                     <apex:inputField label="Link: " value="{!authorizationSetting.Link_to_connected_org__c}" id="link"/>
                 </apex:pageBlockSection>
@@ -36,5 +50,4 @@
                     <apex:commandButton action="{!save}" value="Save" styleClass="btn"/> 
             </apex:form>
         </apex:pageBlock>
-    </apex:outputPanel>
 </apex:page>
