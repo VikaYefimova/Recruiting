@@ -45,12 +45,12 @@ global class SendPositionUsingRestApi {
         System.debug(accessToken+'###0012');
         if(accessToken!=null){
             String posId = position.Id;
-            String endPoint='https://eu16.salesforce.com/services/data/v32.0/sobjects/Job_Advertisement__c'; //Instance  Target Org 
-			String jsonstr='{"Name":"'+ position.Name + '", "Location__c":"' + position.Location__c +'", "Education__c":"' + position.Education__c +
-    					'", "Salary__c":"' + position.Salary_Range__c + '", "Skills_Required__c":"' + position.Skills_Required__c + '", "Description__c":"' 
-                        + position.Job_Description__c + '", "Manager_name__c":"' + recruiterUser.Name + '", "Email__c":"' + recruiterUser.Email + 
-                '", "Phone__c":"' + recruiterUser.Phone +'", "Legacy_Job_Advertisement_Number__c":"' + position.id +
-                '", "Minimum_Salary__c":"' + salaries[0] + '", "Maximum_Salary__c":"' + salaries[1] + '", "Status__c":"' + jobAdvertisementsStatus + '"}';
+            String endPoint='https://eu16.salesforce.com/services/apexrest/jobAdvertisements'; //Instance  Target Org 
+			String jsonstr='{"name":"'+ position.Name + '", "location":"' + position.Location__c +'", "education":"' + position.Education__c +
+    					'", "salary":"' + position.Salary_Range__c + '", "skills":"' + position.Skills_Required__c + '", "description":"' 
+                        + position.Job_Description__c + '", "managerName":"' + recruiterUser.Name + '", "email":"' + recruiterUser.Email + 
+                '", "phone":"' + recruiterUser.Phone +'", "legacyNumber":"' + position.id +
+                '", "minSalary":"' + salaries[0] + '", "maxSalary":"' + salaries[1] + '", "status":"' + jobAdvertisementsStatus + '"}';
             
             system.debug('Show me String jsonstr='+jsonstr);
             Http h2= new Http();
@@ -100,12 +100,12 @@ global class SendPositionUsingRestApi {
         String accessToken = sendPositionUsingRestApi.ReturnAccessToken(sendPositionUsingRestApi);
         if(accessToken!=null){
             String posId = position.Id;
-            String endPoint='https://eu16.salesforce.com/services/data/v32.0/sobjects/Job_Advertisement__c/' + jobAdvertisementsId + '?_HttpMethod=PATCH'; //Instance  Target Org 
-			String jsonstr='{"Name":"'+ position.Name + '", "Location__c":"' + position.Location__c +'", "Education__c":"' + position.Education__c +
-    					'", "Salary__c":"' + position.Salary_Range__c + '", "Skills_Required__c":"' + position.Skills_Required__c + '", "Description__c":"' 
-                        + position.Job_Description__c + '", "Manager_name__c":"' + recruiterUser.Name + '", "Email__c":"' + recruiterUser.Email + 
-                '", "Phone__c":"' + recruiterUser.Phone +'", "Legacy_Job_Advertisement_Number__c":"' + position.id +
-                '", "Minimum_Salary__c":"' + salaries[0] + '", "Maximum_Salary__c":"' + salaries[1] + '", "Status__c":"' + jobAdvertisementsStatus + '"}';
+            String endPoint='https://eu16.salesforce.com/services/apexrest/jobAdvertisements/' + jobAdvertisementsId; //Instance  Target Org 
+			String jsonstr='{"name":"'+ position.Name + '", "location":"' + position.Location__c +'", "education":"' + position.Education__c +
+    					'", "salary":"' + position.Salary_Range__c + '", "skills":"' + position.Skills_Required__c + '", "description":"' 
+                        + position.Job_Description__c + '", "managerName":"' + recruiterUser.Name + '", "email":"' + recruiterUser.Email + 
+                '", "phone":"' + recruiterUser.Phone +'", "legacyNumber":"' + position.id +
+                '", "minSalary":"' + salaries[0] + '", "maxSalary":"' + salaries[1] + '", "status":"' + jobAdvertisementsStatus + '"}';
             
             system.debug('Show me String jsonstr='+jsonstr);
             Http h2= new Http();
@@ -114,19 +114,19 @@ global class SendPositionUsingRestApi {
             req2.setHeader('Content-Type','application/json');
             req2.setHeader('accept','application/json');
             req2.setBody(jsonstr);
-            req2.setMethod('POST');
+            req2.setMethod('PUT');
             req2.setEndpoint(endPoint);
             try{
                 HttpResponse res2=h2.send(req2);
                 System.debug(res2+'###1203createresp');
-                //deserializeResponse deresp2=(deserializeResponse)System.JSON.deserialize(res2.getBody(),deserializeResponse.class);
+                deserializeResponse deresp2=(deserializeResponse)System.JSON.deserialize(res2.getBody(),deserializeResponse.class);
                 System.debug('Show me request body' + req2.getBody());
                 System.debug('Show me response body' + res2.getBody());
                 position.Posting_Status__c = 'Updating successfully';
                 update position;
             }
             catch(Exception e){
-                position.Posting_Status__c = 'Error uploading position';
+                position.Posting_Status__c = 'Error updating position';
                 update position;
             }
         }
@@ -146,7 +146,7 @@ global class SendPositionUsingRestApi {
         SendPositionUsingRestApi sendPositionUsingRestApi = new SendPositionUsingRestApi();
         String accessToken = sendPositionUsingRestApi.ReturnAccessToken(sendPositionUsingRestApi);
         if(accessToken != null){
-            String endPoint='https://eu16.salesforce.com/services/data/v32.0/sobjects/Job_Advertisement__c/' + jobAdvertisementsId;
+            String endPoint='https://eu16.salesforce.com/services/apexrest/jobAdvertisements/' + jobAdvertisementsId;
             Http h2= new Http();
             HttpRequest req2= new HttpRequest();
             req2.setHeader('Authorization','Bearer ' + accessToken);
@@ -175,7 +175,7 @@ global class SendPositionUsingRestApi {
             HttpRequest req = new HttpRequest();
             req.setHeader('Authorization','Bearer ' + accessToken);
             req.setHeader('Content-Type', 'application/json');
-            req.setEndpoint('https://eu16.salesforce.com/services/data/v20.0/query/?q=select+id+,+Legacy_Job_Advertisement_Number__c+from+Job_Advertisement__c');
+            req.setEndpoint('https://eu16.salesforce.com/services/apexrest/jobAdvertisements/');
             req.setMethod('GET');
             HttpResponse res = http.send(req);
             dataFromTargetOrg = res.getBody();
@@ -238,9 +238,9 @@ global class SendPositionUsingRestApi {
             salaries.add(salaryRange);
             salaries.add('');
             string oneSalary ='';
-            for(Integer i =0; i< salaries.size(); i++){
+            for(integer i =0; i< salaries.size(); i++){
                 oneSalary = salaries[0].removeEnd('K+');
-                Integer salary = integer.valueOf(oneSalary);
+                integer salary = integer.valueOf(oneSalary);
                 integerSalaries.add(salary);
             }
             System.debug('salaries max and min without k: ' + integerSalaries);

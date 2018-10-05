@@ -22,7 +22,7 @@ public with sharing class SendCalloutsController {
             approvedPositionFlag = false;
         }
         if(currentPosition.Posting_Status__c == 'Posting successfully' || currentPosition.Posting_Status__c == 'Updating successfully' 
-           || currentPosition.Posting_Status__c == 'Error updating' || currentPosition.Posting_Status__c == 'Error deleting' ){
+           || currentPosition.Posting_Status__c == 'Error updating position' || currentPosition.Posting_Status__c == 'Error deleting' ){
             postingFlag = true;
         }
         else if(currentPosition.Posting_Status__c == 'Error posting'){
