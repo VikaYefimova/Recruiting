@@ -1,6 +1,7 @@
 global class SendPositionUsingRestApi {
     String accesstoken_url='https://login.salesforce.com/services/oauth2/token';
     String authurl='https://login.salesforce.com/services/oauth2/authorize';
+    
   public class deserializeResponse{
       public String id;
       public String access_token;   
@@ -27,8 +28,6 @@ global class SendPositionUsingRestApi {
         System.debug(resp1+'###1203deserializeresponse');
         return resp1.access_token;
     }
-
-   @future(callout=true)
     public static void createJobAdvertisement(id pos){
         Position__c position = [select Name, Education__c, Location__c, Hiring_Manager__c, Legacy_Position_Number__c, Approval_Status__c, Status__c, Salary_Range__c, Skills_Required__c, Job_Description__c from Position__c where id =: pos];
         String jobAdvertisementsStatus = '';
@@ -75,7 +74,6 @@ global class SendPositionUsingRestApi {
             update position;
         }
     }
-    @future(callout=true)
     public static void updateJobAdvertisement(id pos){
         String dataFromTargetOrg = getDatafromTargetOrg();
         List<Map<String, String>> data = parsingDataFromTargetOrg(dataFromTargetOrg);
@@ -101,11 +99,11 @@ global class SendPositionUsingRestApi {
         if(accessToken!=null){
             String posId = position.Id;
             String endPoint='https://eu16.salesforce.com/services/apexrest/jobAdvertisements/' + jobAdvertisementsId; //Instance  Target Org 
-			String jsonstr='{"name":"'+ position.Name + '", "location":"' + position.Location__c +'", "education":"' + position.Education__c +
-    					'", "salary":"' + position.Salary_Range__c + '", "skills":"' + position.Skills_Required__c + '", "description":"' 
-                        + position.Job_Description__c + '", "managerName":"' + recruiterUser.Name + '", "email":"' + recruiterUser.Email + 
-                '", "phone":"' + recruiterUser.Phone +'", "legacyNumber":"' + position.id +
-                '", "minSalary":"' + salaries[0] + '", "maxSalary":"' + salaries[1] + '", "status":"' + jobAdvertisementsStatus + '"}';
+			String jsonstr='{"Name":"'+ position.Name + '", "Location__c":"' + position.Location__c +'", "Education__c":"' + position.Education__c +
+    					'", "Salary__c":"' + position.Salary_Range__c + '", "Skills_Required__c":"' + position.Skills_Required__c + '", "Description__c":"' 
+                        + position.Job_Description__c + '", "Manager_name__c":"' + recruiterUser.Name + '", "Email__c":"' + recruiterUser.Email + 
+                '", "Phone__c":"' + recruiterUser.Phone +'", "Legacy_Job_Advertisement_Number__c":"' + position.id +
+                '", "Minimum_Salary__c":"' + salaries[0] + '", "Maximum_Salary__c":"' + salaries[1] + '", "Status__c":"' + jobAdvertisementsStatus + '"}';
             
             system.debug('Show me String jsonstr='+jsonstr);
             Http h2= new Http();
@@ -126,12 +124,11 @@ global class SendPositionUsingRestApi {
                 update position;
             }
             catch(Exception e){
-                position.Posting_Status__c = 'Error updating position';
+                position.Posting_Status__c = 'Error uploading position';
                 update position;
             }
         }
     }
-    @future(callout=true)
     public static void deleteJobAdvertisement(id pos){
         Position__c position = [select Name, Education__c, Location__c, Hiring_Manager__c, Legacy_Position_Number__c, Salary_Range__c, Skills_Required__c, Job_Description__c from Position__c where id =: pos];
         String dataFromTargetOrg = getDatafromTargetOrg();

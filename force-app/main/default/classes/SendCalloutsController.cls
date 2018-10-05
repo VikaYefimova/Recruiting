@@ -55,7 +55,7 @@ public with sharing class SendCalloutsController {
     public PageReference postJobAdvertisement(){
         System.debug(authorizationSetting);
         System.debug('show me setting id: ' + authorizationSetting);
-        SendPositionUsingRestApi.createJobAdvertisement(positionId);
+        String res = SendPositionUsingRestApi.createJobAdvertisement(positionId);
         postingFlag = true;
         Position__c currentPosition = getCurrentPosition(positionId);
         afterChangeFlag = false;
