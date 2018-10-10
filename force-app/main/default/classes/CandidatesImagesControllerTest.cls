@@ -38,7 +38,9 @@ public class CandidatesImagesControllerTest {
         List<Apexpages.Message> msgs = ApexPages.getMessages();
 		boolean result = false;
         for(Apexpages.Message msg:msgs){
-    	if (msg.getDetail().contains('Error uploading image')) result = true;
+    	if (msg.getDetail().contains('Error uploading image')) 
+            result = true;
+            System.debug('message: ' + msg.getDetail());
 		}
 		system.assert(result);
     }

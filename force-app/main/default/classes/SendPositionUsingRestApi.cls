@@ -7,11 +7,8 @@ global class SendPositionUsingRestApi {
       public String access_token;   
    }
     public String ReturnAccessToken(SendPositionUsingRestApi pos){
-        //String setId = AddingCustomSettingController.settingName;
-        //String settingId = AddingCustomSettingController
         List_Setting__c customSetting = [select id, Name, Login_c__c, Password__c, Client_secret__c, 
                                                   Consumer_Secret__c, Link_to_connected_org__c from List_Setting__c];
-        System.debug('customSetting: ' + customSetting);
         String clientId = customSetting.Consumer_Secret__c;
         String clientsecret = customSetting.Client_secret__c;
         
@@ -23,152 +20,40 @@ global class SendPositionUsingRestApi {
        
         req.setEndpoint('https://eu16.salesforce.com/services/oauth2/token'); //instance Target Org  
         HttpResponse res=h.send(req);
-        System.debug(res.getBody()+'###1203res');
         deserializeResponse resp1=(deserializeResponse)JSON.deserialize(res.getBody(),deserializeResponse.class);
-        System.debug(resp1+'###1203deserializeresponse');
         return resp1.access_token;
     }
     @future (callout=true)
     public static void createJobAdvertisement(id pos){
-        Position__c position = [select Name, Education__c, Location__c, Hiring_Manager__c, Legacy_Position_Number__c, Approval_Status__c, Status__c, Salary_Range__c, Skills_Required__c, Job_Description__c from Position__c where id =: pos];
-        String jobAdvertisementsStatus = '';
-        if(position.Status__c == 'Closed'){
-            jobAdvertisementsStatus = 'Archived';
-        }
-        else if(position.Status__c == 'Open' && position.Approval_Status__c == 'Approved'){
-            jobAdvertisementsStatus = 'Active';
-        }
-        User recruiterUser = [select Name, Email, Phone from User where id =: position.Hiring_Manager__c];
-        List<Integer> salaries = getMinAndMaxSalary(position);
         SendPositionUsingRestApi pos1= new SendPositionUsingRestApi();
         String accessToken=pos1.ReturnAccessToken(pos1);
-        System.debug(accessToken+'###0012');
-        if(accessToken!=null){
-            String posId = position.Id;
-            String endPoint='https://eu16.salesforce.com/services/apexrest/jobAdvertisements'; //Instance  Target Org 
-			String jsonstr='{"name":"'+ position.Name + '", "location":"' + position.Location__c +'", "education":"' + position.Education__c +
-    					'", "salary":"' + position.Salary_Range__c + '", "skills":"' + position.Skills_Required__c + '", "description":"' 
-                        + position.Job_Description__c + '", "managerName":"' + recruiterUser.Name + '", "email":"' + recruiterUser.Email + 
-                '", "phone":"' + recruiterUser.Phone +'", "legacyNumber":"' + position.id +
-                '", "minSalary":"' + salaries[0] + '", "maxSalary":"' + salaries[1] + '", "status":"' + jobAdvertisementsStatus + '"}';
-            
-            system.debug('Show me String jsonstr='+jsonstr);
-            Http h2= new Http();
-            HttpRequest req2= new HttpRequest();
-            req2.setHeader('Authorization','Bearer ' + accessToken);
-            req2.setHeader('Content-Type','application/json');
-            req2.setHeader('accept','application/json');
-            req2.setBody(jsonstr);
-            req2.setMethod('POST');
-            req2.setEndpoint(endPoint);
-            try{
-                HttpResponse res2=h2.send(req2);
-                System.debug(res2+'###1203createresp');
-                deserializeResponse deresp2=(deserializeResponse)System.JSON.deserialize(res2.getBody(),deserializeResponse.class);
-                System.debug('Show me request body' + req2.getBody());
-                System.debug('Show me response body' + res2.getBody());  
-                position.Posting_Status__c = 'Posting successfully';
-            }
-            catch(Exception e){
-                position.Posting_Status__c = 'Error posting';
-            }
-            update position;
-        }
+        HttpResponse response = createRecord(pos, accessToken);
     }
     @future (callout=true)
     public static void updateJobAdvertisement(id pos){
-         String dataFromTargetOrg = getDatafromTargetOrg();
-        List<Map<String, String>> data = parsingDataFromTargetOrg(dataFromTargetOrg);
-        String jobAdvertisementsId;
-        for(Map<String, String> item: data){
-            if(item.get('Legacy_Job_Advertisement_Number__c') == pos){
-                jobAdvertisementsId = item.get('Id');
-            }
-        }
-        system.debug('show me id of Job Advertisements: ' + jobAdvertisementsId);
-        Position__c position = [select Name, Education__c, Location__c, Hiring_Manager__c, Legacy_Position_Number__c, Approval_Status__c, Status__c, Salary_Range__c, Skills_Required__c, Job_Description__c from Position__c where id =: pos];
-        String jobAdvertisementsStatus = '';
-        if(position.Status__c == 'Closed'){
-            jobAdvertisementsStatus = 'Archived';
-        }
-        else if(position.Status__c == 'Open' && position.Approval_Status__c == 'Approved'){
-            jobAdvertisementsStatus = 'Active';
-        }
-        User recruiterUser = [select Name, Email, Phone from User where id =: position.Hiring_Manager__c];
-        List<Integer> salaries = getMinAndMaxSalary(position);
         SendPositionUsingRestApi sendPositionUsingRestApi = new SendPositionUsingRestApi();
-        String accessToken = sendPositionUsingRestApi.ReturnAccessToken(sendPositionUsingRestApi);
-        if(accessToken!=null){
-            String posId = position.Id;
-            String endPoint='https://eu16.salesforce.com/services/apexrest/jobAdvertisements/' + jobAdvertisementsId; //Instance  Target Org 
-			String jsonstr='{"name":"'+ position.Name + '", "location":"' + position.Location__c +'", "education":"' + position.Education__c +
-    					'", "salary":"' + position.Salary_Range__c + '", "skills":"' + position.Skills_Required__c + '", "description":"' 
-                        + position.Job_Description__c + '", "managerName":"' + recruiterUser.Name + '", "email":"' + recruiterUser.Email + 
-                '", "phone":"' + recruiterUser.Phone +'", "legacyNumber":"' + position.id +
-                '", "minSalary":"' + salaries[0] + '", "maxSalary":"' + salaries[1] + '", "status":"' + jobAdvertisementsStatus + '"}';
-            
-            system.debug('Show me String jsonstr='+jsonstr);
-            Http h2= new Http();
-            HttpRequest req2= new HttpRequest();
-            req2.setHeader('Authorization','Bearer ' + accessToken);
-            req2.setHeader('Content-Type','application/json');
-            req2.setHeader('accept','application/json');
-            req2.setBody(jsonstr);
-            req2.setMethod('PUT');
-            req2.setEndpoint(endPoint);
-            try{
-                HttpResponse res2=h2.send(req2);
-                System.debug(res2+'###1203createresp');
-                deserializeResponse deresp2=(deserializeResponse)System.JSON.deserialize(res2.getBody(),deserializeResponse.class);
-                System.debug('Show me request body' + req2.getBody());
-                System.debug('Show me response body' + res2.getBody());
-                position.Posting_Status__c = 'Updating successfully';
-                update position;
-            }
-            catch(Exception e){
-                position.Posting_Status__c = 'Error updating position';
-                update position;
-            }
+        try{
+            String accessToken = sendPositionUsingRestApi.ReturnAccessToken(sendPositionUsingRestApi);
+            String dataFromTargetOrg = getDatafromTargetOrg(accessToken);
+            HttpResponse response = updateRecord(pos, accessToken, dataFromTargetOrg);
+        }
+        catch(Exception e){
+            System.debug('errors' + e.getMessage());
         }
     }
     @future (callout=true)
     public static void deleteJobAdvertisement(id pos){
-        Position__c position = [select Name, Education__c, Location__c, Hiring_Manager__c, Legacy_Position_Number__c, Salary_Range__c, Skills_Required__c, Job_Description__c from Position__c where id =: pos];
-        String dataFromTargetOrg = getDatafromTargetOrg();
-        List<Map<String, String>> data = parsingDataFromTargetOrg(dataFromTargetOrg);
-        String jobAdvertisementsId;
-        for(Map<String, String> item: data){
-            if(item.get('Legacy_Job_Advertisement_Number__c') == pos){
-                jobAdvertisementsId = item.get('Id');
-            }
-        }
-        system.debug('show me id of Job Advertisements: ' + jobAdvertisementsId);
         SendPositionUsingRestApi sendPositionUsingRestApi = new SendPositionUsingRestApi();
-        String accessToken = sendPositionUsingRestApi.ReturnAccessToken(sendPositionUsingRestApi);
-        if(accessToken != null){
-            String endPoint='https://eu16.salesforce.com/services/apexrest/jobAdvertisements/' + jobAdvertisementsId;
-            Http h2= new Http();
-            HttpRequest req2= new HttpRequest();
-            req2.setHeader('Authorization','Bearer ' + accessToken);
-            req2.setHeader('Content-Type','application/json');
-            req2.setHeader('accept','application/json');
-            req2.setMethod('DELETE');
-            req2.setEndpoint(endPoint);
-            try{
-                HttpResponse res2=h2.send(req2);
-                position.Posting_Status__c = 'Deleting successfully';
-                System.debug('Show me request body' + req2.getBody());
-                System.debug('Show me response body' + res2.getBody());
-            }
-            catch(Exception e){
-                position.Posting_Status__c = 'Error deleting';
-            }
-            update position;
+        try{
+           String accessToken = sendPositionUsingRestApi.ReturnAccessToken(sendPositionUsingRestApi);
+           String dataFromTargetOrg = getDatafromTargetOrg(accessToken);
+           HttpResponse response = deleteRecord(pos, accessToken, dataFromTargetOrg); 
+        }
+        catch(Exception e){
+            System.debug('errors' + e.getMessage());
         }
     }
-    public static String getDatafromTargetOrg(){
-        SendPositionUsingRestApi sendPositionUsingRestApi = new SendPositionUsingRestApi();
-        String accessToken = sendPositionUsingRestApi.ReturnAccessToken(sendPositionUsingRestApi);
+    public static String getDatafromTargetOrg(String accessToken){
         String dataFromTargetOrg;
         if(accessToken != null){
             Http http= new Http();
@@ -179,9 +64,131 @@ global class SendPositionUsingRestApi {
             req.setMethod('GET');
             HttpResponse res = http.send(req);
             dataFromTargetOrg = res.getBody();
-            System.debug('show me response body: ' + dataFromTargetOrg);
         }
         return dataFromTargetOrg;
+    }
+    public static HttpResponse createRecord(id pos, String accessToken){
+        Position__c position = [select Name, Education__c, Location__c, Hiring_Manager__c, Legacy_Position_Number__c, Approval_Status__c, Status__c, Salary_Range__c, Skills_Required__c, Job_Description__c from Position__c where id =: pos];
+        String jobAdvertisementsStatus = '';
+        if(position.Status__c == 'Closed'){
+            jobAdvertisementsStatus = 'Archived';
+        }
+        else if(position.Status__c == 'Open' && position.Approval_Status__c == 'Approved'){
+            jobAdvertisementsStatus = 'Active';
+        }
+        User recruiterUser = [select Name, Email, Phone from User where id =: position.Hiring_Manager__c];
+        List<Integer> salaries = getMinAndMaxSalary(position);
+        if(accessToken!=null){
+            String posId = position.Id;
+            String endPoint='https://eu16.salesforce.com/services/apexrest/jobAdvertisements'; //Instance  Target Org 
+			String jsonstr='{"name":"'+ position.Name + '", "location":"' + position.Location__c +'", "education":"' + position.Education__c +
+    					'", "salary":"' + position.Salary_Range__c + '", "skills":"' + position.Skills_Required__c + '", "description":"' 
+                        + position.Job_Description__c + '", "managerName":"' + recruiterUser.Name + '", "email":"' + recruiterUser.Email + 
+                '", "phone":"' + recruiterUser.Phone +'", "legacyNumber":"' + position.id +
+                '", "minSalary":"' + salaries[0] + '", "maxSalary":"' + salaries[1] + '", "status":"' + jobAdvertisementsStatus + '"}';
+        
+            Http h2= new Http();
+            HttpRequest req2= new HttpRequest();
+            req2.setHeader('Authorization','Bearer ' + accessToken);
+            req2.setHeader('Content-Type','application/json');
+            req2.setHeader('accept','application/json');
+            req2.setBody(jsonstr);
+            req2.setMethod('POST');
+            req2.setEndpoint(endPoint);
+            HttpResponse res2;
+            try{
+                res2=h2.send(req2);
+                deserializeResponse deresp2=(deserializeResponse)System.JSON.deserialize(res2.getBody(),deserializeResponse.class);
+                position.Posting_Status__c = 'Posting successfully';
+            }
+            catch(Exception e){
+                position.Posting_Status__c = 'Error posting';
+            }
+            update position;
+            return res2;
+        }
+        return null;
+    }
+    public static HttpResponse updateRecord(id pos, String accessToken, String dataFromTargetOrg){
+        List<Map<String, String>> data = parsingDataFromTargetOrg(dataFromTargetOrg);
+        String jobAdvertisementsId;
+        for(Map<String, String> item: data){
+            if(item.get('Legacy_Job_Advertisement_Number__c') == pos){
+                jobAdvertisementsId = item.get('Id');
+            }
+        }
+        Position__c position = [select Name, Education__c, Location__c, Hiring_Manager__c, Legacy_Position_Number__c, Approval_Status__c, Status__c, Salary_Range__c, Skills_Required__c, Job_Description__c from Position__c where id =: pos];
+        String jobAdvertisementsStatus = '';
+        if(position.Status__c == 'Closed'){
+            jobAdvertisementsStatus = 'Archived';
+        }
+        else if(position.Status__c == 'Open' && position.Approval_Status__c == 'Approved'){
+            jobAdvertisementsStatus = 'Active';
+        }
+        User recruiterUser = [select Name, Email, Phone from User where id =: position.Hiring_Manager__c];
+        List<Integer> salaries = getMinAndMaxSalary(position);
+        if(accessToken!=null){
+            String posId = position.Id;
+            String endPoint='https://eu16.salesforce.com/services/apexrest/jobAdvertisements/' + jobAdvertisementsId; //Instance  Target Org 
+			String jsonstr='{"name":"'+ position.Name + '", "location":"' + position.Location__c +'", "education":"' + position.Education__c +
+    					'", "salary":"' + position.Salary_Range__c + '", "skills":"' + position.Skills_Required__c + '", "description":"' 
+                        + position.Job_Description__c + '", "managerName":"' + recruiterUser.Name + '", "email":"' + recruiterUser.Email + 
+                '", "phone":"' + recruiterUser.Phone +'", "legacyNumber":"' + position.id +
+                '", "minSalary":"' + salaries[0] + '", "maxSalary":"' + salaries[1] + '", "status":"' + jobAdvertisementsStatus + '"}';
+            
+            Http h2= new Http();
+            HttpRequest req2= new HttpRequest();
+            req2.setHeader('Authorization','Bearer ' + accessToken);
+            req2.setHeader('Content-Type','application/json');
+            req2.setHeader('accept','application/json');
+            req2.setBody(jsonstr);
+            req2.setMethod('PUT');
+            req2.setEndpoint(endPoint);
+            HttpResponse res2;
+            try{
+                res2=h2.send(req2);
+                deserializeResponse deresp2=(deserializeResponse)System.JSON.deserialize(res2.getBody(),deserializeResponse.class);
+                position.Posting_Status__c = 'Updating successfully';
+                update position;
+            }
+            catch(Exception e){
+                position.Posting_Status__c = 'Error updating position';
+                update position;
+            }
+            return res2;
+        }
+        return null;
+    }
+    public static HttpResponse deleteRecord(id pos, String accessToken, String dataFromTargetOrg){
+        Position__c position = [select Name, Education__c, Location__c, Hiring_Manager__c, Legacy_Position_Number__c, Salary_Range__c, Skills_Required__c, Job_Description__c from Position__c where id =: pos];
+        List<Map<String, String>> data = parsingDataFromTargetOrg(dataFromTargetOrg);
+        String jobAdvertisementsId;
+        for(Map<String, String> item: data){
+            if(item.get('Legacy_Job_Advertisement_Number__c') == pos){
+                jobAdvertisementsId = item.get('Id');
+            }
+        }
+        if(accessToken != null){
+            String endPoint='https://eu16.salesforce.com/services/apexrest/jobAdvertisements/' + jobAdvertisementsId;
+            Http h2= new Http();
+            HttpRequest req2= new HttpRequest();
+            req2.setHeader('Authorization','Bearer ' + accessToken);
+            req2.setHeader('Content-Type','application/json');
+            req2.setHeader('accept','application/json');
+            req2.setMethod('DELETE');
+            req2.setEndpoint(endPoint);
+            HttpResponse res2;
+            try{
+                res2=h2.send(req2);
+                position.Posting_Status__c = 'Deleting successfully';
+            }
+            catch(Exception e){
+                position.Posting_Status__c = 'Error deleting';
+            }
+            update position;
+            return res2;
+        }
+        return null;
     }
     public static List<Map<String, String>> parsingDataFromTargetOrg(String dataFromTargetOrg){
         List<Map<String, String>> data = new List<Map<String, String>>();
@@ -202,7 +209,6 @@ global class SendPositionUsingRestApi {
                 parser.nextToken();
                 String legacyNumberValue = parser.getIdValue();
                 dataElement.put(key, legacyNumberValue);
-                System.debug('show me  map token: ' + dataElement);
             }
             if(parser.getCurrentToken() == JSONToken.END_OBJECT) {
                 if(flag ==true){
@@ -211,7 +217,6 @@ global class SendPositionUsingRestApi {
                 }
             }
         }
-        System.debug('show me list of maps: ' + data);
         return data;
     }
     public static List<Integer> getMinAndMaxSalary(Position__c currentPosition){
@@ -221,8 +226,8 @@ global class SendPositionUsingRestApi {
         String maxSalary = '';
         String minSalary = '';
         if(salaryRange == null){
-            salaries.add(minSalary);
-            salaries.add(maxSalary);
+            integerSalaries.add(0);
+            integerSalaries.add(0);
         }
         else if(salaryRange.contains('-')){
             salaries = salaryRange.split('-');

@@ -26,7 +26,6 @@ public with sharing class SendCalloutsController {
             postingFlag = true;
         }
         else if(currentPosition.Posting_Status__c == 'Error posting'){
-            SendPositionUsingRestApi pos = new SendPositionUsingRestApi();
             postingFlag = false;
         }
         else postingFlag = false;
@@ -35,17 +34,13 @@ public with sharing class SendCalloutsController {
         }
     }
     public PageReference save(){
-        system.debug('i am in save. authorizationSetting='+ authorizationSetting);
         upsert authorizationSetting;
         newSettingAfterChangeflag = true;
         afterChangeFlag = false;
-        Position__c currentPosition = getCurrentPosition(positionId);
-        currentPosition.Posting_Status__c = '';
 		return null;
     }
     public PageReference createButtonAction(){
         afterChangeFlag = true;
-        System.debug(authorizationSetting);
         return null;
     }
     public PageReference cancel(){
@@ -53,8 +48,6 @@ public with sharing class SendCalloutsController {
         return null;
     }
     public PageReference postJobAdvertisement(){
-        System.debug(authorizationSetting);
-        System.debug('show me setting id: ' + authorizationSetting);
         SendPositionUsingRestApi.createJobAdvertisement(positionId);
         postingFlag = true;
         Position__c currentPosition = getCurrentPosition(positionId);
@@ -72,7 +65,6 @@ public with sharing class SendCalloutsController {
         return pageRef;
     }
     public PageReference deleteJobAdvertisement(){
-        System.debug(authorizationSetting);
         SendPositionUsingRestApi.deleteJobAdvertisement(positionId);
         Position__c currentPosition = getCurrentPosition(positionId);
         if(currentPosition.Status__c == 'Deleting successfully'){
