@@ -18,21 +18,33 @@ public class SendCalloutTest {
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new SendCaloutsMock(pos.Id));
         HttpResponse res = SendPositionUsingRestApi.createRecord(pos.Id, '{"access_token":"SESSION_ID_REMOVED","instance_url":"https://eu16.salesforce.com","id":"https://login.salesforce.com/id/00D1t000000olmDEAQ/0051t000000KDQRAA4","token_type":"Bearer","issued_at":"1539163092870","signature":"ntCyy2HdiPC/k8zKx0xBOBMXwgvbPI7JbyI6CHMhMNA="}');
-        String expectedValue = '{"attributes":{"type":"Job_Advertisement__c","url":"/services/data/v43.0/sobjects/Job_Advertisement__c/a001t000001sKeXAAU"},"Name":"hibd","Description__c":"null","Education__c":"null","Email__c":"vikaephimova1996@gmail.com","Legacy_Job_Advertisement_Number__c":"' + pos.Id + '","Location__c":"null","Manager_name__c":"Kathy Cooper","Phone__c":"380958645755","Salary__c":"75K-90K","Skills_Required__c":"null","Status__c":"Active","Id":"a001t000001sKeXAAU"}';
+        String expectedValue = '{"attributes":{"type":"Job_Advertisement__c", ' + 
+                             '"url":"/services/data/v43.0/sobjects/Job_Advertisement__c/a001t000001sbT5AAI"},"Name":"hibd","Description__c":"null", ' + 
+                             '"Education__c":"null","Email__c":"vikaephimova1996@gmail.com","Legacy_Job_Advertisement_Number__c":"' + pos.Id +'", ' + 
+                             '"Location__c":"APAC","Manager_name__c":"Kathy Cooper","Maximum_Salary__c":120,"Minimum_Salary__c":90,"Phone__c":"380958645755", ' + 
+                             '"Salary__c":"90K-120K","Skills_Required__c":"skills","Status__c":"Active","Id":"a001t000001sbT5AAI"}';
         System.assertEquals(expectedValue, res.getBody());
         System.assertEquals(1, Limits.getCallouts());
         Test.stopTest();
     }
     @isTest
     public static void updateRecordTest(){
-        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = '0050E000002z77hQAA', Salary_Range__c = '50K-90K', Location__c = 'US');
+        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = '0050E000002z77hQAA', Salary_Range__c = '50K-90K');
         insert pos;
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new SendCaloutsMock(pos.Id));
-        String parametrString = '{"attributes":{"type":"Job_Advertisement__c","url":"/services/data/v43.0/sobjects/Job_Advertisement__c/a001t000001sKeXAAU"},"Name":"hibd","Description__c":"null","Education__c":"null","Email__c":"vikaephimova1996@gmail.com","Legacy_Job_Advertisement_Number__c":"' + pos.Id + '","Location__c":"null","Manager_name__c":"Kathy Cooper","Phone__c":"380958645755","Salary__c":"75K-90K","Skills_Required__c":"null","Status__c":"Active","Id":"a001t000001sKeXAAU"}';
+        String parametrString = '{"attributes":{"type":"Job_Advertisement__c", ' + 
+                             '"url":"/services/data/v43.0/sobjects/Job_Advertisement__c/a001t000001sbT5AAI"},"Name":"hibd","Description__c":"null", ' + 
+                             '"Education__c":"null","Email__c":"vikaephimova1996@gmail.com","Legacy_Job_Advertisement_Number__c":"' + pos.Id +'", ' + 
+                             '"Location__c":"APAC","Manager_name__c":"Kathy Cooper","Maximum_Salary__c":120,"Minimum_Salary__c":90,"Phone__c":"380958645755", ' + 
+                             '"Salary__c":"90K-120K","Skills_Required__c":"skills","Status__c":"Active","Id":"a001t000001sbT5AAI"}';
         HttpResponse res = SendPositionUsingRestApi.updateRecord(pos.Id, '{"access_token":"SESSION_ID_REMOVED","instance_url":"https://eu16.salesforce.com","id":"https://login.salesforce.com/id/00D1t000000olmDEAQ/0051t000000KDQRAA4","token_type":"Bearer","issued_at":"1539163092870","signature":"ntCyy2HdiPC/k8zKx0xBOBMXwgvbPI7JbyI6CHMhMNA="}', parametrString);
         System.debug('res body' + res.getBody());
-        String expectedValue = '{"attributes":{"type":"Job_Advertisement__c","url":"/services/data/v43.0/sobjects/Job_Advertisement__c/a001t000001sKeXAAU"},"Name":"hibd","Description__c":"null","Education__c":"null","Email__c":"vikaephimova1996@gmail.com","Legacy_Job_Advertisement_Number__c":"' + pos.Id + '","Location__c":"null","Manager_name__c":"Kathy Cooper","Phone__c":"380958645755","Salary__c":"75K-90K","Skills_Required__c":"null","Status__c":"Active","Id":"a001t000001sKeXAAU"}';
+        String expectedValue = '{"attributes":{"type":"Job_Advertisement__c", ' + 
+                             '"url":"/services/data/v43.0/sobjects/Job_Advertisement__c/a001t000001sbT5AAI"},"Name":"hibd","Description__c":"null", ' + 
+                             '"Education__c":"null","Email__c":"vikaephimova1996@gmail.com","Legacy_Job_Advertisement_Number__c":"' + pos.Id +'", ' + 
+                             '"Location__c":"APAC","Manager_name__c":"Kathy Cooper","Maximum_Salary__c":120,"Minimum_Salary__c":90,"Phone__c":"380958645755", ' + 
+                             '"Salary__c":"90K-120K","Skills_Required__c":"skills","Status__c":"Active","Id":"a001t000001sbT5AAI"}';
         System.assertEquals(expectedValue, res.getBody());
         System.assertEquals(1, Limits.getCallouts());
         Test.stopTest();
@@ -43,10 +55,18 @@ public class SendCalloutTest {
         insert pos;
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new SendCaloutsMock(pos.Id));
-        String parametrString = '{"attributes":{"type":"Job_Advertisement__c","url":"/services/data/v43.0/sobjects/Job_Advertisement__c/a001t000001sKeXAAU"},"Name":"hibd","Description__c":"null","Education__c":"null","Email__c":"vikaephimova1996@gmail.com","Legacy_Job_Advertisement_Number__c":"' + pos.Id + '","Location__c":"null","Manager_name__c":"Kathy Cooper","Phone__c":"380958645755","Salary__c":"75K-90K","Skills_Required__c":"null","Status__c":"Active","Id":"a001t000001sKeXAAU"}';
+        String parametrString = '{"attributes":{"type":"Job_Advertisement__c", ' + 
+                             '"url":"/services/data/v43.0/sobjects/Job_Advertisement__c/a001t000001sbT5AAI"},"Name":"hibd","Description__c":"null", ' + 
+                             '"Education__c":"null","Email__c":"vikaephimova1996@gmail.com","Legacy_Job_Advertisement_Number__c":"' + pos.Id +'", ' + 
+                             '"Location__c":"APAC","Manager_name__c":"Kathy Cooper","Maximum_Salary__c":120,"Minimum_Salary__c":90,"Phone__c":"380958645755", ' + 
+                             '"Salary__c":"90K-120K","Skills_Required__c":"skills","Status__c":"Active","Id":"a001t000001sbT5AAI"}';
         HttpResponse res = SendPositionUsingRestApi.deleteRecord(pos.Id, '{"access_token":"SESSION_ID_REMOVED","instance_url":"https://eu16.salesforce.com","id":"https://login.salesforce.com/id/00D1t000000olmDEAQ/0051t000000KDQRAA4","token_type":"Bearer","issued_at":"1539163092870","signature":"ntCyy2HdiPC/k8zKx0xBOBMXwgvbPI7JbyI6CHMhMNA="}', parametrString);
         System.debug('res body' + res.getBody());
-        String expectedValue = '{"attributes":{"type":"Job_Advertisement__c","url":"/services/data/v43.0/sobjects/Job_Advertisement__c/a001t000001sKeXAAU"},"Name":"hibd","Description__c":"null","Education__c":"null","Email__c":"vikaephimova1996@gmail.com","Legacy_Job_Advertisement_Number__c":"' + pos.Id + '","Location__c":"null","Manager_name__c":"Kathy Cooper","Phone__c":"380958645755","Salary__c":"75K-90K","Skills_Required__c":"null","Status__c":"Active","Id":"a001t000001sKeXAAU"}';
+        String expectedValue = '{"attributes":{"type":"Job_Advertisement__c", ' + 
+                             '"url":"/services/data/v43.0/sobjects/Job_Advertisement__c/a001t000001sbT5AAI"},"Name":"hibd","Description__c":"null", ' + 
+                             '"Education__c":"null","Email__c":"vikaephimova1996@gmail.com","Legacy_Job_Advertisement_Number__c":"' + pos.id +'", ' + 
+                             '"Location__c":"APAC","Manager_name__c":"Kathy Cooper","Maximum_Salary__c":120,"Minimum_Salary__c":90,"Phone__c":"380958645755", ' + 
+                             '"Salary__c":"90K-120K","Skills_Required__c":"skills","Status__c":"Active","Id":"a001t000001sbT5AAI"}';
         System.debug('futurecall: ' + Limits.getCallouts());
         System.assertEquals(expectedValue, res.getBody());
         System.assertEquals(1, Limits.getCallouts());
@@ -78,7 +98,12 @@ public class SendCalloutTest {
         insert pos;
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new SendCaloutsMock(pos.Id));
-        String parametrString = '{"attributes":{"type":"Job_Advertisement__c","url":"/services/data/v43.0/sobjects/Job_Advertisement__c/a001t000001sKeXAAU"},"Name":"hibd","Description__c":"null","Education__c":"null","Email__c":"vikaephimova1996@gmail.com","Legacy_Job_Advertisement_Number__c":"' + pos.Id + '","Location__c":"null","Manager_name__c":"Kathy Cooper","Phone__c":"380958645755","Salary__c":"75K-90K","Skills_Required__c":"null","Status__c":"Active","Id":"a001t000001sKeXAAU"}';
+        String posId = pos.Id;
+        String parametrString = '{"attributes":{"type":"Job_Advertisement__c", ' + 
+                             '"url":"/services/data/v43.0/sobjects/Job_Advertisement__c/a001t000001sbT5AAI"},"Name":"hibd","Description__c":"null", ' + 
+                             '"Education__c":"null","Email__c":"vikaephimova1996@gmail.com","Legacy_Job_Advertisement_Number__c":"' + pos.Id +'", ' + 
+                             '"Location__c":"APAC","Manager_name__c":"Kathy Cooper","Maximum_Salary__c":120,"Minimum_Salary__c":90,"Phone__c":"380958645755", ' + 
+                             '"Salary__c":"90K-120K","Skills_Required__c":"skills","Status__c":"Active","Id":"a001t000001sbT5AAI"}';
         String data = SendPositionUsingRestApi.getDatafromTargetOrg('{"access_token":"SESSION_ID_REMOVED","instance_url":"https://eu16.salesforce.com","id":"https://login.salesforce.com/id/00D1t000000olmDEAQ/0051t000000KDQRAA4","token_type":"Bearer","issued_at":"1539163092870","signature":"ntCyy2HdiPC/k8zKx0xBOBMXwgvbPI7JbyI6CHMhMNA="}');
         System.assertEquals(parametrString, data);
         System.assertEquals(1, Limits.getCallouts());
@@ -94,7 +119,6 @@ public class SendCalloutTest {
         Test.stopTest();
         
     }
-    
     @isTest
     public static void futureCallForUpdateRecordTest(){
         Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = '0050E000002z77hQAA', Salary_Range__c = '50K-90K', Location__c = 'US');
