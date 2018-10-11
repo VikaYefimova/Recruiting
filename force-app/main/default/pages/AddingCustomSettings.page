@@ -1,4 +1,4 @@
-<apex:page standardController="Position__c" extensions="SendCalloutsController" cache="false" standardStylesheets="true">
+<apex:page standardController="Position__c" showHeader="true" extensions="SendCalloutsController" cache="false" standardStylesheets="true">
     <apex:stylesheet value="{!URLFOR($Resource.cssStyles, '/cssStyles/Styles/addingCustomSettingStyles.css')}"/>
     <apex:messages />
         <apex:pageBlock rendered="{!AND(NOT(afterChangeFlag))}">
@@ -9,10 +9,11 @@
             </apex:form>
         </apex:pageBlock>
         <apex:pageBlock rendered="{!NOT(newSettingAfterChangeflag)}">
+            
             <apex:form >
             <div>
             <apex:pageBlockSection id="postingMessage" rendered="{!AND(postingFlag, NOT(afterChangeFlag))}">
-               <apex:outputText value="Request send" label="Callouts status: " rendered="{!postingFlag}"/> 
+               <apex:outputText value="{!position}" label="Callouts status: " rendered="{!postingFlag}"/> 
             </apex:pageBlockSection>
             </div>
             <span>
@@ -23,10 +24,11 @@
             </apex:form>
         </apex:pageBlock>
         <apex:pageBlock rendered="{!newSettingAfterChangeflag}">
+            <apex:messages />
             <apex:form >
             <div>
             <apex:pageBlockSection id="postingAfterChangeSettingMessage" rendered="{!AND(postingFlag, NOT(afterChangeFlag), NOT(newSettingAfterChangeflag))}">
-               <apex:outputText value="Request send" label="Callouts status: " rendered="{!postingFlag}"/> 
+               <apex:outputText value="{!position}" label="Callouts status: " rendered="{!postingFlag}"/> 
             </apex:pageBlockSection>
             </div>
             <span>

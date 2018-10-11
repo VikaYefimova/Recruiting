@@ -1,3 +1,4 @@
+@isTest
 public class TestDataFactory {
     public static Integer candidatesListSize;
     public static Integer positionsListSize;

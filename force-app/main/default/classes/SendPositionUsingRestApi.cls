@@ -18,7 +18,7 @@ global class SendPositionUsingRestApi {
         req.setBody(reqbody);
         req.setMethod('POST');
        
-        req.setEndpoint('https://eu16.salesforce.com/services/oauth2/token'); //instance Target Org  
+        req.setEndpoint('https://eu16.salesforce.com/services/oauth2/token');  
         HttpResponse res=h.send(req);
         deserializeResponse resp1=(deserializeResponse)JSON.deserialize(res.getBody(),deserializeResponse.class);
         return resp1.access_token;
@@ -99,10 +99,12 @@ global class SendPositionUsingRestApi {
             try{
                 res2=h2.send(req2);
                 deserializeResponse deresp2=(deserializeResponse)System.JSON.deserialize(res2.getBody(),deserializeResponse.class);
-                position.Posting_Status__c = 'Posting successfully';
+                position.Posting_Status__c = 'Posted';
+                position.Posting_Setting__c = 'Posted successfully';
             }
             catch(Exception e){
-                position.Posting_Status__c = 'Error posting';
+                position.Posting_Status__c = 'Not posted';
+                position.Posting_Setting__c = 'Error posting';
             }
             update position;
             return res2;
@@ -148,13 +150,12 @@ global class SendPositionUsingRestApi {
             try{
                 res2=h2.send(req2);
                 deserializeResponse deresp2=(deserializeResponse)System.JSON.deserialize(res2.getBody(),deserializeResponse.class);
-                position.Posting_Status__c = 'Updating successfully';
-                update position;
+                position.Posting_Setting__c = 'Update successfully';
             }
             catch(Exception e){
-                position.Posting_Status__c = 'Error updating position';
-                update position;
+                position.Posting_Setting__c = 'Error updating';
             }
+            update position;
             return res2;
         }
         return null;
@@ -180,10 +181,11 @@ global class SendPositionUsingRestApi {
             HttpResponse res2;
             try{
                 res2=h2.send(req2);
-                position.Posting_Status__c = 'Deleting successfully';
+                position.Posting_Setting__c = 'Delete successfully';
+                position.Posting_Status__c = '';
             }
             catch(Exception e){
-                position.Posting_Status__c = 'Error deleting';
+                position.Posting_Setting__c = 'Error deleting';
             }
             update position;
             return res2;
