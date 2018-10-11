@@ -20,7 +20,9 @@ global class SendPositionUsingRestApi {
        
         req.setEndpoint('https://eu16.salesforce.com/services/oauth2/token');  
         HttpResponse res=h.send(req);
+        System.debug('authorization response: ' + res.getBody());
         deserializeResponse resp1=(deserializeResponse)JSON.deserialize(res.getBody(),deserializeResponse.class);
+        System.debug('accessToken: ' + resp1.access_token);
         return resp1.access_token;
     }
     @future (callout=true)
@@ -28,30 +30,25 @@ global class SendPositionUsingRestApi {
         SendPositionUsingRestApi pos1= new SendPositionUsingRestApi();
         String accessToken=pos1.ReturnAccessToken(pos1);
         HttpResponse response = createRecord(pos, accessToken);
+        System.debug('create response: ' + response.getBody());
     }
     @future (callout=true)
     public static void updateJobAdvertisement(id pos){
         SendPositionUsingRestApi sendPositionUsingRestApi = new SendPositionUsingRestApi();
-        try{
+        
             String accessToken = sendPositionUsingRestApi.ReturnAccessToken(sendPositionUsingRestApi);
             String dataFromTargetOrg = getDatafromTargetOrg(accessToken);
             HttpResponse response = updateRecord(pos, accessToken, dataFromTargetOrg);
-        }
-        catch(Exception e){
-            System.debug('errors' + e.getMessage());
-        }
+            System.debug('update response: ' + response.getBody());
+       
     }
     @future (callout=true)
     public static void deleteJobAdvertisement(id pos){
         SendPositionUsingRestApi sendPositionUsingRestApi = new SendPositionUsingRestApi();
-        try{
            String accessToken = sendPositionUsingRestApi.ReturnAccessToken(sendPositionUsingRestApi);
            String dataFromTargetOrg = getDatafromTargetOrg(accessToken);
            HttpResponse response = deleteRecord(pos, accessToken, dataFromTargetOrg); 
-        }
-        catch(Exception e){
-            System.debug('errors' + e.getMessage());
-        }
+           System.debug('delete response: ' + response.getBody());
     }
     public static String getDatafromTargetOrg(String accessToken){
         String dataFromTargetOrg;
@@ -64,6 +61,7 @@ global class SendPositionUsingRestApi {
             req.setMethod('GET');
             HttpResponse res = http.send(req);
             dataFromTargetOrg = res.getBody();
+            system.debug('get data response: ' + dataFromTargetOrg);
         }
         return dataFromTargetOrg;
     }
