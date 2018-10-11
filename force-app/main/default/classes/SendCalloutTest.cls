@@ -94,6 +94,7 @@ public class SendCalloutTest {
         Test.stopTest();
         
     }
+    
     @isTest
     public static void futureCallForUpdateRecordTest(){
         Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = '0050E000002z77hQAA', Salary_Range__c = '50K-90K', Location__c = 'US');
