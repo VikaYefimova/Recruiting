@@ -1324,6 +1324,29 @@
             },
             "hasVirtualSubtypes": false
         },
+        "RecommendationStrategy": {
+            "metadataName": "RecommendationStrategy",
+            "isAddressable": true,
+            "isSourceTracked": true,
+            "ext": "recommendationStrategy",
+            "hasContent": false,
+            "defaultDirectory": "recommendationStrategies",
+            "nameForMsgs": "Recommendation Strategy",
+            "nameForMsgsPlural": "Recommendation Strategys",
+            "contentIsBinary": false,
+            "hasStandardMembers": false,
+            "deleteSupported": true,
+            "decompositionConfig": {
+                "strategy": "nonDecomposed",
+                "workspaceStrategy": "nonDecomposed",
+                "commitStrategy": "fineGrainTracking",
+                "metadataName": "RecommendationStrategy",
+                "useSparseComposition": false,
+                "decompositions": [],
+                "contentStrategy": "nonDecomposedContent"
+            },
+            "hasVirtualSubtypes": false
+        },
         "Flow": {
             "metadataName": "Flow",
             "isAddressable": true,
