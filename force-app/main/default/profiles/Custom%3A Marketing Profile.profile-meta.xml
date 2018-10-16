@@ -10,10 +10,6 @@
         <enabled>false</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>CalloutsStatus</apexClass>
-        <enabled>false</enabled>
-    </classAccesses>
-    <classAccesses>
         <apexClass>CandidatesImagesController</apexClass>
         <enabled>false</enabled>
     </classAccesses>
@@ -63,10 +59,6 @@
     </classAccesses>
     <classAccesses>
         <apexClass>aws_PositionHelper</apexClass>
-        <enabled>false</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>exampleController</apexClass>
         <enabled>false</enabled>
     </classAccesses>
     <custom>true</custom>
@@ -427,14 +419,6 @@
     </pageAccesses>
     <pageAccesses>
         <apexPage>candidatesViewInPDF</apexPage>
-        <enabled>false</enabled>
-    </pageAccesses>
-    <pageAccesses>
-        <apexPage>example</apexPage>
-        <enabled>false</enabled>
-    </pageAccesses>
-    <pageAccesses>
-        <apexPage>examplePage</apexPage>
         <enabled>false</enabled>
     </pageAccesses>
     <recordTypeVisibilities>
