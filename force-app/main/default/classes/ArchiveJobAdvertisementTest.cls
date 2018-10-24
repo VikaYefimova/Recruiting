@@ -2,7 +2,7 @@
 public class ArchiveJobAdvertisementTest {
     @isTest
     public static void makeJobeAdvertisementsArchive(){
-        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = '0050E000002z77hQAA', Salary_Range__c = '50K-90K', Location__c = 'US');
+        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = userInfo.getUserId(), Salary_Range__c = '50K-90K', Location__c = 'US');
         insert pos;
         pos.Approval_Status__c = 'Approved';
         pos.Status__c = 'Closed';

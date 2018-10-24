@@ -2,7 +2,7 @@
 public class SendCalloutsControllerTest {
     @isTest
     public static void createJobAdvertisementsTest(){
-        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = '0050E000002z77hQAA', Salary_Range__c = '50K-90K', Location__c = 'US');
+        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = userInfo.getUserId(), Salary_Range__c = '50K-90K', Location__c = 'US');
         insert pos;
         PageReference pageRef = Page.UploadCandidatesImage;
         pageRef.getParameters().put('id', pos.id);
@@ -18,7 +18,7 @@ public class SendCalloutsControllerTest {
     }
     @IsTest
     public static void saveAuthorizationSettingTest(){
-        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = '0050E000002z77hQAA', Salary_Range__c = '50K-90K', Location__c = 'US');
+        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = userInfo.getUserId(), Salary_Range__c = '50K-90K', Location__c = 'US');
         insert pos;
         PageReference pageRef = Page.UploadCandidatesImage;
         pageRef.getParameters().put('id', pos.id);
@@ -33,7 +33,7 @@ public class SendCalloutsControllerTest {
     }
     @isTest
     public static void createButtonActionTest(){
-        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = '0050E000002z77hQAA', Salary_Range__c = '50K-90K', Location__c = 'US');
+        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = userInfo.getUserId(), Salary_Range__c = '50K-90K', Location__c = 'US');
         insert pos;
         PageReference pageRef = Page.UploadCandidatesImage;
         pageRef.getParameters().put('id', pos.id);
@@ -45,7 +45,7 @@ public class SendCalloutsControllerTest {
     }
     @isTest
     public static void cancelButtonTest(){
-        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = '0050E000002z77hQAA', Salary_Range__c = '50K-90K', Location__c = 'US');
+        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = userInfo.getUserId(), Salary_Range__c = '50K-90K', Location__c = 'US');
         insert pos;
         PageReference pageRef = Page.UploadCandidatesImage;
         pageRef.getParameters().put('id', pos.id);
@@ -57,7 +57,7 @@ public class SendCalloutsControllerTest {
     }
     @isTest
     public static void updateJobAdvertisementsTest(){
-        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = '0050E000002z77hQAA', Salary_Range__c = '50K-90K', Location__c = 'US');
+        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = userInfo.getUserId(), Salary_Range__c = '50K-90K', Location__c = 'US');
         insert pos;
         PageReference pageRef = Page.UploadCandidatesImage;
         pageRef.getParameters().put('id', pos.id);
@@ -72,7 +72,7 @@ public class SendCalloutsControllerTest {
     }
     @isTest
     public static void deleteJobAdvertisementTest(){
-        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = '0050E000002z77hQAA', Salary_Range__c = '50K-90K', Location__c = 'US');
+        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = userInfo.getUserId(), Salary_Range__c = '50K-90K', Location__c = 'US');
         insert pos;
         PageReference pageRef = Page.UploadCandidatesImage;
         pageRef.getParameters().put('id', pos.id);
@@ -87,7 +87,7 @@ public class SendCalloutsControllerTest {
     }
     @isTest
     public static void afterDeleteTest(){
-        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = '0050E000002z77hQAA', Salary_Range__c = '50K-90K', Location__c = 'US', Posting_Status__c = 'Posted', Posting_Setting__c = 'Delete successfully');
+        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = userInfo.getUserId(), Salary_Range__c = '50K-90K', Location__c = 'US', Posting_Status__c = 'Posted', Posting_Setting__c = 'Delete successfully');
         insert pos;
         PageReference pageRef = Page.UploadCandidatesImage;
         pageRef.getParameters().put('id', pos.id);
@@ -102,7 +102,7 @@ public class SendCalloutsControllerTest {
     }
     @isTest
     public static void afterDeleteFlagFalseTest(){
-        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = '0050E000002z77hQAA', Salary_Range__c = '50K-90K', Location__c = 'US', Posting_Status__c = 'Posted', Posting_Setting__c = 'Error deleting');
+        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = userInfo.getUserId(), Salary_Range__c = '50K-90K', Location__c = 'US', Posting_Status__c = 'Posted', Posting_Setting__c = 'Error deleting');
         insert pos;
         PageReference pageRef = Page.UploadCandidatesImage;
         pageRef.getParameters().put('id', pos.id);
