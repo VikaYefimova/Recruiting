@@ -2,7 +2,7 @@
 public class SendCalloutTest {
     @isTest
     public static void returnAccessTokenTest(){
-        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = '0050E000002z77hQAA', Salary_Range__c = '50K-90K', Location__c = 'US');
+        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = userInfo.getUserId(), Salary_Range__c = '50K-90K', Location__c = 'US');
         insert pos;
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new SendCaloutsMock(pos.Id));
@@ -13,7 +13,7 @@ public class SendCalloutTest {
     }
     @isTest
     public static void createRecordTest(){
-        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = '0050E000002z77hQAA', Salary_Range__c = '50K-90K', Location__c = 'US');
+        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = userInfo.getUserId(), Salary_Range__c = '50K-90K', Location__c = 'US');
         insert pos;
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new SendCaloutsMock(pos.Id));
@@ -29,7 +29,7 @@ public class SendCalloutTest {
     }
     @isTest
     public static void updateRecordTest(){
-        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = '0050E000002z77hQAA', Salary_Range__c = '50K-90K');
+        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = userInfo.getUserId(), Salary_Range__c = '50K-90K');
         insert pos;
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new SendCaloutsMock(pos.Id));
@@ -51,7 +51,7 @@ public class SendCalloutTest {
     }
     @isTest
     public static void deleteRecordTest(){
-        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = '0050E000002z77hQAA', Salary_Range__c = '50K-90K', Location__c = 'US');
+        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = userInfo.getUserId(), Salary_Range__c = '50K-90K', Location__c = 'US');
         insert pos;
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new SendCaloutsMock(pos.Id));
@@ -74,7 +74,7 @@ public class SendCalloutTest {
     }
     @isTest
     public static void getMinAndMaxSalaryWithoutSalaryRangeTest(){
-        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = '0050E000002z77hQAA', Location__c = 'US');
+        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = userInfo.getUserId(), Location__c = 'US');
         insert pos;
         List<Integer> salaries = SendPositionUsingRestApi.getMinAndMaxSalary(pos);
         List<Integer> expectedList = new List<Integer>();
@@ -84,7 +84,7 @@ public class SendCalloutTest {
     }
     @isTest
     public static void getMinAndMaxSalaryWithSalaryRangeTest(){
-        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = '0050E000002z77hQAA', Salary_Range__c = '130K+', Location__c = 'US');
+        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = userInfo.getUserId(), Salary_Range__c = '130K+', Location__c = 'US');
         insert pos;
         List<Integer> salaries = SendPositionUsingRestApi.getMinAndMaxSalary(pos);
         List<Integer> expectedList = new List<Integer>();
@@ -94,7 +94,7 @@ public class SendCalloutTest {
     }
     @isTest
     public static void getDataFromtargetOrg(){
-        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = '0050E000002z77hQAA', Salary_Range__c = '50K-90K', Location__c = 'US');
+        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = userInfo.getUserId(), Salary_Range__c = '50K-90K', Location__c = 'US');
         insert pos;
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new SendCaloutsMock(pos.Id));
@@ -110,7 +110,7 @@ public class SendCalloutTest {
     }
     @isTest
     public static void futureCallForCreateRecordTest(){
-         Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = '0050E000002z77hQAA', Salary_Range__c = '50K-90K', Location__c = 'US');
+         Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = userInfo.getUserId(), Salary_Range__c = '50K-90K', Location__c = 'US');
         insert pos;
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new SendCaloutsMock(pos.Id));
@@ -121,7 +121,7 @@ public class SendCalloutTest {
     }
     @isTest
     public static void futureCallForUpdateRecordTest(){
-        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = '0050E000002z77hQAA', Salary_Range__c = '50K-90K', Location__c = 'US');
+        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = userInfo.getUserId(), Salary_Range__c = '50K-90K', Location__c = 'US');
         insert pos;
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new SendCaloutsMock(pos.Id));
@@ -131,7 +131,7 @@ public class SendCalloutTest {
     }
     @isTest
     public static void futureCallForDeleteRecordTest(){
-        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = '0050E000002z77hQAA', Salary_Range__c = '50K-90K', Location__c = 'US');
+        Position__c pos = new Position__c(Name = 'Test', Hiring_Manager__c = userInfo.getUserId(), Salary_Range__c = '50K-90K', Location__c = 'US');
         insert pos;
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new SendCaloutsMock(pos.Id));
