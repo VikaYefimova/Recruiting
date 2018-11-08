@@ -31,16 +31,24 @@ global class SendPositionUsingRestApi {
         String accessToken=pos1.ReturnAccessToken(pos1);
         HttpResponse response = createRecord(pos, accessToken);
         System.debug('create response: ' + response.getBody());
+        //Map<String, String> legacyValue = parsingResponseBody(response.getBody());
+        String legacyItem = parsingResponseBody(response.getBody());
+        system.debug('id value: ' + legacyItem);
+        changePositionLegacyNumber(legacyItem, pos);
+        
     }
     @future (callout=true)
     public static void updateJobAdvertisement(id pos){
         SendPositionUsingRestApi sendPositionUsingRestApi = new SendPositionUsingRestApi();
-        
             String accessToken = sendPositionUsingRestApi.ReturnAccessToken(sendPositionUsingRestApi);
             String dataFromTargetOrg = getDatafromTargetOrg(accessToken);
             HttpResponse response = updateRecord(pos, accessToken, dataFromTargetOrg);
             System.debug('update response: ' + response.getBody());
-       
+       		//Map<String, String> legacyValue = parsingResponseBody(response.getBody());
+        	String legacyItem = parsingResponseBody(response.getBody());
+        	system.debug('id value: ' + legacyItem);
+            changePositionLegacyNumber(legacyItem, pos);
+        	
     }
     @future (callout=true)
     public static void deleteJobAdvertisement(id pos){
@@ -111,10 +119,12 @@ global class SendPositionUsingRestApi {
     }
     public static HttpResponse updateRecord(id pos, String accessToken, String dataFromTargetOrg){
         List<Map<String, String>> data = parsingDataFromTargetOrg(dataFromTargetOrg);
+        system.debug('hi');
         String jobAdvertisementsId;
         for(Map<String, String> item: data){
             if(item.get('Legacy_Job_Advertisement_Number__c') == pos){
                 jobAdvertisementsId = item.get('Id');
+                system.debug('id: ' + jobAdvertisementsId);
             }
         }
         Position__c position = [select Name, Education__c, Location__c, Hiring_Manager__c, Legacy_Position_Number__c, Approval_Status__c, Status__c, Salary_Range__c, Skills_Required__c, Job_Description__c from Position__c where id =: pos];
@@ -152,6 +162,7 @@ global class SendPositionUsingRestApi {
             }
             catch(Exception e){
                 position.Posting_Setting__c = 'Error updating';
+                system.debug('except' + e);
             }
             update position;
             return res2;
@@ -191,6 +202,7 @@ global class SendPositionUsingRestApi {
         return null;
     }
     public static List<Map<String, String>> parsingDataFromTargetOrg(String dataFromTargetOrg){
+        system.debug('hello');
         List<Map<String, String>> data = new List<Map<String, String>>();
         Map<String, String> dataElement;
         Boolean flag = true;
@@ -217,7 +229,35 @@ global class SendPositionUsingRestApi {
                 }
             }
         }
+        system.debug('data: ' + data);
         return data;
+        
+    }
+    public static String parsingResponseBody(String responseBody){
+        String legacyNumber = '';
+        JSONParser parser = JSON.createParser(responseBody);
+        while(parser.nextToken() != null){
+            if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Id')){
+                String key = parser.getText();
+                parser.nextToken();
+                legacyNumber = parser.getIdValue();
+                //legacyNumber.put(key, idValue);
+            }
+        }
+        system.debug('id value: ' + legacyNumber);
+        return legacyNumber;
+    }
+    public static void changePositionLegacyNumber(String legacyValue, id pos){
+        Position__c currentPosition = [select id from Position__c where id =: pos];
+        currentPosition.Legacy_Position_Number__c = legacyValue;
+        
+        try{
+            update currentPosition; 
+            system.debug('current position : ' + currentPosition);
+        }
+        catch(DMLException e){
+            system.debug('error: ' + e);
+        }
     }
     public static List<Integer> getMinAndMaxSalary(Position__c currentPosition){
         List<Integer> integerSalaries = new List<Integer>();
