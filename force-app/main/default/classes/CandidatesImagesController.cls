@@ -49,6 +49,7 @@ public class CandidatesImagesController {
             relatedFile.LinkedEntityId = recId;
             relatedFile.ShareType = 'I';
             insert relatedFile;
+        
             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.INFO, 'Image uploaded successfully'));
         }
         catch(DMLException e){

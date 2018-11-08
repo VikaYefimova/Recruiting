@@ -17,5 +17,4 @@ public class DisplayImageControllerTest {
         String result = displayImageControler.getFileId();
         System.assertEquals(candidatesImageId, result);
     }
-
 }
