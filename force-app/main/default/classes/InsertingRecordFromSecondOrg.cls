@@ -30,19 +30,7 @@ public class InsertingRecordFromSecondOrg {
         String accessToken = obj.ReturnAccessToken(obj);
         String dataFromTargetOrg = getCountfromTargetOrg(accessToken);
         system.debug('response data' + dataFromTargetOrg);
-        /*JSONParser parser = JSON.createParser(dataFromTargetOrg);
-        parser.nextToken();
-        parser.nextToken();
-        Integer countCV = Integer.valueOf(parser.getText());
-        parser.nextToken();
-        Integer countSelectedJob = Integer.valueOf(parser.getText());
-        parser.nextToken();
-        Integer countPhoto = Integer.valueOf(parser.getText());
-        List<Integer> selJOb = new List<Integer>();
-        for(Integer i = 0; i<=countSelectedJob; i++){
-            selJOb.add(i);
-        }
-        */
+        
     }
     public static String getCountfromTargetOrg(String accessToken){
         String dataFromTargetOrg;
@@ -69,12 +57,229 @@ public class InsertingRecordFromSecondOrg {
             HttpRequest req = new HttpRequest();
             req.setHeader('Authorization','Bearer ' + accessToken);
             req.setHeader('Content-Type', 'application/json');
-            req.setEndpoint('https://eu16.salesforce.com/services/data/v24.0/query/?q=SELECT+name+,+Phone__c+,+Email__c+,+Status__c+,+Candidate_Age__c+from+CandidateCV__c+Limit+'+ limitForSearch + '+OFFSET+' + offset);
+            req.setEndpoint('https://eu16.salesforce.com/services/data/v24.0/query/?q=SELECT+id+,+name+,+Phone__c+,+Email__c+,+Status__c+,+Candidate_Age__c+,+Candidate_Photo__c+from+CandidateCV__c+Limit+'+ limitForSearch + '+OFFSET+' + offset);
             req.setMethod('GET');
             HttpResponse res = http.send(req);
             dataFromTargetOrg = res.getBody();
             system.debug('get data response: ' + dataFromTargetOrg);
         }
         return dataFromTargetOrg;
+    }
+    public static String getJobApplicationDataFromSecondOrg(Integer limitForSearch, Integer offset){
+        String dataFromTargetOrg;
+        InsertingRecordFromSecondOrg obj = new InsertingRecordFromSecondOrg();
+        String accessToken = obj.ReturnAccessToken(obj);
+        if(accessToken != null){
+            Http http= new Http();
+            HttpRequest req = new HttpRequest();
+            req.setHeader('Authorization','Bearer ' + accessToken);
+            req.setHeader('Content-Type', 'application/json');
+            req.setEndpoint('https://eu16.salesforce.com/services/data/v24.0/query/?q=SELECT+id+,+CandidateCV__c+,+Candidate_Phone__c+,+Candidate_Salary__c+,+Candidate_Status__c+,+Candidate_Age__c,+Additional_Info__c,+Job_Advertisement__c+from+Selected_Job__c+Limit+'+ limitForSearch + '+OFFSET+' + offset);
+            req.setMethod('GET');
+            HttpResponse res = http.send(req);
+            dataFromTargetOrg = res.getBody();
+            system.debug('get data response: ' + dataFromTargetOrg);
+        }
+        return dataFromTargetOrg;
+    }
+    public static string getCandidateImagesFromTargetOrg(Integer limitForSearch, Integer offset){
+        String dataFromTargetOrg;
+        InsertingRecordFromSecondOrg obj = new InsertingRecordFromSecondOrg();
+        String accessToken = obj.ReturnAccessToken(obj);
+        if(accessToken != null){
+            Http http= new Http();
+            HttpRequest req = new HttpRequest();
+            req.setHeader('Authorization','Bearer ' + accessToken);
+            req.setHeader('Content-Type', 'application/json');
+            req.setEndpoint('https://eu16.salesforce.com/services/apexrest/getImages');
+            req.setMethod('GET');
+            HttpResponse res = http.send(req);
+            dataFromTargetOrg = res.getBody();
+            system.debug('get data response: ' + dataFromTargetOrg);
+        }
+        return dataFromTargetOrg;
+    }
+    public static List<Candidate__c> parsingCandidateRecords(String responseBody){
+        system.debug('parser start working');
+        List<Candidate__c> listOfNewCandidates = new List<Candidate__c>();
+        Boolean flag = true;
+        system.debug('true');
+        Candidate__c newCandidate;
+            JSONParser parser = JSON.createParser(responseBody);
+        system.debug('body: ' + responseBody);
+            while(parser.nextToken() != null){
+                
+                if(parser.getCurrentToken() == JSONToken.START_OBJECT){
+                    newCandidate = new Candidate__c();
+                    flag = true;
+					                  
+                }
+                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Id')){
+                    
+                    parser.nextToken();
+                    newCandidate.Legacy_Candidate_Number__c = parser.getIdValue();
+                }
+                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Name')){
+                    system.debug('hello');  
+                    parser.nextToken();
+                    String nameToSplit = parser.getText();
+                    List<String> names = nameToSplit.split(' ');
+                    if(names.size() > 1){
+                        newCandidate.First_Name__c = names[0];
+                        system.debug(newCandidate.First_Name__c = names[0]);
+                        newCandidate.Last_Name__c = names[1];
+                    }
+                    else if(names.size() == 1){
+                        system.debug('hi');
+                        newCandidate.First_Name__c = names[0];
+                    }
+                    
+                    //system.debug(newCandidate.First_Name__c = names[0]);
+                    //newCandidate.Last_Name__c = names[1];
+                    //system.debug(newCandidate.Last_Name__c = names[1]);
+                }
+                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Candidate_Age__c')){
+                    parser.nextToken();
+                    newCandidate.Age__c = Decimal.valueOf(parser.getText());
+                    system.debug(parser.getText());
+                }
+                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Email__c')){
+                    parser.nextToken();
+                    newCandidate.Email__c = parser.getText();
+                    system.debug(parser.getText());
+                }
+                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Phone__c')){
+                    parser.nextToken();
+                    newCandidate.Phone__c = parser.getText();
+                    system.debug(parser.getText());
+                }
+                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Candidate_Photo__c')){
+                    parser.nextToken();
+                    newCandidate.Candidate_Photo__c = parser.getText();
+                }
+                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Status__c')){
+                    parser.nextToken();
+                    if(parser.getText() == 'Employed'){
+                        newCandidate.Currently_Employed__c = true;
+                    }
+                    else if(parser.getText() == 'Unemployed'){
+                        newCandidate.Currently_Employed__c = false;
+                    }
+                    system.debug(parser.getText());
+                }
+                if(parser.getCurrentToken() == JSONToken.END_OBJECT){
+                    if(flag){
+                        listOfNewCandidates.add(newCandidate);
+                        flag = false;
+                    }  
+                }
+        }
+        system.debug('listOfNewCandidates:    ' + listOfNewCandidates);
+        return listOfNewCandidates;
+    }
+    
+    public static List<Job_Application__c> parsingJobAppliationsRecords(String responseBody){
+        List<Job_Application__c> newJobApplicationRecords = new List<Job_Application__c>();
+        Boolean flag = true;
+        Job_Application__c newJobApplication;
+        system.debug(responseBody);
+        JSONParser parser = JSON.createParser(responseBody);
+            while(parser.nextToken() != null){
+                if(parser.getCurrentToken() == JSONToken.START_OBJECT){
+                    newJobApplication = new Job_Application__c();
+                    flag = true;
+                }
+                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Id')){
+                    parser.nextToken();
+                    newJobApplication.Legacy_Job_Application_Number__c = parser.getIdValue();
+                }
+                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Candidate_Phone__c')){
+                    parser.nextToken();
+                    newJobApplication.Candidate_Phone__c = parser.getText();
+                    system.debug(parser.getText());
+                }
+                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Candidate_Age__c')){
+                    parser.nextToken();
+                    newJobApplication.Candidate_Age__c = Decimal.valueOf(parser.getText());
+                    system.debug(parser.getText());
+                }
+                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Candidate_Salary__c')){
+                    parser.nextToken();
+                    newJobApplication.Candidate_Salary__c = parser.getText();
+                    system.debug(parser.getText());
+                }
+                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Additional_Info__c')){
+                    parser.nextToken();
+                    newJobApplication.Additional_Info__c = parser.getText();
+                }
+                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Candidate_Status__c')){
+                    parser.nextToken();
+                    if(parser.getText() == 'Employed'){
+                        newJobApplication.Currently_Employed__c = true;
+                    }
+                    else if(parser.getText() == 'Unemployed'){
+                        newJobApplication.Currently_Employed__c = false;
+                    }
+                    system.debug(parser.getText());
+                }
+                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'CandidateCV__c')){
+                    parser.nextToken();
+                    Candidate__c cand = [select id from Candidate__c where Legacy_Candidate_Number__c =: parser.getIdValue()];
+                    newJobApplication.Candidate__c = cand.Id;
+                    system.debug('cand: ' + cand);
+                }
+                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Job_Advertisement__c')){
+                    parser.nextToken();
+                    Position__c pos = [select id from Position__c where Legacy_Position_Number__c =: parser.getIdValue()];
+                    newJobApplication.Position__c = pos.id;
+                    system.debug('pos:   ' + pos);
+                }
+                if(parser.getCurrentToken() == JSONToken.END_OBJECT){
+                    if(flag){
+                        newJobApplicationRecords.add(newJobApplication);
+                        //system.debug('job application:   ' + newJobApplication);
+                        flag = false;
+                    }
+                    
+                }
+            
+        }
+        system.debug('listOfNewCaniddates:    ' + newJobApplicationRecords);
+        return newJobApplicationRecords;
+    }
+    public static Set<ContentVersion> parsingCandidateImagesData(String responseBody){
+        Set<ContentVersion> newImages = new Set<ContentVersion>();
+        Boolean flag = true;
+        ContentVersion newImage;
+        JSONParser parser = JSON.createParser(responseBody);
+        while(parser.nextToken() != null){
+            if(parser.getCurrentToken() == JSONToken.START_OBJECT){
+                newImage = new ContentVersion();
+                flag = true;
+                }
+            if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Id')){
+                parser.nextToken();
+                //newImage.Content_Version_Legacy_Number_c__c = parser.getIdValue();
+            }
+            if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'contentBody')){
+                parser.nextToken();
+                system.debug('hi. I\'m here');
+                Blob photo = EncodingUtil.base64Decode(parser.getText());
+                newImage.VersionData = photo;
+                System.debug('photo:   ' + photo);
+                //newImage.VersionData = parser.getBlobValue();
+                //system.debug('image:   ' + parser.getBlobValue());
+            }
+            if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Title')){
+                parser.nextToken();
+                newImage.Title = parser.getText();
+            }
+            if(parser.getCurrentToken() == JSONToken.END_OBJECT){
+                newImages.add(newImage);
+                flag = false;
+            }
+        }
+        system.debug('images:  ' + newImages);
+        return newImages;
     }
 }
