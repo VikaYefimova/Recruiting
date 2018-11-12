@@ -13,7 +13,7 @@ global class BatchableCalloutsForCandidateImages implements Database.Batchable<I
         parser.nextToken();
         parser.nextToken();
         Integer countSelectedJob = Integer.valueOf(parser.getText());
-        pageNumber = (integer)(((countSelectedJob*1.0) / (10 *1.0)).round(RoundingMode.UP) -1);
+        pageNumber = (integer)(((countSelectedJob*1.0) / (2 *1.0)).round(RoundingMode.UP) -1);
         system.debug('page number: ' + pageNumber);
         for(Integer i = 0; i<=pageNumber; i++){
             listPage.add(i);
@@ -25,7 +25,8 @@ global class BatchableCalloutsForCandidateImages implements Database.Batchable<I
         String responseBody;
         for(Integer i: count){
             System.debug('count' + i);
-            responseBody = InsertingRecordFromSecondOrg.getCandidateImagesFromTargetOrg(100, i);
+            responseBody = InsertingRecordFromSecondOrg.getCandidateImagesFromTargetOrg(2, i);
+            
             System.debug('body: ' + responseBody); 
             Set<ContentVersion> listRecords = InsertingRecordFromSecondOrg.parsingCandidateImagesData(responseBody);
             system.debug('list: ' + listRecords);

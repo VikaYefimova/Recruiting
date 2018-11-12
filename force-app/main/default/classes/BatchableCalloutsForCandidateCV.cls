@@ -11,7 +11,7 @@ global class BatchableCalloutsForCandidateCV implements Database.Batchable<Integ
         parser.nextToken();
         parser.nextToken();
         Integer countCV = Integer.valueOf(parser.getText());
-        pageNumber = (integer)(((countCV*1.0) / (1 *1.0)).round(RoundingMode.UP) -1);
+        pageNumber = (integer)(((countCV*1.0) / (100 *1.0)).round(RoundingMode.UP) -1);
         system.debug('page number: ' + pageNumber);
         for(Integer i = 0; i<=pageNumber; i++){
             listPage.add(i);
@@ -23,13 +23,13 @@ global class BatchableCalloutsForCandidateCV implements Database.Batchable<Integ
         String responseBody;
         for(Integer i: count){
             System.debug('count' + i);
-            responseBody = InsertingRecordFromSecondOrg.getCVDataFromSecondOrg(1, i);
-            System.debug('body: ' + responseBody); 
+            responseBody = InsertingRecordFromSecondOrg.getCVDataFromSecondOrg(100, i);
+            system.debug('response: ' + responseBody);
             List<Candidate__c> listForInsert = InsertingRecordFromSecondOrg.parsingCandidateRecords(responseBody);
-            system.debug('list: ' + listForInsert);
+            system.debug('list FIRST: ' + listForInsert);
             listForInsertRecords.addAll(listForInsert);
         }
-        system.debug('list: ' + listForInsertRecords);
+        system.debug('list LAST: ' + listForInsertRecords);
         upsert listForInsertRecords Legacy_Candidate_Number__c;
         
         /*List<ContentVersion> candidateImagesForInsert = new List<ContentVersion>();
