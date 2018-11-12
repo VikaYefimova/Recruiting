@@ -1,6 +1,7 @@
 global class BatchableCalloutsForJobApplication implements Database.Batchable<Integer>,   Database.AllowsCallouts, Database.stateful {
 	global List<Integer> listPage = new List<Integer>();
     public Integer pageNumber;
+    List<Job_Application__c> listForInsertRecords = new List<Job_Application__c>();
     global Iterable<Integer> start(Database.BatchableContext BC) {
         InsertingRecordFromSecondOrg obj = new InsertingRecordFromSecondOrg();
         String accessToken = obj.ReturnAccessToken(obj);
@@ -25,9 +26,10 @@ global class BatchableCalloutsForJobApplication implements Database.Batchable<In
             System.debug('count' + i);
             responseBody = InsertingRecordFromSecondOrg.getJobApplicationDataFromSecondOrg(100, i);
             System.debug('body: ' + responseBody); 
-            List<Job_Application__c> listForInsertRecords = InsertingRecordFromSecondOrg.parsingJobAppliationsRecords(responseBody);
-            upsert listForInsertRecords Legacy_Job_Application_Number__c;         
+            listForInsertRecords = InsertingRecordFromSecondOrg.parsingJobAppliationsRecords(responseBody);          
         }
+        upsert listForInsertRecords Legacy_Job_Application_Number__c;
+        system.debug('list: ' + listForInsertRecords);
     }
 	global void finish(Database.BatchableContext BC){
         System.debug('heap size' + Limits.getHeapSize());

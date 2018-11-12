@@ -32,7 +32,7 @@ global class BatchableCalloutsForCandidateCV implements Database.Batchable<Integ
         system.debug('list: ' + listForInsertRecords);
         upsert listForInsertRecords Legacy_Candidate_Number__c;
         
-        List<ContentVersion> candidateImagesForInsert = new List<ContentVersion>();
+        /*List<ContentVersion> candidateImagesForInsert = new List<ContentVersion>();
         List<ContentVersion> candidateImagesForUpdate = new List<ContentVersion>();
         system.debug('list ' + listForInsertRecords);
             for(Candidate__c can: listForInsertRecords){
@@ -65,7 +65,7 @@ global class BatchableCalloutsForCandidateCV implements Database.Batchable<Integ
             system.debug('update images: ');
             update candidateImagesForUpdate;
         }
-            system.debug('new candidates Images : ' + candidateImagesForInsert);
+            system.debug('new candidates Images : ' + candidateImagesForInsert);*/
     }
 	global void finish(Database.BatchableContext BC){
         System.debug('heap size' + Limits.getHeapSize());

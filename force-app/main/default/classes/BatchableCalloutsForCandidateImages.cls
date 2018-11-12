@@ -1,5 +1,6 @@
 global class BatchableCalloutsForCandidateImages implements Database.Batchable<Integer>,   Database.AllowsCallouts, Database.stateful {
 	global List<Integer> listPage = new List<Integer>();
+    List<ContentVersion> images = new List<ContentVersion>();
     public Integer pageNumber;
     global Iterable<Integer> start(Database.BatchableContext BC) {
         InsertingRecordFromSecondOrg obj = new InsertingRecordFromSecondOrg();
@@ -26,9 +27,36 @@ global class BatchableCalloutsForCandidateImages implements Database.Batchable<I
             System.debug('count' + i);
             responseBody = InsertingRecordFromSecondOrg.getCandidateImagesFromTargetOrg(100, i);
             System.debug('body: ' + responseBody); 
-            InsertingRecordFromSecondOrg.parsingCandidateImagesData(responseBody);
-            //List<Job_Application__c> listForInsertRecords = InsertingRecordFromSecondOrg.parsingJobAppliationsRecords(responseBody);
-            //upsert listForInsertRecords Legacy_Job_Application_Number__c;         
+            Set<ContentVersion> listRecords = InsertingRecordFromSecondOrg.parsingCandidateImagesData(responseBody);
+            system.debug('list: ' + listRecords);
+            for(ContentVersion con: listRecords){
+                List<ContentVersion> currentImage = [select id from ContentVersion where Content_Version_Candidate_Number__c =: con.Content_Version_Candidate_Number__c];
+                if(currentImage.size() == 0){
+                    con.PathOnClient = '/image.jpg';
+                    con.IsMajorVersion = false;
+                }
+                images.add(con);
+            }
+        }
+        system.debug('can' + images);
+        upsert images Content_Version_Candidate_Number__c;
+        List<ContentDocumentLink> assignedImages = new List<ContentDocumentLink>();
+        for(ContentVersion image: images){
+            List<ContentDocumentLink> currentImage = [select id from ContentDocumentLink where LinkedEntityId =: image.Content_Version_Candidate_Number__c];
+           	if(currentImage.size() == 0){
+                ContentVersion versioncon = [select ContentDocumentId from ContentVersion where id =: image.id];
+            	system.debug('con ver' + versioncon);
+                ContentDocumentLink relatedFile = new ContentDocumentLink();
+                Id contentid = versioncon.ContentDocumentId;
+                system.debug('doc: ' + contentid);
+                relatedFile.ContentDocumentId = contentid;
+                relatedFile.LinkedEntityId = image.Content_Version_Candidate_Number__c;
+                relatedFile.ShareType = 'I';
+                assignedImages.add(relatedFile);
+            }
+        }
+        if(assignedImages.size() > 0){
+            insert assignedImages;
         }
     }
 	global void finish(Database.BatchableContext BC){

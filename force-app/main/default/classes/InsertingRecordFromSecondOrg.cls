@@ -57,7 +57,7 @@ public class InsertingRecordFromSecondOrg {
             HttpRequest req = new HttpRequest();
             req.setHeader('Authorization','Bearer ' + accessToken);
             req.setHeader('Content-Type', 'application/json');
-            req.setEndpoint('https://eu16.salesforce.com/services/data/v24.0/query/?q=SELECT+id+,+name+,+Phone__c+,+Email__c+,+Status__c+,+Candidate_Age__c+,+Candidate_Photo__c+from+CandidateCV__c+Limit+'+ limitForSearch + '+OFFSET+' + offset);
+            req.setEndpoint('https://eu16.salesforce.com/services/data/v24.0/query/?q=SELECT+id+,+name+,+Phone__c+,+Email__c+,+Status__c+,+Candidate_Age__c+from+CandidateCV__c+Limit+'+ limitForSearch + '+OFFSET+' + offset);
             req.setMethod('GET');
             HttpResponse res = http.send(req);
             dataFromTargetOrg = res.getBody();
@@ -155,7 +155,7 @@ public class InsertingRecordFromSecondOrg {
                 }
                 if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Candidate_Photo__c')){
                     parser.nextToken();
-                    newCandidate.Candidate_Photo__c = parser.getText();
+                    //newCandidate.Candidate_Photo__c = parser.getText();
                 }
                 if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Status__c')){
                     parser.nextToken();
@@ -252,14 +252,16 @@ public class InsertingRecordFromSecondOrg {
         Boolean flag = true;
         ContentVersion newImage;
         JSONParser parser = JSON.createParser(responseBody);
+        Integer level = 0;
         while(parser.nextToken() != null){
             if(parser.getCurrentToken() == JSONToken.START_OBJECT){
                 newImage = new ContentVersion();
                 flag = true;
-                }
-            if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Id')){
+            }
+            if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Candidate_Number__c')){
                 parser.nextToken();
-                //newImage.Content_Version_Legacy_Number_c__c = parser.getIdValue();
+                Candidate__c can = [select id from Candidate__c where Legacy_Candidate_Number__c = : parser.getIdValue()];
+                newImage.Content_Version_Candidate_Number__c = can.id;
             }
             if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'contentBody')){
                 parser.nextToken();
@@ -275,8 +277,11 @@ public class InsertingRecordFromSecondOrg {
                 newImage.Title = parser.getText();
             }
             if(parser.getCurrentToken() == JSONToken.END_OBJECT){
-                newImages.add(newImage);
-                flag = false;
+                if(flag){
+                    newImages.add(newImage);
+                	flag = false;
+                }
+                
             }
         }
         system.debug('images:  ' + newImages);
