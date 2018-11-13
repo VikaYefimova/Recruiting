@@ -26,10 +26,8 @@ global class BatchableCalloutsForCandidateCV implements Database.Batchable<Integ
             responseBody = InsertingRecordFromSecondOrg.getCVDataFromSecondOrg(100, i);
             system.debug('response: ' + responseBody);
             List<Candidate__c> listForInsert = InsertingRecordFromSecondOrg.parsingCandidateRecords(responseBody);
-            system.debug('list FIRST: ' + listForInsert);
             listForInsertRecords.addAll(listForInsert);
         }
-        system.debug('list LAST: ' + listForInsertRecords);
         upsert listForInsertRecords Legacy_Candidate_Number__c;
         
         /*List<ContentVersion> candidateImagesForInsert = new List<ContentVersion>();
@@ -70,6 +68,8 @@ global class BatchableCalloutsForCandidateCV implements Database.Batchable<Integ
 	global void finish(Database.BatchableContext BC){
         System.debug('heap size' + Limits.getHeapSize());
         system.debug('list ' + listForInsertRecords.size());
+        BatchableCalloutsForJobApplication batch = new BatchableCalloutsForJobApplication();
+		Database.executeBatch(batch, 25);
         /*//upsert listForInsertRecords Legacy_Candidate_Number__c;
             List<ContentVersion> candidateImages = new List<ContentVersion>();
             for(Candidate__c can: listForInsertRecords){

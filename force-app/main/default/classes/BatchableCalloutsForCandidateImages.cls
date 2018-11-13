@@ -1,4 +1,4 @@
-global class BatchableCalloutsForCandidateImages implements Database.Batchable<Integer>,   Database.AllowsCallouts, Database.stateful {
+global class BatchableCalloutsForCandidateImages implements Database.Batchable<Integer>,   Database.AllowsCallouts {
 	global List<Integer> listPage = new List<Integer>();
     List<ContentVersion> images = new List<ContentVersion>();
     public Integer pageNumber;
@@ -18,11 +18,12 @@ global class BatchableCalloutsForCandidateImages implements Database.Batchable<I
         for(Integer i = 0; i<=pageNumber; i++){
             listPage.add(i);
         }
-        system.debug('selJOb: ' + listPage);
+        
         return listPage;
     }
 	global void execute(Database.BatchableContext BC, list<Integer> count){
         String responseBody;
+        system.debug('selJOb: ' + count);
         for(Integer i: count){
             System.debug('count' + i);
             responseBody = InsertingRecordFromSecondOrg.getCandidateImagesFromTargetOrg(2, i);
@@ -62,5 +63,6 @@ global class BatchableCalloutsForCandidateImages implements Database.Batchable<I
     }
 	global void finish(Database.BatchableContext BC){
         System.debug('heap size' + Limits.getHeapSize());
+        system.debug('list: ' + listPage);
     }
 }
