@@ -13,43 +13,71 @@ global class BatchableCalloutsForCandidateImages implements Database.Batchable<I
         parser.nextToken();
         parser.nextToken();
         Integer countSelectedJob = Integer.valueOf(parser.getText());
-        pageNumber = (integer)(((countSelectedJob*1.0) / (2 *1.0)).round(RoundingMode.UP) -1);
+        pageNumber = (integer)(((countSelectedJob*1.0) / (40 *1.0)).round(RoundingMode.UP) -1);
         system.debug('page number: ' + pageNumber);
         for(Integer i = 0; i<=pageNumber; i++){
             listPage.add(i);
         }
-        
         return listPage;
     }
 	global void execute(Database.BatchableContext BC, list<Integer> count){
         String responseBody;
-        system.debug('selJOb: ' + count);
+        List<ContentVersion> contentVersions = [select id, Content_Version_Candidate_Number__c, ContentDocumentId from ContentVersion];
+        Map<String, String> contentVersionsMap = new Map<String, String>();
+        for(ContentVersion conVer: contentVersions){
+            contentVersionsMap.put(conVer.Content_Version_Candidate_Number__c, conVer.ContentDocumentId);
+        }
+        List<ContentDocumentLink> documentLinks = [select id, LinkedEntityId from ContentDocumentLink where LinkedEntityId in (select id from Candidate__c)];
+        Map<String, String> documentLinkMap = new Map<String, String>();
+        for(ContentDocumentLink docLink: documentLinks){
+            documentLinkMap.put(docLink.LinkedEntityId, docLink.id);
+        }
         for(Integer i: count){
             System.debug('count' + i);
-            responseBody = InsertingRecordFromSecondOrg.getCandidateImagesFromTargetOrg(2, i);
-            
-            System.debug('body: ' + responseBody); 
-            Set<ContentVersion> listRecords = InsertingRecordFromSecondOrg.parsingCandidateImagesData(responseBody);
-            system.debug('list: ' + listRecords);
-            for(ContentVersion con: listRecords){
-                List<ContentVersion> currentImage = [select id from ContentVersion where Content_Version_Candidate_Number__c =: con.Content_Version_Candidate_Number__c];
-                if(currentImage.size() == 0){
-                    con.PathOnClient = '/image.jpg';
-                    con.IsMajorVersion = false;
+            try{
+                responseBody = InsertingRecordFromSecondOrg.getCandidateImagesFromTargetOrg(40,i);
+                Set<ContentVersion> listRecords = InsertingRecordFromSecondOrg.parsingCandidateImagesData(responseBody);
+                for(ContentVersion con: listRecords){
+                        string candidateId = con.Content_Version_Candidate_Number__c; 
+                        if(!contentVersionsMap.containsKey(candidateId)){
+                        	con.PathOnClient = '/image.jpg';
+                            con.IsMajorVersion = false;
+                        }
+                    images.add(con);
                 }
-                images.add(con);
             }
+            catch(CalloutException e ){
+                responseBody = InsertingRecordFromSecondOrg.getCandidateImagesFromTargetOrg(40, i); 
+                Set<ContentVersion> listRecords = InsertingRecordFromSecondOrg.parsingCandidateImagesData(responseBody);
+                for(ContentVersion con: listRecords){
+                    string candidateId = con.Content_Version_Candidate_Number__c; 
+                    if(!contentVersionsMap.containsKey(candidateId)){
+                      	con.PathOnClient = '/image.jpg';
+                        con.IsMajorVersion = false;
+                    }      
+                    images.add(con);
+                }
+            } 
         }
         system.debug('can' + images);
+        Map<String, Integer> countImages = new Map<String, Integer>();
+        Integer counter = 0;
+        /*for(ContentVersion image: images){
+            if(countImages.containsKey(image.Content_Version_Candidate_Number__c)){
+                countImages.put(image.Content_Version_Candidate_Number__c, counter++);
+           }
+           else{
+               countImages.put(image.Content_Version_Candidate_Number__c, counter);
+           }
+        }
+        system.debug('map for duplicates' + countImages);*/
         upsert images Content_Version_Candidate_Number__c;
         List<ContentDocumentLink> assignedImages = new List<ContentDocumentLink>();
+        string contentId = '';
         for(ContentVersion image: images){
-            List<ContentDocumentLink> currentImage = [select id from ContentDocumentLink where LinkedEntityId =: image.Content_Version_Candidate_Number__c];
-           	if(currentImage.size() == 0){
-                ContentVersion versioncon = [select ContentDocumentId from ContentVersion where id =: image.id];
-            	system.debug('con ver' + versioncon);
+            if(!documentLinkMap.containsKey(image.Content_Version_Candidate_Number__c)){
+                contentId = contentVersionsMap.get(image.Content_Version_Candidate_Number__c);
                 ContentDocumentLink relatedFile = new ContentDocumentLink();
-                Id contentid = versioncon.ContentDocumentId;
                 system.debug('doc: ' + contentid);
                 relatedFile.ContentDocumentId = contentid;
                 relatedFile.LinkedEntityId = image.Content_Version_Candidate_Number__c;

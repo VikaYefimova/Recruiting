@@ -205,23 +205,23 @@ public class InsertingRecordFromSecondOrg {
                     parser.nextToken();
                     newJobApplication.Legacy_Job_Application_Number__c = parser.getIdValue();
                 }
-                /*if(token == JSONToken.FIELD_NAME && (text == 'Candidate_Phone__c')){
+                if(token == JSONToken.FIELD_NAME && (text == 'Candidate_Phone__c')){
                     parser.nextToken();
                     newJobApplication.Candidate_Phone__c = parser.getText();
-                }*/
-                /*if(token == JSONToken.FIELD_NAME && (text == 'Candidate_Age__c')){
+                }
+                if(token == JSONToken.FIELD_NAME && (text == 'Candidate_Age__c')){
                     parser.nextToken();
                     newJobApplication.Candidate_Age__c = Decimal.valueOf(parser.getText());
                 }
                 if(token == JSONToken.FIELD_NAME && (text == 'Candidate_Salary__c')){
                     parser.nextToken();
                     newJobApplication.Candidate_Salary__c = parser.getText();
-                }*/
-                /*if(token == JSONToken.FIELD_NAME && (text == 'Additional_Info__c')){
+                }
+                if(token == JSONToken.FIELD_NAME && (text == 'Additional_Info__c')){
                     parser.nextToken();
                     newJobApplication.Additional_Info__c = parser.getText();
-                }*/
-                /*if(token == JSONToken.FIELD_NAME && (text == 'Candidate_Status__c')){
+                }
+                if(token == JSONToken.FIELD_NAME && (text == 'Candidate_Status__c')){
                     parser.nextToken();
                     if(parser.getText() == 'Employed'){
                         newJobApplication.Currently_Employed__c = true;
@@ -229,7 +229,7 @@ public class InsertingRecordFromSecondOrg {
                     else if(parser.getText() == 'Unemployed'){
                         newJobApplication.Currently_Employed__c = false;
                     }
-                }*/
+                }
                 if(token == JSONToken.FIELD_NAME && (text == 'CandidateCV__c')){
                     parser.nextToken();
                     for(Map<String, String> canMap: canidatesMap){
@@ -275,10 +275,8 @@ public class InsertingRecordFromSecondOrg {
             }
             if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'contentBody')){
                 parser.nextToken();
-                system.debug('hi. I\'m here');
                 Blob photo = EncodingUtil.base64Decode(parser.getText());
                 newImage.VersionData = photo;
-                System.debug('photo:   ' + photo);
             }
             if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Title')){
                 parser.nextToken();
@@ -292,7 +290,6 @@ public class InsertingRecordFromSecondOrg {
                 
             }
         }
-        system.debug('images:  ' + newImages);
         return newImages;
     }
 }

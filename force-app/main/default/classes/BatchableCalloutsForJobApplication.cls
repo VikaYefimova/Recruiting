@@ -11,7 +11,7 @@ global class BatchableCalloutsForJobApplication implements Database.Batchable<In
         parser.nextToken();
         parser.nextToken();
         Integer countSelectedJob = Integer.valueOf(parser.getText());
-        pageNumber = (integer)(((countSelectedJob*1.0) / (50 *1.0)).round(RoundingMode.UP) -1);
+        pageNumber = (integer)(((countSelectedJob*1.0) / (100 *1.0)).round(RoundingMode.UP) -1);
         for(Integer i = 0; i<=pageNumber; i++){
             listPage.add(i);
         }
@@ -19,17 +19,14 @@ global class BatchableCalloutsForJobApplication implements Database.Batchable<In
     }
 	global void execute(Database.BatchableContext BC, list<Integer> count){
         String responseBody;
-        //System.debug('countList ' + count);
-        //System.debug('countList2 ');
+		Integer level = 0;
         for(Integer i: count){
-            //System.debug('count' + i);
-            responseBody = InsertingRecordFromSecondOrg.getJobApplicationDataFromSecondOrg(50, i);
+            responseBody = InsertingRecordFromSecondOrg.getJobApplicationDataFromSecondOrg(100, i);
             listForInsertRecords.addAll(InsertingRecordFromSecondOrg.parsingJobAppliationsRecords(responseBody));
             system.debug('size ' + listForInsertRecords.size());
         }
         System.debug('before listForInsertRecords ' + listForInsertRecords.size());
         upsert listForInsertRecords Legacy_Job_Application_Number__c;
-        //system.debug('list: ' + listForInsertRecords.size());
     }
 	global void finish(Database.BatchableContext BC){
         System.debug('heap size' + Limits.getHeapSize());
