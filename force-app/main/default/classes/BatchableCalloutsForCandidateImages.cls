@@ -62,15 +62,6 @@ global class BatchableCalloutsForCandidateImages implements Database.Batchable<I
         system.debug('can' + images);
         Map<String, Integer> countImages = new Map<String, Integer>();
         Integer counter = 0;
-        /*for(ContentVersion image: images){
-            if(countImages.containsKey(image.Content_Version_Candidate_Number__c)){
-                countImages.put(image.Content_Version_Candidate_Number__c, counter++);
-           }
-           else{
-               countImages.put(image.Content_Version_Candidate_Number__c, counter);
-           }
-        }
-        system.debug('map for duplicates' + countImages);*/
         upsert images Content_Version_Candidate_Number__c;
         List<ContentDocumentLink> assignedImages = new List<ContentDocumentLink>();
         string contentId = '';

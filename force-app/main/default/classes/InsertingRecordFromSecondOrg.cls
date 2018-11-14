@@ -57,11 +57,10 @@ public class InsertingRecordFromSecondOrg {
             HttpRequest req = new HttpRequest();
             req.setHeader('Authorization','Bearer ' + accessToken);
             req.setHeader('Content-Type', 'application/json');
-            req.setEndpoint('https://eu16.salesforce.com/services/data/v24.0/query/?q=SELECT+id+,+name+,+Phone__c+,+Email__c+,+Status__c+,+Candidate_Age__c+from+CandidateCV__c+Limit+'+ limitForSearch + '+OFFSET+' + (offset*limitForSearch));
+            req.setEndpoint('https://eu16.salesforce.com/services/data/v24.0/query/?q=SELECT+id+,+name+,+Phone__c+,+Email__c+,+Status__c+,+Candidate_Age__c+from+CandidateCV__c+where+LastModifiedDate+=+YESTERDAY+Limit+'+ limitForSearch + '+OFFSET+' + (offset*limitForSearch));
             req.setMethod('GET');
             HttpResponse res = http.send(req);
             dataFromTargetOrg = res.getBody();
-            system.debug('get data response: ' + dataFromTargetOrg);
         }
         return dataFromTargetOrg;
     }
@@ -74,7 +73,7 @@ public class InsertingRecordFromSecondOrg {
             HttpRequest req = new HttpRequest();
             req.setHeader('Authorization','Bearer ' + accessToken);
             req.setHeader('Content-Type', 'application/json');
-            req.setEndpoint('https://eu16.salesforce.com/services/data/v24.0/query/?q=SELECT+id+,+CandidateCV__c+,+Candidate_Phone__c+,+Candidate_Salary__c+,+Candidate_Status__c+,+Candidate_Age__c,+Additional_Info__c,+Job_Advertisement__c+from+Selected_Job__c+Limit+'+ limitForSearch + '+OFFSET+' + (offset*limitForSearch));
+            req.setEndpoint('https://eu16.salesforce.com/services/data/v24.0/query/?q=SELECT+id+,+CandidateCV__c+,+Candidate_Phone__c+,+Candidate_Salary__c+,+Candidate_Status__c+,+Candidate_Age__c,+Additional_Info__c,+Job_Advertisement__c+from+Selected_Job__c+where+CreatedDate+=+YESTERDAY+Limit+'+ limitForSearch + '+OFFSET+' + (offset*limitForSearch));
             req.setMethod('GET');
             HttpResponse res = http.send(req);
             dataFromTargetOrg = res.getBody();
@@ -94,13 +93,10 @@ public class InsertingRecordFromSecondOrg {
             req.setMethod('GET');
             HttpResponse res = http.send(req);
             dataFromTargetOrg = res.getBody();
-            system.debug('get data response: ' + dataFromTargetOrg);
-            system.debug('response size: ' + res.getBodyAsBlob().size());
         }
         return dataFromTargetOrg;
     }
     public static List<Candidate__c> parsingCandidateRecords(String responseBody){
-        system.debug('parser start working');
         List<Candidate__c> listOfNewCandidates = new List<Candidate__c>();
         Boolean flag = true;
         Candidate__c newCandidate;
@@ -132,21 +128,17 @@ public class InsertingRecordFromSecondOrg {
                 if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Candidate_Age__c')){
                     parser.nextToken();
                     newCandidate.Age__c = Decimal.valueOf(parser.getText());
-                    //system.debug(parser.getText());
                 }
                 if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Email__c')){
                     parser.nextToken();
                     newCandidate.Email__c = parser.getText();
-                    //system.debug(parser.getText());
                 }
                 if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Phone__c')){
                     parser.nextToken();
                     newCandidate.Phone__c = parser.getText();
-                    //system.debug(parser.getText());
                 }
                 if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Candidate_Photo__c')){
                     parser.nextToken();
-                    //newCandidate.Candidate_Photo__c = parser.getText();
                 }
                 if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Status__c')){
                     parser.nextToken();
@@ -165,7 +157,6 @@ public class InsertingRecordFromSecondOrg {
                     }  
                 }
         }
-        system.debug('listOfNewCandidates:    ' + listOfNewCandidates);
         return listOfNewCandidates;
     }
     
@@ -191,7 +182,6 @@ public class InsertingRecordFromSecondOrg {
         }
         Boolean flag = true;
         Job_Application__c newJobApplication;
-        //system.debug('response' + responseBody);
         JSONParser parser = JSON.createParser(responseBody);
         integer c = 0;
         while(parser.nextToken() != null){
@@ -253,8 +243,6 @@ public class InsertingRecordFromSecondOrg {
                     }
                 }
         }
-        system.debug('listOfNewCaniddates ccccc:    ' + c);
-        //system.debug('listOfNewCaniddates:    ' + newJobApplicationRecords);
         return newJobApplicationRecords;
     }
     public static Set<ContentVersion> parsingCandidateImagesData(String responseBody){
