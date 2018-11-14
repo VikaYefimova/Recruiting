@@ -20,9 +20,9 @@ public class InsertingRecordFromSecondOrg {
        
         req.setEndpoint('https://eu16.salesforce.com/services/oauth2/token');  
         HttpResponse res=h.send(req);
-        System.debug('authorization response: ' + res.getBody());
+        //System.debug('authorization response: ' + res.getBody());
         deserializeResponse resp1=(deserializeResponse)JSON.deserialize(res.getBody(),deserializeResponse.class);
-        System.debug('accessToken: ' + resp1.access_token);
+        //System.debug('accessToken: ' + resp1.access_token);
         return resp1.access_token;
     }
     public static void getCountOfRecords(){
@@ -57,7 +57,7 @@ public class InsertingRecordFromSecondOrg {
             HttpRequest req = new HttpRequest();
             req.setHeader('Authorization','Bearer ' + accessToken);
             req.setHeader('Content-Type', 'application/json');
-            req.setEndpoint('https://eu16.salesforce.com/services/data/v24.0/query/?q=SELECT+id+,+name+,+Phone__c+,+Email__c+,+Status__c+,+Candidate_Age__c+from+CandidateCV__c+Limit+'+ limitForSearch + '+OFFSET+' + offset);
+            req.setEndpoint('https://eu16.salesforce.com/services/data/v24.0/query/?q=SELECT+id+,+name+,+Phone__c+,+Email__c+,+Status__c+,+Candidate_Age__c+from+CandidateCV__c+Limit+'+ limitForSearch + '+OFFSET+' + (offset*limitForSearch));
             req.setMethod('GET');
             HttpResponse res = http.send(req);
             dataFromTargetOrg = res.getBody();
@@ -74,11 +74,10 @@ public class InsertingRecordFromSecondOrg {
             HttpRequest req = new HttpRequest();
             req.setHeader('Authorization','Bearer ' + accessToken);
             req.setHeader('Content-Type', 'application/json');
-            req.setEndpoint('https://eu16.salesforce.com/services/data/v24.0/query/?q=SELECT+id+,+CandidateCV__c+,+Candidate_Phone__c+,+Candidate_Salary__c+,+Candidate_Status__c+,+Candidate_Age__c,+Additional_Info__c,+Job_Advertisement__c+from+Selected_Job__c+Limit+'+ limitForSearch + '+OFFSET+' + offset);
+            req.setEndpoint('https://eu16.salesforce.com/services/data/v24.0/query/?q=SELECT+id+,+CandidateCV__c+,+Candidate_Phone__c+,+Candidate_Salary__c+,+Candidate_Status__c+,+Candidate_Age__c,+Additional_Info__c,+Job_Advertisement__c+from+Selected_Job__c+Limit+'+ limitForSearch + '+OFFSET+' + (offset*limitForSearch));
             req.setMethod('GET');
             HttpResponse res = http.send(req);
             dataFromTargetOrg = res.getBody();
-            system.debug('get data response: ' + dataFromTargetOrg);
         }
         return dataFromTargetOrg;
     }
@@ -91,11 +90,12 @@ public class InsertingRecordFromSecondOrg {
             HttpRequest req = new HttpRequest();
             req.setHeader('Authorization','Bearer ' + accessToken);
             req.setHeader('Content-Type', 'application/json');
-            req.setEndpoint('https://eu16.salesforce.com/services/apexrest/getImages');
+            req.setEndpoint('https://eu16.salesforce.com/services/apexrest/getImages/' + (limitForSearch*offset));
             req.setMethod('GET');
             HttpResponse res = http.send(req);
             dataFromTargetOrg = res.getBody();
             system.debug('get data response: ' + dataFromTargetOrg);
+            system.debug('response size: ' + res.getBodyAsBlob().size());
         }
         return dataFromTargetOrg;
     }
@@ -103,10 +103,8 @@ public class InsertingRecordFromSecondOrg {
         system.debug('parser start working');
         List<Candidate__c> listOfNewCandidates = new List<Candidate__c>();
         Boolean flag = true;
-        system.debug('true');
         Candidate__c newCandidate;
             JSONParser parser = JSON.createParser(responseBody);
-        system.debug('body: ' + responseBody);
             while(parser.nextToken() != null){
                 
                 if(parser.getCurrentToken() == JSONToken.START_OBJECT){
@@ -120,38 +118,31 @@ public class InsertingRecordFromSecondOrg {
                     newCandidate.Legacy_Candidate_Number__c = parser.getIdValue();
                 }
                 if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Name')){
-                    system.debug('hello');  
                     parser.nextToken();
                     String nameToSplit = parser.getText();
                     List<String> names = nameToSplit.split(' ');
                     if(names.size() > 1){
                         newCandidate.First_Name__c = names[0];
-                        system.debug(newCandidate.First_Name__c = names[0]);
                         newCandidate.Last_Name__c = names[1];
                     }
                     else if(names.size() == 1){
-                        system.debug('hi');
                         newCandidate.First_Name__c = names[0];
                     }
-                    
-                    //system.debug(newCandidate.First_Name__c = names[0]);
-                    //newCandidate.Last_Name__c = names[1];
-                    //system.debug(newCandidate.Last_Name__c = names[1]);
                 }
                 if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Candidate_Age__c')){
                     parser.nextToken();
                     newCandidate.Age__c = Decimal.valueOf(parser.getText());
-                    system.debug(parser.getText());
+                    //system.debug(parser.getText());
                 }
                 if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Email__c')){
                     parser.nextToken();
                     newCandidate.Email__c = parser.getText();
-                    system.debug(parser.getText());
+                    //system.debug(parser.getText());
                 }
                 if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Phone__c')){
                     parser.nextToken();
                     newCandidate.Phone__c = parser.getText();
-                    system.debug(parser.getText());
+                    //system.debug(parser.getText());
                 }
                 if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Candidate_Photo__c')){
                     parser.nextToken();
@@ -180,39 +171,57 @@ public class InsertingRecordFromSecondOrg {
     
     public static List<Job_Application__c> parsingJobAppliationsRecords(String responseBody){
         List<Job_Application__c> newJobApplicationRecords = new List<Job_Application__c>();
+        List<Position__c> positions = [select id, Legacy_Position_Number__c from Position__c];
+        List<Candidate__c> candidates = [select id, Legacy_Candidate_Number__c from Candidate__c];
+        List<Map<String, String>> canidatesMap = new List<Map<String, String>>();
+        List<Map<String, String>> positionsMap = new List<Map<String, String>>();
+        Map<String, String> candidate;
+        for(Candidate__c can: candidates){
+            candidate = new Map<String, String>();
+            candidate.put('id', can.Id);
+            candidate.put('legacyId', can.Legacy_Candidate_Number__c);
+            canidatesMap.add(candidate);
+        }
+        Map<String, String> positionMap;
+        for(Position__c pos: positions){
+            positionMap = new Map<String, String>();
+            positionMap.put('id', pos.Id);
+            positionMap.put('legacyId', pos.Legacy_Position_Number__c);
+            positionsMap.add(positionMap);
+        }
         Boolean flag = true;
         Job_Application__c newJobApplication;
-        system.debug(responseBody);
+        //system.debug('response' + responseBody);
         JSONParser parser = JSON.createParser(responseBody);
-            while(parser.nextToken() != null){
-                if(parser.getCurrentToken() == JSONToken.START_OBJECT){
+        integer c = 0;
+        while(parser.nextToken() != null){
+                System.JSONToken token = parser.getCurrentToken();
+                String text = parser.getText();
+                if(token == JSONToken.START_OBJECT){
                     newJobApplication = new Job_Application__c();
                     flag = true;
                 }
-                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Id')){
+                if(token == JSONToken.FIELD_NAME && (text == 'Id')){
                     parser.nextToken();
                     newJobApplication.Legacy_Job_Application_Number__c = parser.getIdValue();
                 }
-                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Candidate_Phone__c')){
+                if(token == JSONToken.FIELD_NAME && (text == 'Candidate_Phone__c')){
                     parser.nextToken();
                     newJobApplication.Candidate_Phone__c = parser.getText();
-                    system.debug(parser.getText());
                 }
-                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Candidate_Age__c')){
+                if(token == JSONToken.FIELD_NAME && (text == 'Candidate_Age__c')){
                     parser.nextToken();
                     newJobApplication.Candidate_Age__c = Decimal.valueOf(parser.getText());
-                    system.debug(parser.getText());
                 }
-                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Candidate_Salary__c')){
+                if(token == JSONToken.FIELD_NAME && (text == 'Candidate_Salary__c')){
                     parser.nextToken();
                     newJobApplication.Candidate_Salary__c = parser.getText();
-                    system.debug(parser.getText());
                 }
-                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Additional_Info__c')){
+                if(token == JSONToken.FIELD_NAME && (text == 'Additional_Info__c')){
                     parser.nextToken();
                     newJobApplication.Additional_Info__c = parser.getText();
                 }
-                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Candidate_Status__c')){
+                if(token == JSONToken.FIELD_NAME && (text == 'Candidate_Status__c')){
                     parser.nextToken();
                     if(parser.getText() == 'Employed'){
                         newJobApplication.Currently_Employed__c = true;
@@ -220,31 +229,32 @@ public class InsertingRecordFromSecondOrg {
                     else if(parser.getText() == 'Unemployed'){
                         newJobApplication.Currently_Employed__c = false;
                     }
-                    system.debug(parser.getText());
                 }
-                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'CandidateCV__c')){
+                if(token == JSONToken.FIELD_NAME && (text == 'CandidateCV__c')){
                     parser.nextToken();
-                    Candidate__c cand = [select id from Candidate__c where Legacy_Candidate_Number__c =: parser.getIdValue()];
-                    newJobApplication.Candidate__c = cand.Id;
-                    system.debug('cand: ' + cand);
+                    for(Map<String, String> canMap: canidatesMap){
+                        if(canMap.get('legacyId') == parser.getIdValue()){
+                           newJobApplication.Candidate__c =  canMap.get('id');
+                        }
+                    }
                 }
-                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Job_Advertisement__c')){
+                if(token == JSONToken.FIELD_NAME && (text == 'Job_Advertisement__c')){
                     parser.nextToken();
-                    Position__c pos = [select id from Position__c where Legacy_Position_Number__c =: parser.getIdValue()];
-                    newJobApplication.Position__c = pos.id;
-                    system.debug('pos:   ' + pos);
+                    for(Map<String, String> posMap : positionsMap){
+                        if(posMap.get('legacyId') == parser.getIdValue()){
+                            newJobApplication.Position__c = posMap.get('id');
+                        }
+                    }
                 }
-                if(parser.getCurrentToken() == JSONToken.END_OBJECT){
+                if(token == JSONToken.END_OBJECT){
                     if(flag){
                         newJobApplicationRecords.add(newJobApplication);
-                        //system.debug('job application:   ' + newJobApplication);
                         flag = false;
                     }
-                    
                 }
-            
         }
-        system.debug('listOfNewCaniddates:    ' + newJobApplicationRecords);
+        system.debug('listOfNewCaniddates ccccc:    ' + c);
+        //system.debug('listOfNewCaniddates:    ' + newJobApplicationRecords);
         return newJobApplicationRecords;
     }
     public static Set<ContentVersion> parsingCandidateImagesData(String responseBody){
@@ -265,12 +275,8 @@ public class InsertingRecordFromSecondOrg {
             }
             if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'contentBody')){
                 parser.nextToken();
-                system.debug('hi. I\'m here');
                 Blob photo = EncodingUtil.base64Decode(parser.getText());
                 newImage.VersionData = photo;
-                System.debug('photo:   ' + photo);
-                //newImage.VersionData = parser.getBlobValue();
-                //system.debug('image:   ' + parser.getBlobValue());
             }
             if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Title')){
                 parser.nextToken();
@@ -284,7 +290,6 @@ public class InsertingRecordFromSecondOrg {
                 
             }
         }
-        system.debug('images:  ' + newImages);
         return newImages;
     }
 }
