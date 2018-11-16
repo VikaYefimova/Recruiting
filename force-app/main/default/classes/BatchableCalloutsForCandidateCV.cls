@@ -23,7 +23,7 @@ global class BatchableCalloutsForCandidateCV implements Database.Batchable<Integ
         String responseBody;
         for(Integer i: count){
             System.debug('count' + i);
-            responseBody = InsertingRecordFromSecondOrg.getCVDataFromSecondOrg(100, i);
+            responseBody = InsertingRecordFromSecondOrg.getCVDataFromSecondOrg(3, i);
             system.debug('response: ' + responseBody);
             List<Candidate__c> listForInsert = InsertingRecordFromSecondOrg.parsingCandidateRecords(responseBody);
             listForInsertRecords.addAll(listForInsert);

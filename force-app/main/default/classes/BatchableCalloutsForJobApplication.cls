@@ -21,11 +21,12 @@ global class BatchableCalloutsForJobApplication implements Database.Batchable<In
         String responseBody;
 		Integer level = 0;
         for(Integer i: count){
-            responseBody = InsertingRecordFromSecondOrg.getJobApplicationDataFromSecondOrg(100, i);
+            responseBody = InsertingRecordFromSecondOrg.getJobApplicationDataFromSecondOrg(10, i);
+            system.debug('responseBody + ' + responseBody);
             listForInsertRecords.addAll(InsertingRecordFromSecondOrg.parsingJobAppliationsRecords(responseBody));
             system.debug('size ' + listForInsertRecords.size());
         }
-        System.debug('before listForInsertRecords ' + listForInsertRecords.size());
+        System.debug('before listForInsertRecords ' + listForInsertRecords);
         upsert listForInsertRecords Legacy_Job_Application_Number__c;
     }
 	global void finish(Database.BatchableContext BC){

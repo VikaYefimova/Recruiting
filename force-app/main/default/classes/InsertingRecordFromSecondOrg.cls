@@ -25,13 +25,6 @@ public class InsertingRecordFromSecondOrg {
         //System.debug('accessToken: ' + resp1.access_token);
         return resp1.access_token;
     }
-    public static void getCountOfRecords(){
-        InsertingRecordFromSecondOrg obj = new InsertingRecordFromSecondOrg();
-        String accessToken = obj.ReturnAccessToken(obj);
-        String dataFromTargetOrg = getCountfromTargetOrg(accessToken);
-        system.debug('response data' + dataFromTargetOrg);
-        
-    }
     public static String getCountfromTargetOrg(String accessToken){
         String dataFromTargetOrg;
         if(accessToken != null){
@@ -73,7 +66,7 @@ public class InsertingRecordFromSecondOrg {
             HttpRequest req = new HttpRequest();
             req.setHeader('Authorization','Bearer ' + accessToken);
             req.setHeader('Content-Type', 'application/json');
-            req.setEndpoint('https://eu16.salesforce.com/services/data/v24.0/query/?q=SELECT+id+,+CandidateCV__c+,+Candidate_Phone__c+,+Candidate_Salary__c+,+Candidate_Status__c+,+Candidate_Age__c,+Additional_Info__c,+Job_Advertisement__c+from+Selected_Job__c+where+CreatedDate+=+YESTERDAY+Limit+'+ limitForSearch + '+OFFSET+' + (offset*limitForSearch));
+            req.setEndpoint('https://eu16.salesforce.com/services/data/v24.0/query/?q=SELECT+id+,+CandidateCV__c+,+Candidate_Phone__c+,+Candidate_Salary__c+,+Candidate_Status__c+,+Candidate_Age__c,+Additional_Info__c,+Job_Advertisement__c+from+Selected_Job__c+where+LastModifiedDate+=+YESTERDAY+Limit+'+ limitForSearch + '+OFFSET+' + (offset*limitForSearch));
             req.setMethod('GET');
             HttpResponse res = http.send(req);
             dataFromTargetOrg = res.getBody();
@@ -136,9 +129,6 @@ public class InsertingRecordFromSecondOrg {
                 if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Phone__c')){
                     parser.nextToken();
                     newCandidate.Phone__c = parser.getText();
-                }
-                if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Candidate_Photo__c')){
-                    parser.nextToken();
                 }
                 if(parser.getCurrentToken() == JSONToken.FIELD_NAME && (parser.getText() == 'Status__c')){
                     parser.nextToken();
