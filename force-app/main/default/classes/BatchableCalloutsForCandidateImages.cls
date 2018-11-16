@@ -35,7 +35,8 @@ global class BatchableCalloutsForCandidateImages implements Database.Batchable<I
         for(Integer i: count){
             System.debug('count' + i);
             try{
-                responseBody = InsertingRecordFromSecondOrg.getCandidateImagesFromTargetOrg(40,i);
+                responseBody = InsertingRecordFromSecondOrg.getCandidateImagesFromTargetOrg(3,i);
+                system.debug('responseBody + ' + responseBody);
                 Set<ContentVersion> listRecords = InsertingRecordFromSecondOrg.parsingCandidateImagesData(responseBody);
                 for(ContentVersion con: listRecords){
                         string candidateId = con.Content_Version_Candidate_Number__c; 
@@ -47,7 +48,7 @@ global class BatchableCalloutsForCandidateImages implements Database.Batchable<I
                 }
             }
             catch(CalloutException e ){
-                responseBody = InsertingRecordFromSecondOrg.getCandidateImagesFromTargetOrg(40, i); 
+                responseBody = InsertingRecordFromSecondOrg.getCandidateImagesFromTargetOrg(65, i); 
                 Set<ContentVersion> listRecords = InsertingRecordFromSecondOrg.parsingCandidateImagesData(responseBody);
                 for(ContentVersion con: listRecords){
                     string candidateId = con.Content_Version_Candidate_Number__c; 
@@ -62,16 +63,8 @@ global class BatchableCalloutsForCandidateImages implements Database.Batchable<I
         system.debug('can' + images);
         Map<String, Integer> countImages = new Map<String, Integer>();
         Integer counter = 0;
-        /*for(ContentVersion image: images){
-            if(countImages.containsKey(image.Content_Version_Candidate_Number__c)){
-                countImages.put(image.Content_Version_Candidate_Number__c, counter++);
-           }
-           else{
-               countImages.put(image.Content_Version_Candidate_Number__c, counter);
-           }
-        }
-        system.debug('map for duplicates' + countImages);*/
         upsert images Content_Version_Candidate_Number__c;
+        system.debug('size: ' + images.size());
         List<ContentDocumentLink> assignedImages = new List<ContentDocumentLink>();
         string contentId = '';
         for(ContentVersion image: images){
@@ -86,7 +79,12 @@ global class BatchableCalloutsForCandidateImages implements Database.Batchable<I
             }
         }
         if(assignedImages.size() > 0){
-            insert assignedImages;
+            try{
+                insert assignedImages;
+            }
+            catch(DMLException e){
+                system.debug('exception: ' + e );
+            }
         }
     }
 	global void finish(Database.BatchableContext BC){
