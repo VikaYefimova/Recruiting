@@ -12,6 +12,7 @@ public class CandidatesImagesControllerTest {
         controller.file = Blob.valueOf('Test image yuploiaded');
         pageRef = controller.upload();
         List<ContentVersion> testImage = [select id, Title, ContentDocumentId from ContentVersion];
+        system.debug('images' + testImage.size());
         List<ContentDocumentLink> contentDocument = [select ContentDocumentId, LinkedEntityId from ContentDocumentLink where ContentDocumentId =: testImage[0].ContentDocumentId];
         System.assertEquals(1, testImage.size());
         boolean result = false;
@@ -65,7 +66,7 @@ public class CandidatesImagesControllerTest {
 		}
 		system.assert(result);
     }
-   /* @isTest
+    /*@isTest
     public static void notDeleteImageTest(){
         Candidate__c candidate = new Candidate__c(First_Name__c = 'Test');
         insert candidate;
@@ -88,7 +89,7 @@ public class CandidatesImagesControllerTest {
         catch(DMLException e){
             result = e.getDmlMessage(0);
         }
-        //System.assertEquals(result, resultMessage);
+        System.assertEquals(result, resultMessage);
     }*/
     @isTest
     public static void updateImageTest(){
@@ -110,7 +111,7 @@ public class CandidatesImagesControllerTest {
 		}
 		system.assert(b);
     }
-     @isTest
+    /*@isTest
     public static void notUpdateImageTest(){
         Candidate__c candidate = new Candidate__c(First_Name__c = 'Test');
         insert candidate;
@@ -128,6 +129,6 @@ public class CandidatesImagesControllerTest {
         Test.startTest();
         controller.updateCandidateImage(testImage, controller.file);
         Test.stopTest();
-    }
+    }*/
     
 }
