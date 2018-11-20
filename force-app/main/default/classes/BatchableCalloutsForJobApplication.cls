@@ -21,7 +21,7 @@ global class BatchableCalloutsForJobApplication implements Database.Batchable<In
         String responseBody;
 		Integer level = 0;
         for(Integer i: count){
-            responseBody = InsertingRecordFromSecondOrg.getJobApplicationDataFromSecondOrg(10, i);
+            responseBody = InsertingRecordFromSecondOrg.getJobApplicationDataFromSecondOrg(100, i);
             system.debug('responseBody + ' + responseBody);
             listForInsertRecords.addAll(InsertingRecordFromSecondOrg.parsingJobAppliationsRecords(responseBody));
             system.debug('size ' + listForInsertRecords.size());

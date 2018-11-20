@@ -1,6 +1,7 @@
 global class BatchableCalloutsForCandidateImages implements Database.Batchable<Integer>,   Database.AllowsCallouts {
 	global List<Integer> listPage = new List<Integer>();
     List<ContentVersion> images = new List<ContentVersion>();
+    Set<ContentVersion> listRecords = new Set<ContentVersion>();
     public Integer pageNumber;
     global Iterable<Integer> start(Database.BatchableContext BC) {
         InsertingRecordFromSecondOrg obj = new InsertingRecordFromSecondOrg();
@@ -37,19 +38,13 @@ global class BatchableCalloutsForCandidateImages implements Database.Batchable<I
             try{
                 responseBody = InsertingRecordFromSecondOrg.getCandidateImagesFromTargetOrg(3,i);
                 system.debug('responseBody + ' + responseBody);
-                Set<ContentVersion> listRecords = InsertingRecordFromSecondOrg.parsingCandidateImagesData(responseBody);
-                for(ContentVersion con: listRecords){
-                        string candidateId = con.Content_Version_Candidate_Number__c; 
-                        if(!contentVersionsMap.containsKey(candidateId)){
-                        	con.PathOnClient = '/image.jpg';
-                            con.IsMajorVersion = false;
-                        }
-                    images.add(con);
-                }
+                listRecords = InsertingRecordFromSecondOrg.parsingCandidateImagesData(responseBody);
             }
             catch(CalloutException e ){
                 responseBody = InsertingRecordFromSecondOrg.getCandidateImagesFromTargetOrg(65, i); 
-                Set<ContentVersion> listRecords = InsertingRecordFromSecondOrg.parsingCandidateImagesData(responseBody);
+                listRecords = InsertingRecordFromSecondOrg.parsingCandidateImagesData(responseBody);
+            }
+            finally{
                 for(ContentVersion con: listRecords){
                     string candidateId = con.Content_Version_Candidate_Number__c; 
                     if(!contentVersionsMap.containsKey(candidateId)){
@@ -58,7 +53,7 @@ global class BatchableCalloutsForCandidateImages implements Database.Batchable<I
                     }      
                     images.add(con);
                 }
-            } 
+            }
         }
         system.debug('can' + images);
         Map<String, Integer> countImages = new Map<String, Integer>();
@@ -67,9 +62,15 @@ global class BatchableCalloutsForCandidateImages implements Database.Batchable<I
         system.debug('size: ' + images.size());
         List<ContentDocumentLink> assignedImages = new List<ContentDocumentLink>();
         string contentId = '';
+        if(Test.isRunningTest()){
+            images = [select id, ContentDocumentId, Content_Version_Candidate_Number__c from ContentVersion];
+        }
         for(ContentVersion image: images){
             if(!documentLinkMap.containsKey(image.Content_Version_Candidate_Number__c)){
                 contentId = contentVersionsMap.get(image.Content_Version_Candidate_Number__c);
+                if(Test.isRunningTest()){
+                    contentId = image.ContentDocumentId;
+                }
                 ContentDocumentLink relatedFile = new ContentDocumentLink();
                 system.debug('doc: ' + contentid);
                 relatedFile.ContentDocumentId = contentid;

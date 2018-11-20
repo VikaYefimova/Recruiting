@@ -13,6 +13,7 @@ public class DisplayImageControllerTest {
         controller.file = Blob.valueOf('Test image uploaded');
         PageReference objectPageRef =  controller.upload();
         id documentid = [select ContentDocumentId from ContentDocumentLink where LinkedEntityId =: can.id].ContentDocumentId;
+        system.debug('id: ' + documentid);
         String candidatesImageId = [select id from ContentVersion where ContentDocumentId =: documentid And isLatest = True].id;
         String result = displayImageControler.getFileId();
         System.assertEquals(candidatesImageId, result);

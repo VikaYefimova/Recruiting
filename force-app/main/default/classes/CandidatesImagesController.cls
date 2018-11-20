@@ -15,6 +15,7 @@ public class CandidatesImagesController {
     }
     public PageReference upload() {
         ContentVersion image = new ContentVersion();
+        
         String candidateName = getCandidateName(recordId);
         uploadCandidatesImage(file, candidateName, recordId);
         return null;
@@ -39,6 +40,7 @@ public class CandidatesImagesController {
         image.title = candidateName;
         image.PathOnClient = '/image.jpg';
         image.IsMajorVersion = false;
+        image.Content_Version_Candidate_Number__c = recId;
         try{
             insert image;
             hasImage = true;
@@ -49,7 +51,7 @@ public class CandidatesImagesController {
             relatedFile.LinkedEntityId = recId;
             relatedFile.ShareType = 'I';
             insert relatedFile;
-        
+        	system.debug('insert image successfull');
             ApexPages.addMessage(new ApexPages.message(ApexPages.severity.INFO, 'Image uploaded successfully'));
         }
         catch(DMLException e){

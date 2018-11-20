@@ -1,8 +1,8 @@
 @isTest
-global class InsertingRecordFromSecondOrgMock implements HttpCalloutMock{
-	
+global class CalloutExceptionMock implements HttpCalloutMock{
+    Integer flag = 0;
     global HTTPResponse respond(HTTPRequest request){
-    	HttpResponse response = new HttpResponse();
+        HttpResponse response = new HttpResponse();
         if(request.getEndpoint().endsWith('oauth2/token')){
             system.debug('hello in get authorization');
             response.setStatusCode(200);
@@ -38,16 +38,23 @@ global class InsertingRecordFromSecondOrgMock implements HttpCalloutMock{
         	return response;
         }
         if(request.getEndpoint().endsWith('apexrest/getImages/0')){
-            system.debug('helo in get images');
-			response.setBody('[{"contentData":{"attributes":{"type":"ContentVersion","url":"/services/data/v44.0/sobjects/ContentVersion/0681t000000YYZGAA4"},"Id":"0681t000000YYZGAA4","Title":"TestCv","VersionData":"/services/data/v44.0/sobjects/ContentVersion/0681t000000YYZGAA4/VersionData","Candidate_Number__c":"a011t000006pRBZAA2","ContentBodyId":"05T1t000000VLgpEAG","FileType":"JPG"},"contentBody":"'+
+            if(flag == 0){
+                system.debug('helo in get images');
+                flag++;
+                CalloutException e = (CalloutException)CalloutException.class.newInstance();
+                e.setMessage('System.CalloutException: Read timed out');
+                throw e;
+            }
+            else{
+                system.debug('helo in get images');
+				response.setBody('[{"contentData":{"attributes":{"type":"ContentVersion","url":"/services/data/v44.0/sobjects/ContentVersion/0681t000000YYZGAA4"},"Id":"0681t000000YYZGAA4","Title":"TestCv","VersionData":"/services/data/v44.0/sobjects/ContentVersion/0681t000000YYZGAA4/VersionData","Candidate_Number__c":"a011t000006pRBZAA2","ContentBodyId":"05T1t000000VLgpEAG","FileType":"JPG"},"contentBody":"'+
                             +'dGVzdCB0byBpbnNlcnQgaW1hZ2V0ZXN0IHRvIGluc2VydCBpbWFnZXRlc3QgdG8gaW5zZXJ0IGltYWdldGVzdCB0byBpbnNlcnQgaW1hZ2V0ZXN0IHRvIGluc2VydCBpbWFnZXRlc3QgdG8gaW5zZXJ0IGltYWdldGVzdCB0byBpbnNlcnQgaW1hZ2V0ZXN0IHRvIGluc2VydCBpbWFnZXRlc3QgdG8gaW5zZXJ0IGltYWdldGVzdCB0byBpbnNlcnQgaW1hZ2V0ZXN0IHRvIGluc2VydCBpbWFnZXRlc3QgdG8gaW5zZXJ0IGltYWdldGVzdCB0byBpbnNlcnQgaW1hZ2V0ZXN0IHRvIGluc2VydCBpbWFnZXRlc3'+
                              +'QgdG8gaW5zZXJ0IGltYWdldGVzdCB0byBpbnNlcnQgaW1hZ2U="},{"contentData":{"attributes":{"type":"ContentVersion","url":"/services/data/v44.0/sobjects/ContentVersion/0681t000000YYZGAA4"},"Id":"0681t000000YYZGAA4","TestCV 66":"Dmitriy","VersionData":"/services/data/v44.0/sobjects/ContentVersion/0681t000000YYZGAA4/VersionData","Candidate_Number__c":"a011t000006pTq2AAE","ContentBodyId":"05T1t000000VLgpEAG","FileType":"JPG"},"contentBody":"'+
                             +'dGVzdCB0byBpbnNlcnQgaW1hZ2V0ZXN0IHRvIGluc2VydCBpbWFnZXRlc3QgdG8gaW5zZXJ0IGltYWdldGVzdCB0byBpbnNlcnQgaW1hZ2V0ZXN0IHRvIGluc2VydCBpbWFnZXRlc3QgdG8gaW5zZXJ0IGltYWdldGVzdCB0byBpbnNlcnQgaW1hZ2V0ZXN0IHRvIGluc2VydCBpbWFnZXRlc3QgdG8gaW5zZXJ0IGltYWdldGVzdCB0byBpbnNlcnQgaW1hZ2V0ZXN0IHRvIGluc2VydCBpbWFnZXRlc3QgdG8gaW5zZXJ0IGltYWdldGVzdCB0byBpbnNlcnQgaW1hZ2V0ZXN0IHRvIGluc2VydCBpbWFnZXRlc3'+
                              +'QgdG8gaW5zZXJ0IGltYWdldGVzdCB0byBpbnNlcnQgaW1hZ2U="},{"contentData":{"attributes":{"type":"ContentVersion","url":"/services/data/v44.0/sobjects/ContentVersion/0681t000000YYZGAA4"},"Id":"0681t000000YYZGAA4","Title":"testcv 67","VersionData":"/services/data/v44.0/sobjects/ContentVersion/0681t000000YYZGAA4/VersionData","Candidate_Number__c":"a011t000006pTq7AAE","ContentBodyId":"05T1t000000VLgpEAG","FileType":"JPG"},"contentBody":"'+
                             +'dGVzdCB0byBpbnNlcnQgaW1hZ2V0ZXN0IHRvIGluc2VydCBpbWFnZXRlc3QgdG8gaW5zZXJ0IGltYWdldGVzdCB0byBpbnNlcnQgaW1hZ2V0ZXN0IHRvIGluc2VydCBpbWFnZXRlc3QgdG8gaW5zZXJ0IGltYWdldGVzdCB0byBpbnNlcnQgaW1hZ2V0ZXN0IHRvIGluc2VydCBpbWFnZXRlc3QgdG8gaW5zZXJ0IGltYWdldGVzdCB0byBpbnNlcnQgaW1hZ2V0ZXN0IHRvIGluc2VydCBpbWFnZXRlc3QgdG8gaW5zZXJ0IGltYWdldGVzdCB0byBpbnNlcnQgaW1hZ2V0ZXN0IHRvIGluc2VydCBpbWFnZXRlc3'+
                              +'QgdG8gaW5zZXJ0IGltYWdldGVzdCB0byBpbnNlcnQgaW1hZ2U="}]');
-
-            
+            }
         }
         return response;
     }
