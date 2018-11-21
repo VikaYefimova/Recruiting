@@ -32,6 +32,6 @@ global class BatchableCalloutsForJobApplication implements Database.Batchable<In
 	global void finish(Database.BatchableContext BC){
         System.debug('heap size' + Limits.getHeapSize());
         BatchableCalloutsForCandidateImages batch = new BatchableCalloutsForCandidateImages();
-		Database.executeBatch(batch, 70);
+		Database.executeBatch(batch, 3);
     }
 }
