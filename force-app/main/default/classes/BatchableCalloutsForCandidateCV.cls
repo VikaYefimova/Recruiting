@@ -34,6 +34,6 @@ global class BatchableCalloutsForCandidateCV implements Database.Batchable<Integ
         System.debug('heap size' + Limits.getHeapSize());
         system.debug('list ' + listForInsertRecords.size());
         BatchableCalloutsForJobApplication batch = new BatchableCalloutsForJobApplication();
-		Database.executeBatch(batch, 100);
+		Database.executeBatch(batch, 2);
     }
 }
