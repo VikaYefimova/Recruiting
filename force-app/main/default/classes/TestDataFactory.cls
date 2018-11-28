@@ -34,4 +34,15 @@ public class TestDataFactory {
         insert jobApplications;
         return jobApplications;
     }
+    public static void insertCustomSetting(){
+        List_Setting__c testCustomSetting = new List_Setting__c();
+        testCustomSetting.Client_Secret__c = '6062214781788623861';
+        testCustomSetting.Consumer_Secret__c = '3MVG9fTLmJ60pJ5I9d8FcNmhnOyWg4QBXzptmhuhTNPXtWTsLGzeihB6UX.YrwAW6wOsB2SpHWM8AeoR8FUyz	';
+        testCustomSetting.Login_c__c = 'vikaephimova1996@mycomp.com';
+        testCustomSetting.Password__c = 'Hibd2014';
+        testCustomSetting.Link_to_connected_org__c = 'https://eu16.salesforce.com/';
+        testCustomSetting.RecordsCountOnTargetOrg__c = 'https://eu16.salesforce.com/services/apexrest/recordsCount';
+        testCustomSetting.ImagesOnTargetOrg__c = 'https://eu16.salesforce.com/services/apexrest/getImages/';
+        insert testCustomSetting;
+    }
 }
