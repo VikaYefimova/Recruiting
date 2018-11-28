@@ -1,5 +1,6 @@
 global class BatchableCalloutsForCandidateCV implements Database.Batchable<Integer>,   Database.AllowsCallouts, Database.stateful {
     global List<Integer> listPage = new List<Integer>();
+    global List<Integer> countOfRecords = new List<Integer>();
     List<Candidate__c> listForInsertRecords = new List<Candidate__c>();
     public Integer pageNumber;
     global Iterable<Integer> start(Database.BatchableContext BC) {
@@ -7,10 +8,8 @@ global class BatchableCalloutsForCandidateCV implements Database.Batchable<Integ
         String accessToken = obj.ReturnAccessToken(obj);
         String dataFromTargetOrg = InsertingRecordFromSecondOrg.getCountfromTargetOrg(accessToken);
         system.debug('response data' + dataFromTargetOrg);
-        JSONParser parser = JSON.createParser(dataFromTargetOrg);
-        parser.nextToken();
-        parser.nextToken();
-        Integer countCV = Integer.valueOf(parser.getText());
+        countOfRecords = parseRecordsCountList(dataFromTargetOrg);
+        Integer countCV = countOfRecords[0];
         pageNumber = (integer)(((countCV*1.0) / (100 *1.0)).round(RoundingMode.UP) -1);
         system.debug('page number: ' + pageNumber);
         for(Integer i = 0; i<=pageNumber; i++){
@@ -33,7 +32,11 @@ global class BatchableCalloutsForCandidateCV implements Database.Batchable<Integ
 	global void finish(Database.BatchableContext BC){
         System.debug('heap size' + Limits.getHeapSize());
         system.debug('list ' + listForInsertRecords.size());
-        BatchableCalloutsForJobApplication batch = new BatchableCalloutsForJobApplication();
+        BatchableCalloutsForJobApplication batch = new BatchableCalloutsForJobApplication(countOfRecords);
 		Database.executeBatch(batch, 2);
+    }
+    global List<Integer> parseRecordsCountList(String response){
+        List<Integer> recordsCount = (List<Integer>)JSON.deserialize(response, List<Integer>.class);
+        return recordsCount;
     }
 }

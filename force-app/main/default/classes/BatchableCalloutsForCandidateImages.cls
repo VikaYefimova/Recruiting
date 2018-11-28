@@ -1,19 +1,14 @@
 global class BatchableCalloutsForCandidateImages implements Database.Batchable<Integer>,   Database.AllowsCallouts {
 	global List<Integer> listPage = new List<Integer>();
     List<ContentVersion> images = new List<ContentVersion>();
+    global List<Integer> countOfRecords = new List<Integer>();
     Set<ContentVersion> listRecords = new Set<ContentVersion>();
     public Integer pageNumber;
+    public BatchableCalloutsForCandidateImages(List<Integer> recordsCount){
+        this.countOfRecords = recordsCount;
+    }
     global Iterable<Integer> start(Database.BatchableContext BC) {
-        InsertingRecordFromSecondOrg obj = new InsertingRecordFromSecondOrg();
-        String accessToken = obj.ReturnAccessToken(obj);
-        String dataFromTargetOrg = InsertingRecordFromSecondOrg.getCountfromTargetOrg(accessToken);
-        system.debug('response data' + dataFromTargetOrg);
-        JSONParser parser = JSON.createParser(dataFromTargetOrg);
-        parser.nextToken();
-        parser.nextToken();
-        parser.nextToken();
-        parser.nextToken();
-        Integer countSelectedJob = Integer.valueOf(parser.getText());
+        Integer countSelectedJob = countOfRecords[2];
         pageNumber = (integer)(((countSelectedJob*1.0) / (65 *1.0)).round(RoundingMode.UP) -1);
         system.debug('page number: ' + pageNumber);
         for(Integer i = 0; i<=pageNumber; i++){
@@ -35,24 +30,16 @@ global class BatchableCalloutsForCandidateImages implements Database.Batchable<I
         }
         for(Integer i: count){
             System.debug('count' + i);
-            try{
-                responseBody = InsertingRecordFromSecondOrg.getCandidateImagesFromTargetOrg(65,i);
-                system.debug('responseBody + ' + responseBody);
-                listRecords = InsertingRecordFromSecondOrg.parsingCandidateImagesData(responseBody);
-            }
-            catch(CalloutException e ){
-                responseBody = InsertingRecordFromSecondOrg.getCandidateImagesFromTargetOrg(65, i); 
-                listRecords = InsertingRecordFromSecondOrg.parsingCandidateImagesData(responseBody);
-            }
-            finally{
-                for(ContentVersion con: listRecords){
-                    string candidateId = con.Content_Version_Candidate_Number__c; 
-                    if(!contentVersionsMap.containsKey(candidateId)){
-                      	con.PathOnClient = '/image.jpg';
-                        con.IsMajorVersion = false;
-                    }      
-                    images.add(con);
-                }
+            responseBody = InsertingRecordFromSecondOrg.getCandidateImagesFromTargetOrg(65,i);
+            system.debug('responseBody + ' + responseBody);
+            listRecords = InsertingRecordFromSecondOrg.parsingCandidateImagesData(responseBody);
+            for(ContentVersion con: listRecords){
+                string candidateId = con.Content_Version_Candidate_Number__c; 
+                if(!contentVersionsMap.containsKey(candidateId)){
+                  	con.PathOnClient = '/image.jpg';
+                    con.IsMajorVersion = false;
+                }      
+                images.add(con);
             }
         }
         system.debug('can' + images);
