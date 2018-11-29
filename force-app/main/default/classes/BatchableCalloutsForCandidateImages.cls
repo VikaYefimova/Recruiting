@@ -10,7 +10,6 @@ global class BatchableCalloutsForCandidateImages implements Database.Batchable<I
     global Iterable<Integer> start(Database.BatchableContext BC) {
         Integer countSelectedJob = countOfRecords[2];
         pageNumber = (integer)(((countSelectedJob*1.0) / (65 *1.0)).round(RoundingMode.UP) -1);
-        system.debug('page number: ' + pageNumber);
         for(Integer i = 0; i<=pageNumber; i++){
             listPage.add(i);
         }
@@ -29,9 +28,7 @@ global class BatchableCalloutsForCandidateImages implements Database.Batchable<I
             documentLinkMap.put(docLink.LinkedEntityId, docLink.id);
         }
         for(Integer i: count){
-            System.debug('count' + i);
             responseBody = InsertingRecordFromSecondOrg.getCandidateImagesFromTargetOrg(65,i);
-            system.debug('responseBody + ' + responseBody);
             listRecords = InsertingRecordFromSecondOrg.parsingCandidateImagesData(responseBody);
             for(ContentVersion con: listRecords){
                 string candidateId = con.Content_Version_Candidate_Number__c; 
@@ -42,11 +39,10 @@ global class BatchableCalloutsForCandidateImages implements Database.Batchable<I
                 images.add(con);
             }
         }
-        system.debug('can' + images);
         Map<String, Integer> countImages = new Map<String, Integer>();
         Integer counter = 0;
-        upsert images Content_Version_Candidate_Number__c;
-        system.debug('size: ' + images.size());
+        Schema.SObjectField fieldForUpsert = ContentVersion.fields.Content_Version_Candidate_Number__c;
+        Database.upsert(images, fieldForUpsert);
         List<ContentDocumentLink> assignedImages = new List<ContentDocumentLink>();
         string contentId = '';
         if(Test.isRunningTest()){
@@ -59,7 +55,6 @@ global class BatchableCalloutsForCandidateImages implements Database.Batchable<I
                     contentId = image.ContentDocumentId;
                 }
                 ContentDocumentLink relatedFile = new ContentDocumentLink();
-                system.debug('doc: ' + contentid);
                 relatedFile.ContentDocumentId = contentid;
                 relatedFile.LinkedEntityId = image.Content_Version_Candidate_Number__c;
                 relatedFile.ShareType = 'I';
@@ -67,12 +62,7 @@ global class BatchableCalloutsForCandidateImages implements Database.Batchable<I
             }
         }
         if(assignedImages.size() > 0){
-            try{
-                insert assignedImages;
-            }
-            catch(DMLException e){
-                system.debug('exception: ' + e );
-            }
+                Database.insert(assignedImages);
         }
     }
 	global void finish(Database.BatchableContext BC){
