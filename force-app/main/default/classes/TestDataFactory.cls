@@ -43,6 +43,8 @@ public class TestDataFactory {
         testCustomSetting.Link_to_connected_org__c = 'https://eu16.salesforce.com/';
         testCustomSetting.RecordsCountOnTargetOrg__c = 'https://eu16.salesforce.com/services/apexrest/recordsCount';
         testCustomSetting.ImagesOnTargetOrg__c = 'https://eu16.salesforce.com/services/apexrest/getImages/';
+        testCustomSetting.queryLink__c = 'https://eu16.salesforce.com/services/data/v44.0/query/';
+        testCustomSetting.tokenLink__c = 'https://eu16.salesforce.com/services/oauth2/token';
         insert testCustomSetting;
     }
 }

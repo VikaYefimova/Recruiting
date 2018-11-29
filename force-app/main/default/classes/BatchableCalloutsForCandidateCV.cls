@@ -4,10 +4,7 @@ global class BatchableCalloutsForCandidateCV implements Database.Batchable<Integ
     List<Candidate__c> listForInsertRecords = new List<Candidate__c>();
     public Integer pageNumber;
     global Iterable<Integer> start(Database.BatchableContext BC) {
-        InsertingRecordFromSecondOrg obj = new InsertingRecordFromSecondOrg();
-        String accessToken = obj.ReturnAccessToken();
-        String dataFromTargetOrg = InsertingRecordFromSecondOrg.getCountfromTargetOrg(accessToken);
-        countOfRecords = parseRecordsCountList(dataFromTargetOrg);
+        countOfRecords = parseRecordsCountList();
         Integer countCV = countOfRecords[0];
         pageNumber = (integer)(((countCV*1.0) / (100 *1.0)).round(RoundingMode.UP) -1);
         for(Integer i = 0; i<=pageNumber; i++){
@@ -29,10 +26,12 @@ global class BatchableCalloutsForCandidateCV implements Database.Batchable<Integ
         BatchableCalloutsForJobApplication batch = new BatchableCalloutsForJobApplication(countOfRecords);
 		Database.executeBatch(batch, 95);
     }
-    global List<Integer> parseRecordsCountList(String response){
+    global List<Integer> parseRecordsCountList(){
+        String accessToken = InsertingRecordFromSecondOrg.ReturnAccessToken();
+        String dataFromTargetOrg = InsertingRecordFromSecondOrg.getCountfromTargetOrg(accessToken);
         List<Integer> recordsCount = new List<Integer>();
-        if(!String.isBlank(response)){
-            recordsCount = (List<Integer>)JSON.deserialize(response, List<Integer>.class);
+        if(!String.isBlank(dataFromTargetOrg)){
+            recordsCount = (List<Integer>)JSON.deserialize(dataFromTargetOrg, List<Integer>.class);
         }
         return recordsCount;
     }
