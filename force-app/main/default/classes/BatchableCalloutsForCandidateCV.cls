@@ -30,7 +30,10 @@ global class BatchableCalloutsForCandidateCV implements Database.Batchable<Integ
 		Database.executeBatch(batch, 95);
     }
     global List<Integer> parseRecordsCountList(String response){
-        List<Integer> recordsCount = (List<Integer>)JSON.deserialize(response, List<Integer>.class);
+        List<Integer> recordsCount = new List<Integer>();
+        if(!String.isBlank(response)){
+            recordsCount = (List<Integer>)JSON.deserialize(response, List<Integer>.class);
+        }
         return recordsCount;
     }
 }
