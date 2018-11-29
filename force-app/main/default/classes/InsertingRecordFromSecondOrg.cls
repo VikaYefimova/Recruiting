@@ -5,7 +5,7 @@ public class InsertingRecordFromSecondOrg {
       public String id;
       public String access_token;   
    }
-    public String ReturnAccessToken(InsertingRecordFromSecondOrg pos){
+    public String ReturnAccessToken(){
         List_Setting__c customSetting = List_Setting__c.getOrgDefaults();
         String clientId = customSetting.Consumer_Secret__c;
         String clientsecret = customSetting.Client_secret__c;
@@ -16,8 +16,14 @@ public class InsertingRecordFromSecondOrg {
         request.setBody(reqbody);
         request.setMethod('POST');
         request.setEndpoint(orgLink + 'services/oauth2/token');  
-        HttpResponse response = httpClass.send(request);
-        DeserializeResponse resp1=(DeserializeResponse)JSON.deserialize(response.getBody(),DeserializeResponse.class);
+        DeserializeResponse resp1 = new DeserializeResponse();
+        try{
+            HttpResponse response = httpClass.send(request);
+            resp1=(DeserializeResponse)JSON.deserialize(response.getBody(),DeserializeResponse.class);
+        }
+        catch(Exception e){
+            system.debug('error callouts' + e);
+        }
         return resp1.access_token;
     }
     public static String getCountfromTargetOrg(String accessToken){
@@ -31,9 +37,13 @@ public class InsertingRecordFromSecondOrg {
             req.setHeader('Content-Type', 'application/json');
             req.setEndpoint(recordsCountOnTargetOrg);
             req.setMethod('GET');
-            HttpResponse res = http.send(req);
-            dataFromTargetOrg = res.getBody();
-            system.debug('get data response: ' + dataFromTargetOrg);
+            try{
+                HttpResponse res = http.send(req);
+                dataFromTargetOrg = res.getBody();
+            }
+            catch(Exception e){
+                system.debug('error callouts' + e);
+            }
         }
         return dataFromTargetOrg;
     }
@@ -42,7 +52,7 @@ public class InsertingRecordFromSecondOrg {
         String orgLink = customSetting.Link_to_connected_org__c;
         String dataFromTargetOrg;
         InsertingRecordFromSecondOrg webServiceClass = new InsertingRecordFromSecondOrg();
-        String accessToken = webServiceClass.ReturnAccessToken(webServiceClass);
+        String accessToken = webServiceClass.ReturnAccessToken();
         if(accessToken != null){
             Http http= new Http();
             HttpRequest req = new HttpRequest();
@@ -65,7 +75,7 @@ public class InsertingRecordFromSecondOrg {
         String orgLink = customSetting.Link_to_connected_org__c;
         String dataFromTargetOrg = '';
         InsertingRecordFromSecondOrg webServiceClass = new InsertingRecordFromSecondOrg();
-        String accessToken = webServiceClass.ReturnAccessToken(webServiceClass);
+        String accessToken = webServiceClass.ReturnAccessToken();
         if(accessToken != null){
             Http http= new Http();
             HttpRequest req = new HttpRequest();
@@ -88,7 +98,7 @@ public class InsertingRecordFromSecondOrg {
         String endpointForGetImagesOnTargetOrg = customSetting.ImagesOnTargetOrg__c;
         String dataFromTargetOrg;
         InsertingRecordFromSecondOrg webServiceClass = new InsertingRecordFromSecondOrg();
-        String accessToken = webServiceClass.ReturnAccessToken(webServiceClass);
+        String accessToken = webServiceClass.ReturnAccessToken();
         if(accessToken != null){
             Http http= new Http();
             HttpRequest req = new HttpRequest();
@@ -154,7 +164,6 @@ public class InsertingRecordFromSecondOrg {
                     else if(parser.getText() == 'Unemployed'){
                         newCandidate.Currently_Employed__c = false;
                     }
-                    system.debug(parser.getText());
                 }
                 if(parser.getCurrentToken() == JSONToken.END_OBJECT){
                     if(flag){

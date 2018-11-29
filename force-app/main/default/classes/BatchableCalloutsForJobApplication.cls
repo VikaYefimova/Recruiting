@@ -19,16 +19,13 @@ global class BatchableCalloutsForJobApplication implements Database.Batchable<In
 		Integer level = 0;
         for(Integer i: count){
             responseBody = InsertingRecordFromSecondOrg.getJobApplicationDataFromSecondOrg(100, i);
-            system.debug('responseBody + ' + responseBody);
             listForInsertRecords.addAll(InsertingRecordFromSecondOrg.parsingJobAppliationsRecords(responseBody));
-            system.debug('size ' + listForInsertRecords.size());
         }
-        System.debug('before listForInsertRecords ' + listForInsertRecords);
-        upsert listForInsertRecords Legacy_Job_Application_Number__c;
+        Schema.SObjectField fieldForUpsert = Job_Application__c.fields.Legacy_Job_Application_Number__c;
+        Database.upsert(listForInsertRecords, fieldForUpsert);
     }
 	global void finish(Database.BatchableContext BC){
-        System.debug('heap size' + Limits.getHeapSize());
         BatchableCalloutsForCandidateImages batch = new BatchableCalloutsForCandidateImages(countOfRecords);
-		Database.executeBatch(batch, 3);
+		Database.executeBatch(batch, 95);
     }
 }
