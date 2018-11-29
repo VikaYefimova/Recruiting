@@ -5,17 +5,17 @@ public class InsertingRecordFromSecondOrg {
       public String id;
       public String access_token;   
    }
-    public String ReturnAccessToken(){
+    public static String ReturnAccessToken(){
         List_Setting__c customSetting = List_Setting__c.getOrgDefaults();
         String clientId = customSetting.Consumer_Secret__c;
         String clientsecret = customSetting.Client_secret__c;
-        String orgLink = customSetting.Link_to_connected_org__c;
+        String tokenLink = customSetting.tokenLink__c;        
         String reqbody = 'grant_type=password&client_id='+customSetting.Consumer_Secret__c+'&client_secret='+customSetting.Client_secret__c+'&username='+customSetting.Login_c__c+'&password='+customSetting.Password__c;
         Http httpClass= new Http();
         HttpRequest request= new HttpRequest();
         request.setBody(reqbody);
         request.setMethod('POST');
-        request.setEndpoint(orgLink + 'services/oauth2/token');  
+        request.setEndpoint(tokenLink);  
         DeserializeResponse resp1 = new DeserializeResponse();
         try{
             HttpResponse response = httpClass.send(request);
@@ -29,7 +29,7 @@ public class InsertingRecordFromSecondOrg {
     public static String getCountfromTargetOrg(String accessToken){
         List_Setting__c customSetting = List_Setting__c.getOrgDefaults();
         String recordsCountOnTargetOrg = customSetting.RecordsCountOnTargetOrg__c;
-        String dataFromTargetOrg;
+        String dataFromTargetOrg = '';
         if(accessToken != null){
             Http http= new Http();
             HttpRequest req = new HttpRequest();
@@ -49,16 +49,15 @@ public class InsertingRecordFromSecondOrg {
     }
     public static String getCVDataFromSecondOrg(Integer limitForSearch, Integer offset){
         List_Setting__c customSetting = List_Setting__c.getOrgDefaults();
-        String orgLink = customSetting.Link_to_connected_org__c;
-        String dataFromTargetOrg;
-        InsertingRecordFromSecondOrg webServiceClass = new InsertingRecordFromSecondOrg();
-        String accessToken = webServiceClass.ReturnAccessToken();
+        String queryLink = customSetting.queryLink__c;
+        String dataFromTargetOrg = '';
+        String accessToken = ReturnAccessToken();
         if(accessToken != null){
             Http http= new Http();
             HttpRequest req = new HttpRequest();
             req.setHeader('Authorization','Bearer ' + accessToken);
             req.setHeader('Content-Type', 'application/json');
-            req.setEndpoint(orgLink + 'services/data/v24.0/query/?q=SELECT+id+,+name+,+Phone__c+,+Email__c+,+Status__c+,+Candidate_Age__c+from+CandidateCV__c+where+LastModifiedDate+=+YESTERDAY+Limit+'+ limitForSearch + '+OFFSET+' + (offset*limitForSearch));
+            req.setEndpoint(queryLink + '?q=SELECT+id+,+name+,+Phone__c+,+Email__c+,+Status__c+,+Candidate_Age__c+from+CandidateCV__c+where+LastModifiedDate+=+YESTERDAY+Limit+'+ limitForSearch + '+OFFSET+' + (offset*limitForSearch));
             req.setMethod('GET');
             try{
                 HttpResponse res = http.send(req);
@@ -72,16 +71,15 @@ public class InsertingRecordFromSecondOrg {
     }
     public static String getJobApplicationDataFromSecondOrg(Integer limitForSearch, Integer offset){
         List_Setting__c customSetting = List_Setting__c.getOrgDefaults();
-        String orgLink = customSetting.Link_to_connected_org__c;
+        String queryLink = customSetting.queryLink__c;
         String dataFromTargetOrg = '';
-        InsertingRecordFromSecondOrg webServiceClass = new InsertingRecordFromSecondOrg();
-        String accessToken = webServiceClass.ReturnAccessToken();
+        String accessToken = ReturnAccessToken();
         if(accessToken != null){
             Http http= new Http();
             HttpRequest req = new HttpRequest();
             req.setHeader('Authorization','Bearer ' + accessToken);
             req.setHeader('Content-Type', 'application/json');
-            req.setEndpoint(orgLink + 'services/data/v24.0/query/?q=SELECT+id+,+CandidateCV__c+,+Candidate_Phone__c+,+Candidate_Salary__c+,+Candidate_Status__c+,+Candidate_Age__c,+Additional_Info__c,+Job_Advertisement__c+from+Selected_Job__c+where+LastModifiedDate+=+YESTERDAY+Limit+'+ limitForSearch + '+OFFSET+' + (offset*limitForSearch));
+            req.setEndpoint(queryLink + '?q=SELECT+id+,+CandidateCV__c+,+Candidate_Phone__c+,+Candidate_Salary__c+,+Candidate_Status__c+,+Candidate_Age__c,+Additional_Info__c,+Job_Advertisement__c+from+Selected_Job__c+where+LastModifiedDate+=+YESTERDAY+Limit+'+ limitForSearch + '+OFFSET+' + (offset*limitForSearch));
             req.setMethod('GET');
             try{
                 HttpResponse res = http.send(req);
@@ -96,9 +94,8 @@ public class InsertingRecordFromSecondOrg {
     public static string getCandidateImagesFromTargetOrg(Integer limitForSearch, Integer offset){
         List_Setting__c customSetting = List_Setting__c.getOrgDefaults();
         String endpointForGetImagesOnTargetOrg = customSetting.ImagesOnTargetOrg__c;
-        String dataFromTargetOrg;
-        InsertingRecordFromSecondOrg webServiceClass = new InsertingRecordFromSecondOrg();
-        String accessToken = webServiceClass.ReturnAccessToken();
+        String dataFromTargetOrg = '';
+        String accessToken = ReturnAccessToken();
         if(accessToken != null){
             Http http= new Http();
             HttpRequest req = new HttpRequest();

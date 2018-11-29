@@ -5,8 +5,7 @@ public class InsertingRecordFromSecondOrgTest {
         TestDataFactory.insertCustomSetting();
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new InsertingRecordFromSecondOrgMock());
-        InsertingRecordFromSecondOrg insertingRecordFromSecondOrg = new InsertingRecordFromSecondOrg();
-        String accessToken = insertingRecordFromSecondOrg.ReturnAccessToken();
+        String accessToken = InsertingRecordFromSecondOrg.ReturnAccessToken();
         String expectedValue = 'SESSION_ID_REMOVED';
         System.assertEquals(1, Limits.getCallouts());
         system.assertEquals(expectedValue, accessToken);
@@ -17,8 +16,7 @@ public class InsertingRecordFromSecondOrgTest {
         TestDataFactory.insertCustomSetting();
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new InsertingRecordFromSecondOrgMock());
-        InsertingRecordFromSecondOrg insertingRecord = new InsertingRecordFromSecondOrg();
-        String accessToken = insertingRecord.ReturnAccessToken();
+        String accessToken = InsertingRecordFromSecondOrg.ReturnAccessToken();
         String responseBody = InsertingRecordFromSecondOrg.getCountfromTargetOrg(accessToken);
         String expectedValue = '[3,9,3]';
         system.assertEquals(expectedValue, responseBody);
@@ -28,8 +26,7 @@ public class InsertingRecordFromSecondOrgTest {
         TestDataFactory.insertCustomSetting();
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new InsertingRecordFromSecondOrgMock());
-        InsertingRecordFromSecondOrg insertingRecord = new InsertingRecordFromSecondOrg();
-        String accessToken = insertingRecord.ReturnAccessToken();
+        String accessToken = InsertingRecordFromSecondOrg.ReturnAccessToken();
         String responseBody = InsertingRecordFromSecondOrg.getCVDataFromSecondOrg(100, 0);
         String expectedValue = '{"totalSize":3,"done":true,"records":[{"attributes":{"type":"CandidateCV__c","url":"/services/data/v24.0/sobjects/CandidateCV__c/a011t000006pRBZAA2"},"Id":"a011t000006pRBZAA2","Name":"TestCv","Phone__c":"0668567810","Email__c":"testcv651996@gmail.com","Status__c":"Employed","Candidate_Age__c":45.0},{"attributes":{"type":"CandidateCV__c","url":"/services/data/v24.0/sobjects/CandidateCV__c/a011t000006pTq2AAE"},"Id":"a011t000006pTq2AAE","Name":"TestCV 66","Phone__c"'+
                              +':"0668567810","Email__c":"testcv661996@gmail.com","Status__c":"Unemployed","Candidate_Age__c":45.0},{"attributes":{"type":"CandidateCV__c","url":"/services/data/v24.0/sobjects/CandidateCV__c/a011t000006pTq7AAE"},"Id":"a011t000006pTq7AAE","Name":"testcv 67","Phone__c":"0668567810","Email__c":"testcv671996@gmail.com","Status__c":"Unemployed","Candidate_Age__c":12.0}]}';
@@ -40,8 +37,7 @@ public class InsertingRecordFromSecondOrgTest {
         TestDataFactory.insertCustomSetting();
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new InsertingRecordFromSecondOrgMock());
-        InsertingRecordFromSecondOrg insertingRecord = new InsertingRecordFromSecondOrg();
-        String accessToken = insertingRecord.ReturnAccessToken();
+        String accessToken = InsertingRecordFromSecondOrg.ReturnAccessToken();
         String responseBody = InsertingRecordFromSecondOrg.getJobApplicationDataFromSecondOrg(100, 0);
         String expectedValue = '{"totalSize":9,"done":true,"records":[{"attributes":{"type":"Selected_Job__c","url":"/services/data/v24.0/sobjects/Selected_Job__c/a021t000005LzjVAAS"},'+
                              +'"Id":"a021t000005LzjVAAS","CandidateCV__c":"a011t000006pRBZAA2","Candidate_Phone__c":"0668567810","Candidate_Salary__c":"546","Candidate_Status__c":"Unemployed","Candidate_Age__c":12.0,"Additional_Info__c":null,"Job_Advertisement__c":"a001t000001tCyFAAU"},'+
@@ -61,8 +57,7 @@ public class InsertingRecordFromSecondOrgTest {
         TestDataFactory.insertCustomSetting();
         Test.startTest();
         Test.setMock(HttpCalloutMock.class, new InsertingRecordFromSecondOrgMock());
-        InsertingRecordFromSecondOrg insertingRecord = new InsertingRecordFromSecondOrg();
-        String accessToken = insertingRecord.ReturnAccessToken();
+        String accessToken = InsertingRecordFromSecondOrg.ReturnAccessToken();
         String responseBody = InsertingRecordFromSecondOrg.getCandidateImagesFromTargetOrg(70, 0);
         String expectedValue = '[{"contentData":{"attributes":{"type":"ContentVersion","url":"/services/data/v44.0/sobjects/ContentVersion/0681t000000YYZGAA4"},"Id":"0681t000000YYZGAA4","Title":"TestCv","VersionData":"/services/data/v44.0/sobjects/ContentVersion/0681t000000YYZGAA4/VersionData","Candidate_Number__c":"a011t000006pRBZAA2","ContentBodyId":"05T1t000000VLgpEAG","FileType":"JPG"},"contentBody":"'+
                             +'dGVzdCB0byBpbnNlcnQgaW1hZ2V0ZXN0IHRvIGluc2VydCBpbWFnZXRlc3QgdG8gaW5zZXJ0IGltYWdldGVzdCB0byBpbnNlcnQgaW1hZ2V0ZXN0IHRvIGluc2VydCBpbWFnZXRlc3QgdG8gaW5zZXJ0IGltYWdldGVzdCB0byBpbnNlcnQgaW1hZ2V0ZXN0IHRvIGluc2VydCBpbWFnZXRlc3QgdG8gaW5zZXJ0IGltYWdldGVzdCB0byBpbnNlcnQgaW1hZ2V0ZXN0IHRvIGluc2VydCBpbWFnZXRlc3QgdG8gaW5zZXJ0IGltYWdldGVzdCB0byBpbnNlcnQgaW1hZ2V0ZXN0IHRvIGluc2VydCBpbWFnZXRlc3'+
