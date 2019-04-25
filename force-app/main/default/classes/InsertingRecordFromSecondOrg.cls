@@ -19,7 +19,9 @@ public class InsertingRecordFromSecondOrg {
         DeserializeResponse resp1 = new DeserializeResponse();
         try{
             HttpResponse response = httpClass.send(request);
-            resp1=(DeserializeResponse)JSON.deserialize(response.getBody(),DeserializeResponse.class);
+            if(response.getStatus() == 'OK'){
+                resp1=(DeserializeResponse)JSON.deserialize(response.getBody(),DeserializeResponse.class);
+            }
         }
         catch(Exception e){
             system.debug('error callouts' + e);
@@ -39,7 +41,13 @@ public class InsertingRecordFromSecondOrg {
             req.setMethod('GET');
             try{
                 HttpResponse res = http.send(req);
-                dataFromTargetOrg = res.getBody();
+                if(res.getStatus() == 'OK'){
+                    dataFromTargetOrg = res.getBody();
+                }
+                else{
+                    dataFromTargetOrg = '';
+                }
+                
             }
             catch(Exception e){
                 system.debug('error callouts' + e);
@@ -61,7 +69,12 @@ public class InsertingRecordFromSecondOrg {
             req.setMethod('GET');
             try{
                 HttpResponse res = http.send(req);
-            	dataFromTargetOrg = res.getBody();
+                if(res.getStatus() == 'OK'){
+                    dataFromTargetOrg = res.getBody();
+                }
+                else{
+                    dataFromTargetOrg = '';
+                }
             }
             catch(Exception e){
                 system.debug('error callouts');
@@ -83,7 +96,12 @@ public class InsertingRecordFromSecondOrg {
             req.setMethod('GET');
             try{
                 HttpResponse res = http.send(req);
-            	dataFromTargetOrg = res.getBody();
+                if(res.getStatus() == 'OK'){
+                    dataFromTargetOrg = res.getBody();
+                }
+                else{
+                    dataFromTargetOrg = '';
+                }
             }
             catch(Exception e){
                 system.debug('error callouts');
@@ -105,7 +123,12 @@ public class InsertingRecordFromSecondOrg {
             req.setMethod('GET');
             try{
                 HttpResponse res = http.send(req);
-            	dataFromTargetOrg = res.getBody();
+                if(res.getStatus() == 'OK'){
+                    dataFromTargetOrg = res.getBody();
+                }
+                else{
+                    dataFromTargetOrg = '';
+                }
             }
             catch(Exception e){
                 system.debug('error callouts');
